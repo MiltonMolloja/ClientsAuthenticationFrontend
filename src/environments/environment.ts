@@ -1,0 +1,9 @@
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:10000',
+  tokenRefreshInterval: 840000, // 14 minutes (token expires in 15)
+  sessionTimeoutWarning: 300000, // 5 minutes warning
+  sessionTimeout: 900000, // 15 minutes
+  enableDebugMode: true,
+  apiVersion: 'v1'
+};

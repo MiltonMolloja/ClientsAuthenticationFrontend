@@ -1,0 +1,13 @@
+// Component-specific styles for app component
+// Global styles are in src/styles.scss
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

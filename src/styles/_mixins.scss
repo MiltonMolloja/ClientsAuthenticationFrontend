@@ -1,0 +1,116 @@
+@use '@angular/material' as mat;
+@use 'variables' as vars;
+
+// Responsive breakpoint mixins
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (min-width: vars.$breakpoint-xs) {
+      @content;
+    }
+  } @else if $breakpoint == sm {
+    @media (min-width: vars.$breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: vars.$breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: vars.$breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: vars.$breakpoint-xl) {
+      @content;
+    }
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Card styles
+@mixin card-style {
+  background: white;
+  border-radius: vars.$border-radius-md;
+  box-shadow: vars.$shadow-md;
+  padding: vars.$spacing-lg;
+}
+
+// Truncate text
+@mixin truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Custom scrollbar
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Focus styles
+@mixin focus-outline {
+  outline: 2px solid vars.$primary-color;
+  outline-offset: 2px;
+}
+
+// Button reset
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+
+  &:focus {
+    @include focus-outline;
+  }
+}
+
+// Elevation/Shadow helper
+@mixin elevation($level) {
+  @if $level == 1 {
+    box-shadow: vars.$shadow-sm;
+  } @else if $level == 2 {
+    box-shadow: vars.$shadow-md;
+  } @else if $level == 3 {
+    box-shadow: vars.$shadow-lg;
+  } @else if $level == 4 {
+    box-shadow: vars.$shadow-xl;
+  }
+}
