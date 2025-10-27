@@ -1,0 +1,19 @@
+<div class="callback-container">
+  <mat-card class="callback-card">
+    <mat-card-content>
+      <div *ngIf="isProcessing; else errorTemplate" class="processing">
+        <mat-spinner diameter="60"></mat-spinner>
+        <h2>Processing authentication...</h2>
+        <p>Please wait while we complete your login.</p>
+      </div>
+
+      <ng-template #errorTemplate>
+        <div class="error">
+          <h2>Authentication Error</h2>
+          <p>{{ errorMessage }}</p>
+          <p class="redirect-message">Redirecting to login page...</p>
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

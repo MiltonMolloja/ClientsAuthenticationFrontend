@@ -1,9 +1,35 @@
-// Color Palette
-$primary-color: #3f51b5; // Indigo
-$accent-color: #ff4081; // Pink
-$warn-color: #f44336; // Red
-$success-color: #4caf50; // Green
-$info-color: #2196f3; // Blue
+// Amazon Theme Color Palette
+$amazon-dark: #232F3E;
+$amazon-light: #37475A;
+$amazon-orange: #FF9900;
+$amazon-yellow: #FEBD69;
+$amazon-bg-light: #F3F3F3;
+$amazon-bg-dark: #0F1111;
+$amazon-text-light: #111111;
+$amazon-text-dark: #FFFFFF;
+
+// Primary Color Palette (based on Amazon theme)
+$primary-color: $amazon-dark;
+$accent-color: $amazon-orange;
+$warn-color: #d4183d;
+$success-color: #4caf50;
+$info-color: #2196f3;
+
+// Background Colors
+$background-light: #ffffff;
+$background-dark: oklch(0.145 0 0);
+$foreground-light: oklch(0.145 0 0);
+$foreground-dark: oklch(0.985 0 0);
+
+// Card Colors
+$card-light: #ffffff;
+$card-dark: oklch(0.145 0 0);
+
+// Border & Input
+$border-light: rgba(0, 0, 0, 0.1);
+$border-dark: oklch(0.269 0 0);
+$input-background-light: #f3f3f5;
+$input-background-dark: oklch(0.269 0 0);
 
 // Spacing
 $spacing-xs: 4px;

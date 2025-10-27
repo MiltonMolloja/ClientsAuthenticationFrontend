@@ -1,0 +1,96 @@
+@use '../../../../styles/variables' as vars;
+
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--amazon-bg);
+}
+
+// Header
+.auth-header {
+  background-color: var(--amazon-dark);
+  padding: 1rem;
+}
+
+.auth-header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-box {
+  border: 2px solid var(--amazon-orange);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.logo-text {
+  color: var(--amazon-orange);
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+// Main Content
+.auth-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.auth-content {
+  width: 100%;
+  max-width: 28rem; // 448px
+}
+
+// Footer
+.auth-footer {
+  background-color: var(--amazon-dark);
+  padding: 1.5rem 1rem;
+  color: white;
+}
+
+.auth-footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  @media (min-width: vars.$breakpoint-sm) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.footer-link {
+  color: #d1d5db; // gray-300
+  text-decoration: none;
+  transition: color vars.$transition-fast;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.footer-copyright {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af; // gray-400
+}

@@ -1,0 +1,38 @@
+<mat-card class="session-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar class="device-icon">
+      {{ getDeviceIcon(session.deviceInfo) }}
+    </mat-icon>
+    <mat-card-title>
+      <div class="title-row">
+        <span>{{ session.deviceInfo }}</span>
+        @if (session.isCurrent) {
+          <mat-chip class="current-chip" highlighted>Current</mat-chip>
+        }
+      </div>
+    </mat-card-title>
+    <mat-card-subtitle>{{ session.ipAddress }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="session-details">
+      <div class="detail-row">
+        <span class="detail-label">Created:</span>
+        <span class="detail-value">{{ session.createdAt | date:'medium' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Expires:</span>
+        <span class="detail-value">{{ session.expiresAt | date:'medium' }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  @if (!session.isCurrent) {
+    <mat-card-actions>
+      <button mat-button color="warn" (click)="onRevoke()">
+        <mat-icon>logout</mat-icon>
+        Revoke
+      </button>
+    </mat-card-actions>
+  }
+</mat-card>

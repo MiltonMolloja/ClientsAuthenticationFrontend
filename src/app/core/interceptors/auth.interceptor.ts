@@ -1,20 +1,17 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { TokenService } from '@core/services/token.service';
 
-// Functional HTTP interceptor for authentication - will be fully implemented in Part 2
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Implementation will be completed in Part 2
-  // Will inject JWT token into requests
+  const tokenService = inject(TokenService);
+  const token = tokenService.getAccessToken();
 
-  // const authService = inject(AuthService);
-  // const token = authService.getAccessToken();
-
-  // if (token) {
-  //   req = req.clone({
-  //     setHeaders: {
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   });
-  // }
+  if (token && !req.url.includes('/v1/identity/authentication')) {
+    const cloned = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`)
+    });
+    return next(cloned);
+  }
 
   return next(req);
 };

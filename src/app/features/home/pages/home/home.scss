@@ -1,0 +1,54 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.welcome-card {
+  max-width: 600px;
+  width: 100%;
+
+  mat-card-header {
+    margin-bottom: 1.5rem;
+  }
+
+  mat-card-content {
+    p {
+      margin-bottom: 2rem;
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      mat-icon {
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .home-container {
+    padding: 1rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<div class="home-container">
+  <mat-card class="welcome-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>home</mat-icon>
+      <mat-card-title>Welcome{{ userName ? ', ' + userName : '' }}!</mat-card-title>
+      <mat-card-subtitle>You have successfully logged in</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>This is your home page. From here you can access different sections of the application.</p>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="navigateToProfile()">
+          <mat-icon>person</mat-icon>
+          Go to Profile
+        </button>
+
+        <button mat-raised-button color="warn" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,26 +1,28 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '@core/guards/auth.guard';
+import { noAuthGuard } from '@core/guards/no-auth.guard';
 
 export const routes: Routes = [
-  // Root redirect to profile
+  // Root - Home page (public)
   {
     path: '',
-    redirectTo: '/profile',
+    loadComponent: () => import('./features/home/pages/home/home').then(m => m.Home),
     pathMatch: 'full'
   },
 
-  // Auth feature - No authentication required
-  // Will contain login, register, forgot-password, etc.
+  // Auth feature - No authentication required (redirect if already authenticated)
   {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
+    canActivate: [noAuthGuard],
     data: { animation: 'AuthPage' }
   },
 
-  // Profile feature - Authentication required (guard will be added in Part 2)
+  // Profile feature - Authentication required
   {
     path: 'profile',
     loadChildren: () => import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
-    // canActivate: [authGuard], // Will be added in Part 2
+    canActivate: [authGuard],
     data: { animation: 'ProfilePage' }
   },
 
@@ -28,21 +30,21 @@ export const routes: Routes = [
   {
     path: '2fa',
     loadChildren: () => import('./features/two-factor/two-factor.routes').then(m => m.TWO_FACTOR_ROUTES),
-    // canActivate: [authGuard], // Will be added in Part 2
+    canActivate: [authGuard],
     data: { animation: 'TwoFactorPage' }
   },
 
-  // Admin feature - Authentication required (additional role guard will be added in Part 2)
+  // Admin feature - Authentication required
   {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
-    // canActivate: [authGuard, roleGuard], // Will be added in Part 2
+    canActivate: [authGuard],
     data: { animation: 'AdminPage', requiredRole: 'admin' }
   },
 
-  // Wildcard route - redirect to profile
+  // Wildcard route - redirect to home
   {
     path: '**',
-    redirectTo: '/profile'
+    redirectTo: '/'
   }
 ];

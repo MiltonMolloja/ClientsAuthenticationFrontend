@@ -1,49 +1,72 @@
-// Authentication models - will be fully implemented in Part 2
 export interface LoginRequest {
   email: string;
   password: string;
-  rememberMe?: boolean;
 }
 
 export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    email: string;
-    username: string;
-    role: string;
-  };
-  expiresIn: number;
+  succeeded: boolean;
+  accessToken?: string;
+  refreshToken?: string;
+  expiresAt?: Date;
+  requires2FA?: boolean;
+  userId?: string;
+  message?: string;
 }
 
 export interface RegisterRequest {
-  email: string;
-  username: string;
-  password: string;
   firstName: string;
   lastName: string;
-}
-
-export interface TokenPayload {
-  sub: string;
   email: string;
-  role: string;
-  exp: number;
-  iat: number;
+  password: string;
+  confirmPassword: string;
 }
 
-export interface RefreshTokenRequest {
-  refreshToken: string;
-}
-
-export interface TwoFactorVerifyRequest {
+export interface TwoFactorAuthRequest {
   userId: string;
+  code: string;
+  rememberDevice?: boolean;
+}
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ConfirmEmailRequest {
+  userId: string;
+  token: string;
+}
+
+export interface Enable2FAResponse {
+  succeeded: boolean;
+  secret: string;
+  qrCodeUri: string;
+  backupCodes: string[];
+}
+
+export interface Disable2FARequest {
+  password: string;
   code: string;
 }
 
-export interface TwoFactorSetupResponse {
-  secret: string;
-  qrCode: string;
+export interface RegenerateBackupCodesRequest {
+  password: string;
+  code: string;
+}
+
+export interface RegenerateBackupCodesResponse {
+  succeeded: boolean;
   backupCodes: string[];
 }

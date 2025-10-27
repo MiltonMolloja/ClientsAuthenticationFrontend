@@ -1,0 +1,37 @@
+<div class="two-factor-container">
+  <mat-card class="two-factor-card">
+    <mat-card-header>
+      <mat-card-title>Two-Factor Authentication</mat-card-title>
+      <mat-card-subtitle>Enter the 6-digit code from your authenticator app</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="code-input-wrapper">
+        <app-code-input [length]="6" (codeComplete)="onCodeComplete($event)"></app-code-input>
+      </div>
+
+      <div class="remember-device">
+        <mat-checkbox [(ngModel)]="rememberDevice">
+          Remember this device for 30 days
+        </mat-checkbox>
+      </div>
+
+      @if (isLoading) {
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Verifying code...</p>
+        </div>
+      }
+
+      <div class="backup-code-link">
+        <a routerLink="/auth/2fa/backup" class="link">Use a backup code instead</a>
+      </div>
+    </mat-card-content>
+
+    <mat-card-footer class="card-footer">
+      <p class="back-text">
+        <a routerLink="/auth/login" class="back-link">← Back to login</a>
+      </p>
+    </mat-card-footer>
+  </mat-card>
+</div>

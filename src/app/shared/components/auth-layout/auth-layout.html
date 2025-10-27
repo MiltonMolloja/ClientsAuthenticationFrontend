@@ -1,0 +1,33 @@
+<div class="auth-layout">
+  <!-- Header -->
+  <header class="auth-header">
+    <div class="auth-header-container">
+      <div class="auth-logo">
+        <div class="logo-box">
+          <span class="logo-text">AuthApp</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="auth-main">
+    <div class="auth-content">
+      <ng-content></ng-content>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="auth-footer">
+    <div class="auth-footer-container">
+      <div class="footer-links">
+        <a href="#" class="footer-link">Conditions of Use</a>
+        <a href="#" class="footer-link">Privacy Notice</a>
+        <a href="#" class="footer-link">Help</a>
+      </div>
+      <p class="footer-copyright">
+        © {{ currentYear }} AuthApp, Inc.
+      </p>
+    </div>
+  </footer>
+</div>

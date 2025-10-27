@@ -1,19 +1,57 @@
-import { HttpInterceptorFn } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { catchError, switchMap } from 'rxjs/operators';
+import { throwError, of } from 'rxjs';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '@core/services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
 
-// Functional HTTP interceptor for error handling - will be fully implemented in Part 2
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  return next(req).pipe(
-    catchError(error => {
-      // Implementation will be completed in Part 2
-      // Will handle different error types:
-      // - 401: Unauthorized - redirect to login
-      // - 403: Forbidden - show access denied message
-      // - 500: Server error - show error notification
-      // etc.
+  const authService = inject(AuthService);
+  const notificationService = inject(NotificationService);
+  const router = inject(Router);
 
-      console.error('HTTP Error:', error);
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      let errorMessage = 'An error occurred';
+
+      if (error.error instanceof ErrorEvent) {
+        // Client-side error
+        errorMessage = `Error: ${error.error.message}`;
+      } else {
+        // Server-side error
+        switch (error.status) {
+          case 401:
+            // Unauthorized - try to refresh token
+            return authService.refreshToken().pipe(
+              switchMap(() => {
+                // Retry original request
+                return next(req);
+              }),
+              catchError(() => {
+                authService.logout();
+                router.navigate(['/auth/login']);
+                return throwError(() => new Error('Session expired'));
+              })
+            );
+          case 403:
+            errorMessage = 'Access forbidden';
+            break;
+          case 404:
+            errorMessage = 'Resource not found';
+            break;
+          case 429:
+            errorMessage = error.error?.message || 'Too many requests';
+            break;
+          case 500:
+            errorMessage = 'Internal server error';
+            break;
+          default:
+            errorMessage = error.error?.message || `Error Code: ${error.status}`;
+        }
+      }
+
+      notificationService.showError(errorMessage);
       return throwError(() => error);
     })
   );

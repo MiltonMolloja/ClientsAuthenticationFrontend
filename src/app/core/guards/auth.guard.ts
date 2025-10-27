@@ -1,22 +1,22 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '@core/services/auth.service';
+import { TokenService } from '@core/services/token.service';
 
-// Functional auth guard - will be fully implemented in Part 2
 export const authGuard: CanActivateFn = (route, state) => {
-  // const authService = inject(AuthService);
+  const authService = inject(AuthService);
   const router = inject(Router);
+  const tokenService = inject(TokenService);
 
-  // Implementation will be completed in Part 2
-  // Will check if user is authenticated
-  // If not, redirect to login page
+  const token = tokenService.getAccessToken();
 
-  // Placeholder: allow all for now
-  return true;
+  if (token && !tokenService.isTokenExpired(token)) {
+    return true;
+  }
 
-  // Final implementation will be:
-  // if (authService.isAuthenticated()) {
-  //   return true;
-  // }
-  // router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
-  // return false;
+  // Save return URL for redirect after login
+  router.navigate(['/auth/login'], {
+    queryParams: { returnUrl: state.url }
+  });
+  return false;
 };
