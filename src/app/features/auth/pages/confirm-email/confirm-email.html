@@ -1,40 +1,38 @@
-<div class="verify-email-container">
-  <mat-card class="verify-email-card">
-    <mat-card-header class="card-header">
-      <div class="icon-container">
-        <mat-icon class="email-icon">mail</mat-icon>
+<app-auth-layout>
+  <mat-card class="confirm-email-card">
+    <mat-card-header class="text-center">
+      <div class="icon-wrapper">
+        <div class="icon-container">
+          <mat-icon class="email-icon">mail</mat-icon>
+        </div>
       </div>
+      <mat-card-title class="card-title">Verify Your Email</mat-card-title>
+      <mat-card-subtitle class="card-description">
+        We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.
+      </mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content>
-      <div class="content-wrapper">
-        <h1 class="title">Verify Your Email</h1>
-        <p class="description">
-          We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.
+    <mat-card-content class="card-content">
+      <div class="info-box">
+        <p class="info-text">
+          Didn't receive the email? Check your spam folder or request a new verification email.
         </p>
+      </div>
 
-        <div class="info-box">
-          <p class="info-text">
-            Didn't receive the email? Check your spam folder or request a new verification email.
-          </p>
-        </div>
+      <button
+        mat-raised-button
+        class="resend-button"
+        (click)="resendVerificationEmail()"
+        [disabled]="isResending">
+        <mat-spinner *ngIf="isResending" diameter="20" class="button-spinner"></mat-spinner>
+        <span *ngIf="!isResending">Resend Verification Email</span>
+      </button>
 
-        <button
-          mat-raised-button
-          color="primary"
-          class="resend-button"
-          (click)="resendVerificationEmail()"
-          [disabled]="isResending">
-          <mat-spinner *ngIf="isResending" diameter="20" class="button-spinner"></mat-spinner>
-          <span *ngIf="!isResending">Resend Verification Email</span>
-        </button>
-
-        <div class="back-link-container">
-          <a routerLink="/auth/login" class="back-link">
-            Back to Sign In
-          </a>
-        </div>
+      <div class="back-link-container">
+        <a routerLink="/auth/login" class="back-link">
+          Back to Sign In
+        </a>
       </div>
     </mat-card-content>
   </mat-card>
-</div>
+</app-auth-layout>

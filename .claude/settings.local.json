@@ -43,7 +43,8 @@
       "Bash(timeout:*)",
       "Bash(npm run dev:*)",
       "Bash(ping:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git remote add:*)"
     ],
     "deny": [],
     "ask": []
