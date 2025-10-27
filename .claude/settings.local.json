@@ -42,7 +42,8 @@
       "Bash(netstat:*)",
       "Bash(timeout:*)",
       "Bash(npm run dev:*)",
-      "Bash(ping:*)"
+      "Bash(ping:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
