@@ -1,0 +1,62 @@
+<!-- Selector de Tema - Desktop -->
+<button mat-button class="theme-button hide-xs" [matMenuTriggerFor]="themeMenu">
+  <div class="account-info">
+    <span class="account-greeting">Tema</span>
+    <span class="account-label">{{ themeService.getThemeLabel() }}</span>
+  </div>
+  <span class="mat-mdc-button-touch-target"></span>
+</button>
+
+<mat-menu #themeMenu="matMenu">
+  <button
+    mat-menu-item
+    (click)="setTheme('light')"
+    [class.active]="themeService.themeMode() === 'light'">
+    <mat-icon>light_mode</mat-icon>
+    <span>Claro</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="setTheme('dark')"
+    [class.active]="themeService.themeMode() === 'dark'">
+    <mat-icon>dark_mode</mat-icon>
+    <span>Oscuro</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="setTheme('auto')"
+    [class.active]="themeService.themeMode() === 'auto'">
+    <mat-icon>brightness_auto</mat-icon>
+    <span>Automático</span>
+  </button>
+</mat-menu>
+
+<!-- Icono de tema - Móvil -->
+<button mat-icon-button class="hide-gt-xs" [matMenuTriggerFor]="themeMobileMenu">
+  <mat-icon>{{ themeService.getThemeIcon() }}</mat-icon>
+  <span class="mat-mdc-button-touch-target"></span>
+</button>
+
+<mat-menu #themeMobileMenu="matMenu">
+  <button
+    mat-menu-item
+    (click)="setTheme('light')"
+    [class.active]="themeService.themeMode() === 'light'">
+    <mat-icon>light_mode</mat-icon>
+    <span>Claro</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="setTheme('dark')"
+    [class.active]="themeService.themeMode() === 'dark'">
+    <mat-icon>dark_mode</mat-icon>
+    <span>Oscuro</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="setTheme('auto')"
+    [class.active]="themeService.themeMode() === 'auto'">
+    <mat-icon>brightness_auto</mat-icon>
+    <span>Automático</span>
+  </button>
+</mat-menu>

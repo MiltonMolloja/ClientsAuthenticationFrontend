@@ -5,60 +5,94 @@
 @use 'styles/variables' as vars;
 @use 'styles/mixins' as mixins;
 
-// Amazon Theme CSS Variables
+// Amazon Theme CSS Variables (disponibles en ambos temas)
 :root {
-  --amazon-dark: #{vars.$amazon-dark};
-  --amazon-light: #{vars.$amazon-light};
-  --amazon-orange: #{vars.$amazon-orange};
-  --amazon-yellow: #{vars.$amazon-yellow};
-  --amazon-bg: #{vars.$amazon-bg-light};
-  --amazon-text: #{vars.$amazon-text-light};
+  --amazon-dark: #232f3e;
+  --amazon-light: #37475a;
+  --amazon-orange: #ff9900;
+  --amazon-yellow: #febd69;
+  --amazon-bg: #eaeded;
+  --amazon-bg-dark: #131921;
+  --amazon-white: #ffffff;
+  --amazon-text-light: #0f1111;
+  --amazon-text-dark: #ffffff;
 
-  --background: #{vars.$background-light};
-  --foreground: #{vars.$foreground-light};
-  --card: #{vars.$card-light};
-  --border: #{vars.$border-light};
-  --input-background: #{vars.$input-background-light};
-  --radius: 0.625rem;
+  // Variables dinámicas por defecto (tema claro)
+  --card-bg: #ffffff;
+  --card-border: #e0e0e0;
+  --card-hover-bg: #f5f5f5;
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --header-bg-primary: #232f3e;
+  --header-bg-secondary: #37475a;
+  --footer-bg: #37475a;
+  --footer-bottom-bg: #232f3e;
+  --search-bg: #ffffff;
+  --search-text: #111111;
 }
 
-// Dark theme variables
-.dark {
-  --amazon-bg: #{vars.$amazon-bg-dark};
-  --amazon-text: #{vars.$amazon-text-dark};
-  --background: #{vars.$background-dark};
-  --foreground: #{vars.$foreground-dark};
-  --card: #{vars.$card-dark};
-  --border: #{vars.$border-dark};
-  --input-background: #{vars.$input-background-dark};
-}
-
-// Create Amazon-inspired theme using Material 3 theming
-html {
-  @include mat.theme((
-    color: (
-      primary: mat.$orange-palette,
-      tertiary: mat.$blue-palette,
-      theme-type: light,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-}
-
-// Dark mode support using prefers-color-scheme
-@media (prefers-color-scheme: dark) {
-  html {
-    @include mat.theme((
+// Tema Claro por defecto
+html,
+html.light-theme {
+  @include mat.theme(
+    (
       color: (
-        primary: mat.$orange-palette,
+        primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
-        theme-type: dark,
+        theme-type: light
       ),
       typography: Roboto,
-      density: 0,
-    ));
-  }
+      density: 0
+    )
+  );
+
+  color-scheme: light;
+  --current-bg: var(--amazon-bg);
+  --current-text: var(--amazon-text-light);
+  --card-bg: #ffffff;
+  --card-border: #e0e0e0;
+  --card-hover-bg: #f5f5f5;
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --header-bg-primary: #232f3e;
+  --header-bg-secondary: #37475a;
+  --footer-bg: #37475a;
+  --footer-bottom-bg: #232f3e;
+  --search-bg: #ffffff;
+  --search-text: #111111;
+}
+
+// Tema Oscuro
+html.dark-theme {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+        theme-type: dark
+      ),
+      typography: Roboto,
+      density: 0
+    )
+  );
+
+  color-scheme: dark;
+  --current-bg: var(--amazon-bg-dark);
+  --current-text: var(--amazon-text-dark);
+  --card-bg: #1f2937;
+  --card-border: #374151;
+  --card-hover-bg: #2d3748;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border-color: #374151;
+  --header-bg-primary: #0f172a;
+  --header-bg-secondary: #1e293b;
+  --footer-bg: #1e293b;
+  --footer-bottom-bg: #0f172a;
+  --search-bg: #374151;
+  --search-text: #f3f4f6;
 }
 
 // Base HTML and body styles
@@ -69,12 +103,14 @@ html, body {
 }
 
 body {
-  font-family: vars.$font-family-base;
-  background-color: var(--amazon-bg);
-  color: var(--amazon-text);
+  background-color: var(--current-bg, var(--amazon-bg));
+  color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 // Global box-sizing
@@ -244,6 +280,13 @@ p {
 
 .hide-sm {
   @media (max-width: vars.$breakpoint-md - 1) {
+    display: none !important;
+  }
+}
+
+// Hide on greater than xs (hide on sm and above)
+.hide-gt-xs {
+  @media (min-width: vars.$breakpoint-sm) {
     display: none !important;
   }
 }

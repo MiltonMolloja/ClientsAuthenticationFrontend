@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@core/services/auth.service';
+import { ThemeToggle } from '@shared/components/theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,8 @@ import { AuthService } from '@core/services/auth.service';
     CommonModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    ThemeToggle
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',

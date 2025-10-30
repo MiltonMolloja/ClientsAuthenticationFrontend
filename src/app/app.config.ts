@@ -1,9 +1,18 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, APP_INITIALIZER } from '@angular/core';
 import { provideRouter, withPreloading, PreloadAllModules, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { ThemeService } from '@core/services/theme.service';
 
 import { routes } from './app.routes';
+
+// Inicializar ThemeService al arranque de la aplicación
+function initializeTheme(themeService: ThemeService) {
+  return () => {
+    // El servicio se inyecta y el constructor se ejecuta automáticamente
+    console.log('ThemeService initialized:', themeService.themeMode());
+  };
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -34,5 +43,13 @@ export const appConfig: ApplicationConfig = {
 
     // Material animations
     provideAnimations(),
+
+    // Initialize ThemeService at app startup
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeTheme,
+      deps: [ThemeService],
+      multi: true
+    }
   ]
 };
