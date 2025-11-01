@@ -70,3 +70,12 @@ export interface RegenerateBackupCodesResponse {
   succeeded: boolean;
   backupCodes: string[];
 }
+
+export interface Verify2FARequest {
+  code: string;
+}
+
+export interface Verify2FAResponse {
+  succeeded: boolean;
+  message?: string;
+}

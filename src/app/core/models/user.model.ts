@@ -10,6 +10,7 @@ export interface User {
   lockoutEnd?: Date;
   lockoutEnabled: boolean;
   accessFailedCount: number;
+  passwordChangedAt?: Date;
 }
 
 export interface UserDto {

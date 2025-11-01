@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LanguageService } from '@core/services/language.service';
 import { LoginRequest } from '@core/models/auth.model';
 import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout';
 
@@ -38,13 +39,16 @@ export class Login implements OnInit {
   hidePassword = true;
   isLoading = false;
   returnUrl = '/';
+  showPasswordChangedMessage = false;
+  showPasswordResetMessage = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public languageService: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +57,18 @@ export class Login implements OnInit {
       password: ['', Validators.required],
       rememberMe: [false]
     });
+
+    // Check if redirected from password change
+    const passwordChanged = this.route.snapshot.queryParams['passwordChanged'];
+    if (passwordChanged === 'true') {
+      this.showPasswordChangedMessage = true;
+    }
+
+    // Check if redirected from password reset
+    const passwordReset = this.route.snapshot.queryParams['passwordReset'];
+    if (passwordReset === 'true') {
+      this.showPasswordResetMessage = true;
+    }
 
     // Get return URL from route parameters or default to '/'
     const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -74,7 +90,7 @@ export class Login implements OnInit {
           return url; // Allow external redirect
         }
       } catch (e) {
-        console.error('Invalid URL:', url);
+        // Invalid URL
       }
       return '/'; // Invalid or not allowed
     }
@@ -146,8 +162,6 @@ export class Login implements OnInit {
 
   private redirectToExternalApp(accessToken: string, refreshToken: string, expiresAt?: string): void {
     // Parse the return URL to add tokens as query params
-    console.log('Redirecting to external app. ReturnUrl:', this.returnUrl);
-
     const urlObj = new URL(this.returnUrl);
 
     // Add tokens as query parameters
@@ -158,7 +172,6 @@ export class Login implements OnInit {
     }
 
     const finalUrl = urlObj.toString();
-    console.log('Final redirect URL:', finalUrl);
 
     // Redirect to external app
     window.location.href = finalUrl;

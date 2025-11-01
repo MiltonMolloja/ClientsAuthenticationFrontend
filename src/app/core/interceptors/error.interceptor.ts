@@ -22,14 +22,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Server-side error
         switch (error.status) {
           case 401:
-            // Unauthorized - try to refresh token
+            // Unauthorized - try to refresh token only if not already trying to refresh
+            if (req.url.includes('/refresh-token') || req.url.includes('/authentication')) {
+              // Don't try to refresh if we're already refreshing or logging in
+              errorMessage = 'Unauthorized';
+              break;
+            }
             return authService.refreshToken().pipe(
               switchMap(() => {
                 // Retry original request
                 return next(req);
               }),
               catchError(() => {
-                authService.logout();
+                authService.logout().subscribe();
                 router.navigate(['/auth/login']);
                 return throwError(() => new Error('Session expired'));
               })

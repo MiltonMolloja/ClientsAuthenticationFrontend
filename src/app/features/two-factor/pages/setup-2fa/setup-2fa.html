@@ -1,0 +1,205 @@
+<app-dashboard-layout>
+<div class="setup-2fa-container">
+  <div class="page-header">
+    <h1>Enable Two-Factor Authentication</h1>
+    <p>Protect your account with an extra layer of security</p>
+  </div>
+
+  <!-- Progress Indicator -->
+  <div class="progress-indicator">
+    @for (stepNum of [1, 2, 3]; track stepNum) {
+      <div class="progress-step">
+        <div
+          class="step-circle"
+          [class.active]="isStepActive(stepNum)"
+          [class.completed]="isStepCompleted(stepNum)">
+          @if (isStepCompleted(stepNum)) {
+            <mat-icon>check_circle</mat-icon>
+          } @else {
+            {{ stepNum }}
+          }
+        </div>
+        @if (stepNum < 3) {
+          <div
+            class="step-line"
+            [class.completed]="isStepCompleted(stepNum + 1)">
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Step 1: Scan QR Code -->
+  @if (step === 1 && setupData) {
+    <mat-card class="setup-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon">
+          <mat-icon>shield</mat-icon>
+          Step 1: Scan QR Code
+        </mat-card-title>
+        <mat-card-subtitle>
+          Use your authenticator app to scan this QR code
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="qr-code-container">
+          <div class="qr-code-placeholder">
+            <mat-icon>qr_code_2</mat-icon>
+            <p>QR Code</p>
+            <p class="qr-hint">(Mock for development)</p>
+          </div>
+          <p class="qr-instruction">
+            Scan this code with Google Authenticator, Authy, or any TOTP app
+          </p>
+        </div>
+
+        <div class="manual-entry-card">
+          <p class="manual-entry-title">Can't scan the QR code? Enter this key manually:</p>
+          <div class="manual-entry-input">
+            <input
+              type="text"
+              [value]="setupData.secret"
+              readonly
+              class="secret-input">
+            <button
+              mat-icon-button
+              (click)="copyToClipboard(setupData.secret, 'secret')">
+              @if (copiedSecret) {
+                <mat-icon class="success-icon">check_circle</mat-icon>
+              } @else {
+                <mat-icon>content_copy</mat-icon>
+              }
+            </button>
+          </div>
+        </div>
+
+        <button
+          mat-raised-button
+          class="full-width amazon-button"
+          (click)="nextStep()">
+          Next: Verify Code
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Step 2: Verify Code -->
+  @if (step === 2) {
+    <mat-card class="setup-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon">
+          <mat-icon>shield</mat-icon>
+          Step 2: Verify Code
+        </mat-card-title>
+        <mat-card-subtitle>
+          Enter the 6-digit code from your authenticator app
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="verifyForm" (ngSubmit)="onVerifyCode()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Verification Code</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="code"
+              placeholder="000000"
+              maxlength="6"
+              inputmode="numeric"
+              required>
+            <mat-icon matPrefix>pin</mat-icon>
+            @if (verifyForm.get('code')?.hasError('required') && verifyForm.get('code')?.touched) {
+              <mat-error>Code is required</mat-error>
+            }
+            @if (verifyForm.get('code')?.hasError('pattern') && verifyForm.get('code')?.touched) {
+              <mat-error>Code must be 6 digits</mat-error>
+            }
+          </mat-form-field>
+
+          @if (isLoading) {
+            <p class="verifying-text">Verifying code...</p>
+          }
+
+          <div class="form-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="previousStep()"
+              class="back-button">
+              Back
+            </button>
+            <button
+              mat-raised-button
+              type="submit"
+              class="verify-button amazon-button"
+              [disabled]="verifyForm.invalid || isLoading">
+              @if (isLoading) {
+                <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+                <span>Verifying...</span>
+              } @else {
+                <span>Verify Code</span>
+              }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Step 3: Save Backup Codes -->
+  @if (step === 3 && setupData) {
+    <mat-card class="setup-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon success-title">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+          Step 3: Save Backup Codes
+        </mat-card-title>
+        <mat-card-subtitle>
+          Store these codes in a safe place
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="warning-card">
+          <p class="warning-text">
+            <strong>Important:</strong> Save these backup codes now. You can use them to access your
+            account if you lose your authenticator device.
+          </p>
+        </div>
+
+        <div class="backup-codes-grid">
+          @for (code of setupData.backupCodes; track code) {
+            <div class="backup-code">{{ code }}</div>
+          }
+        </div>
+
+        <div class="backup-actions">
+          <button
+            mat-stroked-button
+            class="backup-action-button"
+            (click)="copyToClipboard(setupData.backupCodes.join('\n'), 'codes')">
+            <mat-icon>content_copy</mat-icon>
+            {{ copiedCodes ? 'Copied!' : 'Copy Codes' }}
+          </button>
+          <button
+            mat-stroked-button
+            class="backup-action-button"
+            (click)="downloadBackupCodes()">
+            <mat-icon>download</mat-icon>
+            Download
+          </button>
+        </div>
+
+        <button
+          mat-raised-button
+          class="full-width amazon-button"
+          (click)="completeSetup()">
+          Complete Setup
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+</app-dashboard-layout>

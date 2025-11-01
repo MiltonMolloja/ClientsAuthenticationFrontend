@@ -1,0 +1,221 @@
+<app-dashboard-layout>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h1>Account Overview</h1>
+      <p>Manage your account information and security settings</p>
+    </div>
+
+    @if (user) {
+      <!-- Profile Information -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>person</mat-icon>
+            Profile Information
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-label">Name</p>
+              <p class="info-value">{{ user.firstName }} {{ user.lastName }}</p>
+            </div>
+            <button mat-stroked-button class="action-button">Edit</button>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-label">Email</p>
+              <div class="info-value-with-badge">
+                <p class="info-value">{{ user.email }}</p>
+                @if (user.emailConfirmed) {
+                  <mat-chip class="status-chip verified">
+                    <mat-icon>check_circle</mat-icon>
+                    Verified
+                  </mat-chip>
+                } @else {
+                  <mat-chip class="status-chip not-verified">
+                    <mat-icon>cancel</mat-icon>
+                    Not Verified
+                  </mat-chip>
+                }
+              </div>
+            </div>
+            @if (!user.emailConfirmed) {
+              <button mat-stroked-button class="action-button">Verify Email</button>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Preferences Section -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title>{{ languageService.t('profile.preferences') }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- Theme Selector -->
+          <div class="info-row">
+            <div class="info-content">
+              <div class="preference-item">
+                <mat-icon class="preference-icon">{{ getThemeIcon() }}</mat-icon>
+                <div>
+                  <p class="info-value">{{ languageService.t('profile.theme') }}</p>
+                  <p class="info-label">
+                    {{ themeService.getThemeName(languageService.language()) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <mat-form-field appearance="outline" class="preference-select">
+              <mat-select 
+                [value]="themeService.theme()" 
+                (selectionChange)="onThemeChange($event.value)">
+                <mat-option value="light">
+                  <mat-icon>light_mode</mat-icon>
+                  {{ languageService.t('profile.themeLight') }}
+                </mat-option>
+                <mat-option value="dark">
+                  <mat-icon>dark_mode</mat-icon>
+                  {{ languageService.t('profile.themeDark') }}
+                </mat-option>
+                <mat-option value="auto">
+                  <mat-icon>brightness_auto</mat-icon>
+                  {{ languageService.t('profile.themeAuto') }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Language Selector -->
+          <div class="info-row">
+            <div class="info-content">
+              <div class="preference-item">
+                <mat-icon class="preference-icon">language</mat-icon>
+                <div>
+                  <p class="info-value">{{ languageService.t('profile.language') }}</p>
+                  <p class="info-label">
+                    {{ languageService.language() === 'es' ? 
+                       languageService.t('profile.languageSpanish') : 
+                       languageService.t('profile.languageEnglish') }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <mat-form-field appearance="outline" class="preference-select">
+              <mat-select 
+                [value]="languageService.language()" 
+                (selectionChange)="onLanguageChange($event.value)">
+                <mat-option value="es">
+                  {{ languageService.t('profile.languageSpanish') }}
+                </mat-option>
+                <mat-option value="en">
+                  {{ languageService.t('profile.languageEnglish') }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Security Overview -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>shield</mat-icon>
+            Security
+          </mat-card-title>
+          <mat-card-subtitle>
+            Protect your account with advanced security features
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">Password</p>
+              <p class="info-label">Last changed 30 days ago</p>
+            </div>
+            <a routerLink="/profile/change-password">
+              <button mat-stroked-button class="action-button">
+                <mat-icon>key</mat-icon>
+                Change Password
+              </button>
+            </a>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">Two-Factor Authentication</p>
+              <div class="info-value-with-badge">
+                @if (user.twoFactorEnabled) {
+                  <mat-chip class="status-chip verified">
+                    <mat-icon>check_circle</mat-icon>
+                    Enabled
+                  </mat-chip>
+                } @else {
+                  <mat-chip class="status-chip danger">
+                    <mat-icon>cancel</mat-icon>
+                    Disabled
+                  </mat-chip>
+                }
+              </div>
+            </div>
+            <a [routerLink]="user.twoFactorEnabled ? '/profile/security' : '/two-factor/setup'">
+              <button mat-stroked-button class="action-button">
+                {{ user.twoFactorEnabled ? 'Manage' : 'Enable' }}
+              </button>
+            </a>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">Active Sessions</p>
+              <p class="info-label">3 active sessions</p>
+            </div>
+            <a routerLink="/profile/sessions">
+              <button mat-stroked-button class="action-button">
+                <mat-icon>history</mat-icon>
+                View Sessions
+              </button>
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Quick Actions -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title>Quick Actions</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="quick-actions-grid">
+            <a routerLink="/profile/security">
+              <button mat-stroked-button class="quick-action-button">
+                <mat-icon>shield</mat-icon>
+                Security Settings
+              </button>
+            </a>
+            <a routerLink="/profile/sessions">
+              <button mat-stroked-button class="quick-action-button">
+                <mat-icon>history</mat-icon>
+                Active Sessions
+              </button>
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</app-dashboard-layout>

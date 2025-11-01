@@ -1,0 +1,82 @@
+<app-dashboard-layout>
+  <div class="edit-profile-container">
+    <div class="page-header">
+      <h1>{{ languageService.t('editProfile.title') }}</h1>
+      <p>{{ languageService.t('editProfile.subtitle') }}</p>
+    </div>
+
+    <mat-card class="edit-profile-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon">
+          <mat-icon>person</mat-icon>
+          {{ languageService.t('profile.information') }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          Update your personal information below
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          <!-- First Name -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ languageService.t('editProfile.firstName') }}</mat-label>
+            <input
+              matInput
+              formControlName="firstName"
+              [placeholder]="languageService.t('editProfile.firstNamePlaceholder')"
+              required
+            >
+            @if (profileForm.get('firstName')?.hasError('required') && profileForm.get('firstName')?.touched) {
+              <mat-error>First name is required</mat-error>
+            }
+            @if (profileForm.get('firstName')?.hasError('minlength') && profileForm.get('firstName')?.touched) {
+              <mat-error>Minimum 2 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Last Name -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ languageService.t('editProfile.lastName') }}</mat-label>
+            <input
+              matInput
+              formControlName="lastName"
+              [placeholder]="languageService.t('editProfile.lastNamePlaceholder')"
+              required
+            >
+            @if (profileForm.get('lastName')?.hasError('required') && profileForm.get('lastName')?.touched) {
+              <mat-error>Last name is required</mat-error>
+            }
+            @if (profileForm.get('lastName')?.hasError('minlength') && profileForm.get('lastName')?.touched) {
+              <mat-error>Minimum 2 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Action Buttons -->
+          <div class="form-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="onCancel()"
+              class="cancel-button"
+              [disabled]="isLoading()">
+              {{ languageService.t('common.cancel') }}
+            </button>
+            <button
+              mat-raised-button
+              type="submit"
+              class="submit-button amazon-button"
+              [disabled]="isLoading() || !hasChanges() || profileForm.invalid">
+              @if (isLoading()) {
+                <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+                <span>{{ languageService.t('common.loading') }}</span>
+              } @else {
+                <span>{{ languageService.t('editProfile.updateProfile') }}</span>
+              }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</app-dashboard-layout>

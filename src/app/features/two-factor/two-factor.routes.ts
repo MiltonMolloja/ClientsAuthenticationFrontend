@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
 
 export const TWO_FACTOR_ROUTES: Routes = [
-  // Two-factor authentication routes will be implemented in Part 2
-  // Will include: setup, verify, disable, backup-codes
   {
-    path: '',
-    children: [
-      // Placeholder - will be implemented in Part 2
-    ]
-  }
+    path: 'setup',
+    loadComponent: () => import('./pages/setup-2fa/setup-2fa').then(m => m.Setup2FA)
+  },
+  // Verify 2FA route will be implemented later
+  // {
+  //   path: 'verify',
+  //   loadComponent: () => import('./pages/verify-2fa/verify-2fa').then(m => m.Verify2FA)
+  // }
 ];

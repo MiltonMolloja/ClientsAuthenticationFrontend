@@ -1,0 +1,29 @@
+.language-button,
+.account-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.account-info {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.account-greeting {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.account-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+mat-menu-item.active {
+  background-color: rgba(var(--primary-rgb), 0.1);
+  
+  mat-icon {
+    color: var(--primary);
+  }
+}

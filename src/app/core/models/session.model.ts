@@ -5,6 +5,7 @@ export interface Session {
   createdAt: Date;
   expiresAt: Date;
   isCurrent: boolean;
+  refreshToken?: string;
 }
 
 export interface SessionsResponse {

@@ -1,0 +1,227 @@
+<app-dashboard-layout>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h1>{{ languageService.t('profile.title') }}</h1>
+      <p>{{ languageService.t('profile.subtitle') }}</p>
+    </div>
+
+    @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>{{ languageService.t('common.loading') }}</p>
+    </div>
+  } @else if (user()) {
+      <!-- Profile Information -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>person</mat-icon>
+            {{ languageService.t('profile.information') }}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-label">{{ languageService.t('profile.name') }}</p>
+              <p class="info-value">{{ user()!.firstName }} {{ user()!.lastName }}</p>
+            </div>
+            <a routerLink="/profile/edit">
+              <button mat-stroked-button class="action-button">{{ languageService.t('common.edit') }}</button>
+            </a>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-label">{{ languageService.t('profile.email') }}</p>
+              <div class="info-value-with-badge">
+                <p class="info-value">{{ user()!.email }}</p>
+                @if (user() && user()!.emailConfirmed) {
+                  <mat-chip class="status-chip verified">
+                    <mat-icon>check_circle</mat-icon>
+                    {{ languageService.t('profile.verified') }}
+                  </mat-chip>
+                } @else {
+                  <mat-chip class="status-chip not-verified">
+                    <mat-icon>cancel</mat-icon>
+                    {{ languageService.t('profile.notVerified') }}
+                  </mat-chip>
+                }
+              </div>
+            </div>
+            @if (user() && !user()!.emailConfirmed) {
+              <button mat-stroked-button class="action-button" (click)="resendVerificationEmail()" [disabled]="isResendingEmail()">{{ isResendingEmail() ? languageService.t('common.loading') : languageService.t('profile.verifyEmail') }}</button>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Preferences Section -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title>{{ languageService.t('profile.preferences') }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- Theme Selector -->
+          <div class="info-row">
+            <div class="info-content">
+              <div class="preference-item">
+                <mat-icon class="preference-icon">{{ getThemeIcon() }}</mat-icon>
+                <div>
+                  <p class="info-value">{{ languageService.t('profile.theme') }}</p>
+                  <p class="info-label">
+                    {{ themeService.getThemeName(languageService.language()) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <mat-button-toggle-group
+              class="preference-toggle"
+              [value]="themeService.theme()"
+              (change)="onThemeChange($event.value)">
+              <mat-button-toggle value="light">
+                <mat-icon>light_mode</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle value="dark">
+                <mat-icon>dark_mode</mat-icon>
+              </mat-button-toggle>
+              <mat-button-toggle value="auto">
+                <mat-icon>brightness_auto</mat-icon>
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Language Selector -->
+          <div class="info-row">
+            <div class="info-content">
+              <div class="preference-item">
+                <mat-icon class="preference-icon">language</mat-icon>
+                <div>
+                  <p class="info-value">{{ languageService.t('profile.language') }}</p>
+                  <p class="info-label">
+                    {{ languageService.language() === 'es' ?
+                       languageService.t('profile.languageSpanish') :
+                       languageService.t('profile.languageEnglish') }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <mat-button-toggle-group
+              class="preference-toggle"
+              [value]="languageService.language()"
+              (change)="onLanguageChange($event.value)">
+              <mat-button-toggle value="es">
+                ES
+              </mat-button-toggle>
+              <mat-button-toggle value="en">
+                EN
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Security Overview -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>shield</mat-icon>
+            {{ languageService.t('security.title') }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ languageService.t('security.subtitle') }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">{{ languageService.t('security.password') }}</p>
+              @if (user()?.passwordChangedAt) {
+                <p class="info-label">
+                  {{ languageService.t('security.lastChanged') }} {{ getDaysSincePasswordChange() }} {{ languageService.t('security.days') }}
+                </p>
+              }
+            </div>
+            <a routerLink="/profile/change-password">
+              <button mat-stroked-button class="action-button">
+                <mat-icon>key</mat-icon>
+                {{ languageService.t('security.changePassword') }}
+              </button>
+            </a>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">{{ languageService.t('security.twoFactor') }}</p>
+              <div class="info-value-with-badge">
+                @if (user() && user()!.twoFactorEnabled) {
+                  <mat-chip class="status-chip verified">
+                    <mat-icon>check_circle</mat-icon>
+                    {{ languageService.t('security.enabled') }}
+                  </mat-chip>
+                } @else {
+                  <mat-chip class="status-chip danger">
+                    <mat-icon>cancel</mat-icon>
+                    {{ languageService.t('security.disabled') }}
+                  </mat-chip>
+                }
+              </div>
+            </div>
+            <a [routerLink]="user()!.twoFactorEnabled ? '/profile/security' : '/two-factor/setup'">
+              <button mat-stroked-button class="action-button">
+                {{ user()!.twoFactorEnabled ? languageService.t('security.manage') : languageService.t('security.enable') }}
+              </button>
+            </a>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">{{ languageService.t('security.activeSessions') }}</p>
+              <p class="info-label">3 {{ languageService.t('security.activeSessionsCount') }}</p>
+            </div>
+            <a routerLink="/profile/sessions">
+              <button mat-stroked-button class="action-button">
+                <mat-icon>history</mat-icon>
+                {{ languageService.t('security.viewSessions') }}
+              </button>
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Quick Actions -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title>{{ languageService.t('quickActions.title') }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="quick-actions-grid">
+            <a routerLink="/profile/security">
+              <button mat-stroked-button class="quick-action-button">
+                <mat-icon>shield</mat-icon>
+                {{ languageService.t('quickActions.securitySettings') }}
+              </button>
+            </a>
+            <a routerLink="/profile/sessions">
+              <button mat-stroked-button class="quick-action-button">
+                <mat-icon>history</mat-icon>
+                {{ languageService.t('quickActions.activeSessions') }}
+              </button>
+            </a>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</app-dashboard-layout>

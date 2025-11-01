@@ -1,0 +1,176 @@
+<app-dashboard-layout>
+<div class="security-settings-container">
+  <div class="page-header">
+    <h1>{{ languageService.t('security.settingsTitle') }}</h1>
+    <p>{{ languageService.t('security.settingsSubtitle') }}</p>
+  </div>
+
+  @if (user) {
+    <!-- Password Section -->
+    <mat-card class="security-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon">
+          <mat-icon>key</mat-icon>
+          {{ languageService.t('security.passwordSection') }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ languageService.t('security.passwordSubtitle') }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-row">
+          <div class="info-content">
+            <p class="info-value">{{ languageService.t('security.currentPassword') }}</p>
+            @if (user.passwordChangedAt) {
+              <p class="info-label">
+                {{ languageService.t('security.lastChanged') }} {{ getDaysSincePasswordChange() }} {{ languageService.t('security.lastChangedDays') }}
+              </p>
+            }
+          </div>
+          <a routerLink="/profile/change-password">
+            <button mat-stroked-button class="action-button">{{ languageService.t('security.changePassword') }}</button>
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Two-Factor Authentication Section -->
+    <mat-card class="security-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon">
+          <mat-icon>smartphone</mat-icon>
+          {{ languageService.t('security.twoFactorSection') }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ languageService.t('security.twoFactorSubtitle') }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-row">
+          <div class="info-content">
+            <p class="info-value">{{ languageService.t('security.status') }}</p>
+            <div class="info-value-with-badge">
+              @if (user.twoFactorEnabled) {
+                <mat-chip class="status-chip verified">
+                  {{ languageService.t('security.enabled') }}
+                </mat-chip>
+              } @else {
+                <mat-chip class="status-chip danger">
+                  {{ languageService.t('security.disabled') }}
+                </mat-chip>
+              }
+            </div>
+          </div>
+          <a [routerLink]="user.twoFactorEnabled ? '/two-factor/disable' : '/two-factor/setup'">
+            <button mat-stroked-button class="action-button">
+              {{ user.twoFactorEnabled ? languageService.t('security.disable') : languageService.t('security.enable') }} 2FA
+            </button>
+          </a>
+        </div>
+
+        @if (user.twoFactorEnabled) {
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <div class="info-content">
+              <p class="info-value">{{ languageService.t('security.backupCodes') }}</p>
+              <p class="info-label">{{ languageService.t('security.backupCodesSubtitle') }}</p>
+            </div>
+            <button mat-stroked-button class="action-button">
+              <mat-icon>download</mat-icon>
+              {{ languageService.t('security.viewCodes') }}
+            </button>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Account Activity Section -->
+    <mat-card class="security-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon">
+          <mat-icon>history</mat-icon>
+          {{ languageService.t('security.recentActivity') }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ languageService.t('security.recentActivitySubtitle') }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="table-container">
+          <table mat-table [dataSource]="auditLogs" class="activity-table">
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>{{ languageService.t('security.action') }}</th>
+              <td mat-cell *matCellDef="let log">{{ languageService.t('activity.' + log.action) || log.action }}</td>
+            </ng-container>
+
+            <!-- Timestamp Column -->
+            <ng-container matColumnDef="timestamp">
+              <th mat-header-cell *matHeaderCellDef>{{ languageService.t('security.dateTime') }}</th>
+              <td mat-cell *matCellDef="let log" class="timestamp-cell">
+                {{ formatDate(log.timestamp) }} {{ formatTime(log.timestamp) }}
+              </td>
+            </ng-container>
+
+            <!-- IP Address Column -->
+            <ng-container matColumnDef="ipAddress">
+              <th mat-header-cell *matHeaderCellDef>{{ languageService.t('security.ipAddress') }}</th>
+              <td mat-cell *matCellDef="let log" class="ip-cell">{{ log.ipAddress }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>{{ languageService.t('security.statusColumn') }}</th>
+              <td mat-cell *matCellDef="let log">
+                @if (log.success) {
+                  <mat-chip class="status-chip verified">{{ languageService.t('security.success') }}</mat-chip>
+                } @else {
+                  <mat-chip class="status-chip danger">{{ languageService.t('security.failed') }}</mat-chip>
+                }
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Security Recommendations Section -->
+    <mat-card class="security-card recommendations-card">
+      <mat-card-header>
+        <mat-card-title class="card-title-with-icon recommendations-title">
+          <mat-icon>shield</mat-icon>
+          {{ languageService.t('security.recommendations') }}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <ul class="recommendations-list">
+          <li>
+            <span class="bullet">•</span>
+            <span>{{ languageService.t('security.rec1') }}</span>
+          </li>
+          <li>
+            <span class="bullet">•</span>
+            <span>{{ languageService.t('security.rec2') }}</span>
+          </li>
+          <li>
+            <span class="bullet">•</span>
+            <span>{{ languageService.t('security.rec3') }}</span>
+          </li>
+          <li>
+            <span class="bullet">•</span>
+            <span>{{ languageService.t('security.rec4') }}</span>
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+</app-dashboard-layout>

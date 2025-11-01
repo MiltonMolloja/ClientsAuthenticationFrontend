@@ -1,0 +1,435 @@
+export type Language = 'es' | 'en';
+
+export interface Translations {
+  [key: string]: any;
+}
+
+export const translations: Record<Language, Translations> = {
+  es: {
+    // Common
+    common: {
+      edit: 'Editar',
+      save: 'Guardar',
+      cancel: 'Cancelar',
+      delete: 'Eliminar',
+      confirm: 'Confirmar',
+      back: 'Volver',
+      loading: 'Cargando...',
+      error: 'Error',
+      success: 'Éxito',
+      unknown: 'Desconocido',
+    },
+
+    // Profile
+    profile: {
+      title: 'Resumen de Cuenta',
+      subtitle: 'Gestiona tu información de cuenta y configuración de seguridad',
+      information: 'Información de Perfil',
+      name: 'Nombre',
+      email: 'Email',
+      verified: 'Verificado',
+      notVerified: 'No Verificado',
+      verifyEmail: 'Verificar Email',
+      preferences: 'Preferencias',
+      theme: 'Tema',
+      language: 'Idioma',
+      themeLight: 'Claro',
+      themeDark: 'Oscuro',
+      themeAuto: 'Automático',
+      languageSpanish: 'Español',
+      languageEnglish: 'Inglés',
+    },
+
+    // Edit Profile
+    editProfile: {
+      title: 'Editar Perfil',
+      subtitle: 'Actualiza tu información personal',
+      firstName: 'Nombre',
+      lastName: 'Apellido',
+      firstNamePlaceholder: 'Ingresa tu nombre',
+      lastNamePlaceholder: 'Ingresa tu apellido',
+      updateProfile: 'Actualizar Perfil',
+      successMessage: 'Perfil actualizado exitosamente',
+      errorMessage: 'Error al actualizar el perfil',
+    },
+
+    // Security
+    security: {
+      title: 'Seguridad',
+      subtitle: 'Protege tu cuenta con características avanzadas de seguridad',
+      password: 'Contraseña',
+      lastChanged: 'Última modificación hace',
+      days: 'días',
+      changePassword: 'Cambiar Contraseña',
+      twoFactor: 'Autenticación de Dos Factores',
+      enabled: 'Habilitado',
+      disabled: 'Deshabilitado',
+      enable: 'Habilitar',
+      manage: 'Gestionar',
+      activeSessions: 'Sesiones Activas',
+      activeSessionsCount: 'sesiones activas',
+      viewSessions: 'Ver Sesiones',
+      settingsTitle: 'Configuración de Seguridad',
+      settingsSubtitle: 'Gestiona tu seguridad de cuenta y métodos de autenticación',
+      passwordSection: 'Contraseña',
+      passwordSubtitle: 'Cambia tu contraseña regularmente para mantener tu cuenta segura',
+      currentPassword: 'Contraseña Actual',
+      lastChangedDays: 'días atrás',
+      twoFactorSection: 'Autenticación de Dos Factores',
+      twoFactorSubtitle: 'Agrega una capa extra de seguridad a tu cuenta',
+      status: 'Estado',
+      disable: 'Deshabilitar',
+      backupCodes: 'Códigos de Respaldo',
+      backupCodesSubtitle: 'Úsalos si pierdes acceso a tu autenticador',
+      viewCodes: 'Ver Códigos',
+      recentActivity: 'Actividad Reciente de la Cuenta',
+      recentActivitySubtitle: 'Monitorea las acciones recientes en tu cuenta',
+      action: 'Acción',
+      dateTime: 'Fecha y Hora',
+      ipAddress: 'Dirección IP',
+      statusColumn: 'Estado',
+      success: 'Éxito',
+      failed: 'Falló',
+      recommendations: 'Recomendaciones de Seguridad',
+      rec1: 'Habilita la autenticación de dos factores para mayor seguridad',
+      rec2: 'Usa una contraseña fuerte y única, y cámbiala regularmente',
+      rec3: 'Revisa tus sesiones activas y revoca cualquiera que no reconozcas',
+      rec4: 'Mantén tus códigos de respaldo en un lugar seguro',
+    },
+
+    // Quick Actions
+    quickActions: {
+      title: 'Acciones Rápidas',
+      securitySettings: 'Configuración de Seguridad',
+      activeSessions: 'Sesiones Activas',
+    },
+
+    // Sessions
+    sessions: {
+      title: 'Sesiones Activas',
+      subtitle: 'Gestiona dispositivos y navegadores actualmente conectados a tu cuenta',
+      revokeAll: 'Revocar Todas las Sesiones',
+      securityTipTitle: 'Consejo de Seguridad:',
+      securityTipText: 'Revisa tus sesiones activas regularmente',
+      securityTipDescription: 'Si ves una sesión que no reconoces, revócala inmediatamente y cambia tu contraseña.',
+      current: 'Actual',
+      revoke: 'Revocar',
+      created: 'Creado:',
+      expires: 'Expira:',
+      at: 'a las',
+      noOtherSessions: 'No hay otras sesiones activas',
+      revokeSuccess: 'Sesión revocada exitosamente',
+      revokeAllSuccess: 'Todas las demás sesiones han sido revocadas',
+      revokeAllConfirmTitle: '¿Cerrar todas las sesiones?',
+      revokeAllConfirmMessage: 'Esto cerrará todas las demás sesiones. Necesitarás iniciar sesión nuevamente en esos dispositivos.',
+      revokeAllConfirmButton: 'Cerrar Todas',
+    },
+
+    // Activity Actions
+    activity: {
+      Login: 'Inicio de Sesión',
+      Logout: 'Cierre de Sesión',
+      PasswordChange: 'Cambio de Contraseña',
+      PasswordReset: 'Restablecimiento de Contraseña',
+      ResetPassword: 'Restablecimiento de Contraseña',
+      ForgotPassword: 'Solicitud de Restablecimiento de Contraseña',
+      FailedLoginAttempt: 'Intento de Inicio de Sesión Fallido',
+      '2FAEnabled': '2FA Habilitado',
+      '2FADisabled': '2FA Deshabilitado',
+      '2FAVerification': 'Verificación 2FA',
+      '2FAVerificationFailed': 'Verificación 2FA Fallida',
+      EmailVerified: 'Email Verificado',
+      EmailConfirmation: 'Confirmación de Email',
+      ProfileUpdate: 'Actualización de Perfil',
+      RevokeSession: 'Sesión Revocada',
+      RevokeAllSessions: 'Todas las Sesiones Revocadas',
+      SessionCreated: 'Sesión Creada',
+      AccountLocked: 'Cuenta Bloqueada',
+      AccountUnlocked: 'Cuenta Desbloqueada',
+      Register: 'Registro de Usuario',
+      RefreshToken: 'Renovación de Token',
+    },
+
+    // Auth
+    auth: {
+      login: 'Iniciar Sesión',
+      logout: 'Cerrar Sesión',
+      register: 'Registrarse',
+      email: 'Correo Electrónico',
+      password: 'Contraseña',
+      passwordChangedSuccess: '¡Contraseña cambiada exitosamente!',
+      passwordChangedMessage: 'Por favor, inicia sesión con tu nueva contraseña para continuar.',
+      passwordResetSuccess: '¡Contraseña restablecida exitosamente!',
+      passwordResetMessage: 'Todas las sesiones han sido cerradas. Por favor, inicia sesión con tu nueva contraseña.',
+      loggingOut: 'Cerrando sesión...',
+    },
+
+    // 2FA
+    twoFactor: {
+      title: 'Verificación en Dos Pasos',
+      subtitle: 'Ingresa el código de 6 dígitos de tu aplicación de autenticación',
+      setup: 'Configurar Autenticación de Dos Factores',
+    },
+
+    // Change Password
+    changePassword: {
+      title: 'Cambiar Contraseña',
+      subtitle: 'Actualiza tu contraseña para mantener tu cuenta segura',
+      currentPassword: 'Contraseña Actual',
+      newPassword: 'Nueva Contraseña',
+      confirmNewPassword: 'Confirmar Nueva Contraseña',
+      update: 'Actualizar Contraseña',
+    },
+
+    // Reset Password
+    resetPassword: {
+      title: 'Restablecer Contraseña',
+      subtitle: 'Ingresa tu nueva contraseña',
+      newPassword: 'Nueva Contraseña',
+      newPasswordPlaceholder: 'Ingresa tu nueva contraseña',
+      confirmPassword: 'Confirmar Contraseña',
+      confirmPasswordPlaceholder: 'Confirma tu nueva contraseña',
+      confirmButton: 'Confirmar',
+      confirming: 'Confirmando...',
+      cancelButton: 'Cancelar',
+      passwordsDoNotMatch: 'Las contraseñas no coinciden',
+      invalidToken: 'Token inválido o expirado',
+      successMessage: 'Tu contraseña ha sido restablecida exitosamente',
+    },
+
+    // Forgot Password
+    forgotPassword: {
+      title: 'Olvidé mi Contraseña',
+      subtitle: 'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
+      emailLabel: 'Correo Electrónico',
+      emailPlaceholder: 'tu@email.com',
+      sendResetLink: 'Enviar Enlace de Restablecimiento',
+      sending: 'Enviando...',
+      backToLogin: 'Volver al inicio de sesión',
+      checkEmailTitle: 'Revisa tu correo',
+      checkEmailMessage: 'Hemos enviado un enlace de restablecimiento a',
+      checkEmailMessage2: 'si existe una cuenta con ese correo',
+      emailNote: 'Si no recibes el correo en unos minutos, revisa tu carpeta de spam',
+    },
+
+    // Register
+    register: {
+      passwordsDoNotMatch: 'Las contraseñas no coinciden',
+    },
+  },
+
+  en: {
+    // Common
+    common: {
+      edit: 'Edit',
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      confirm: 'Confirm',
+      back: 'Back',
+      loading: 'Loading...',
+      error: 'Error',
+      success: 'Success',
+      unknown: 'Unknown',
+    },
+
+    // Profile
+    profile: {
+      title: 'Account Overview',
+      subtitle: 'Manage your account information and security settings',
+      information: 'Profile Information',
+      name: 'Name',
+      email: 'Email',
+      verified: 'Verified',
+      notVerified: 'Not Verified',
+      verifyEmail: 'Verify Email',
+      preferences: 'Preferences',
+      theme: 'Theme',
+      language: 'Language',
+      themeLight: 'Light',
+      themeDark: 'Dark',
+      themeAuto: 'Automatic',
+      languageSpanish: 'Spanish',
+      languageEnglish: 'English',
+      verificationEmailSent: 'Verification email sent successfully',
+      verificationEmailError: 'Error sending verification email',
+    },
+
+    // Edit Profile
+    editProfile: {
+      title: 'Edit Profile',
+      subtitle: 'Update your personal information',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      firstNamePlaceholder: 'Enter your first name',
+      lastNamePlaceholder: 'Enter your last name',
+      updateProfile: 'Update Profile',
+      successMessage: 'Profile updated successfully',
+      errorMessage: 'Error updating profile',
+    },
+
+    // Security
+    security: {
+      title: 'Security',
+      subtitle: 'Protect your account with advanced security features',
+      password: 'Password',
+      lastChanged: 'Last changed',
+      days: 'days ago',
+      changePassword: 'Change Password',
+      twoFactor: 'Two-Factor Authentication',
+      enabled: 'Enabled',
+      disabled: 'Disabled',
+      enable: 'Enable',
+      manage: 'Manage',
+      activeSessions: 'Active Sessions',
+      activeSessionsCount: 'active sessions',
+      viewSessions: 'View Sessions',
+      settingsTitle: 'Security Settings',
+      settingsSubtitle: 'Manage your account security and authentication methods',
+      passwordSection: 'Password',
+      passwordSubtitle: 'Change your password regularly to keep your account secure',
+      currentPassword: 'Current Password',
+      lastChangedDays: 'days ago',
+      twoFactorSection: 'Two-Factor Authentication',
+      twoFactorSubtitle: 'Add an extra layer of security to your account',
+      status: 'Status',
+      disable: 'Disable',
+      backupCodes: 'Backup Codes',
+      backupCodesSubtitle: 'Use these if you lose access to your authenticator',
+      viewCodes: 'View Codes',
+      recentActivity: 'Recent Account Activity',
+      recentActivitySubtitle: 'Monitor recent actions on your account',
+      action: 'Action',
+      dateTime: 'Date & Time',
+      ipAddress: 'IP Address',
+      statusColumn: 'Status',
+      success: 'Success',
+      failed: 'Failed',
+      recommendations: 'Security Recommendations',
+      rec1: 'Enable two-factor authentication for enhanced security',
+      rec2: 'Use a strong, unique password and change it regularly',
+      rec3: 'Review your active sessions and revoke any you don\'t recognize',
+      rec4: 'Keep your backup codes in a safe place',
+    },
+
+    // Quick Actions
+    quickActions: {
+      title: 'Quick Actions',
+      securitySettings: 'Security Settings',
+      activeSessions: 'Active Sessions',
+    },
+
+    // Sessions
+    sessions: {
+      title: 'Active Sessions',
+      subtitle: 'Manage devices and browsers currently signed into your account',
+      revokeAll: 'Revoke All Sessions',
+      securityTipTitle: 'Security Tip:',
+      securityTipText: 'Review your active sessions regularly',
+      securityTipDescription: 'If you see a session you don\'t recognize, revoke it immediately and change your password.',
+      current: 'Current',
+      revoke: 'Revoke',
+      created: 'Created:',
+      expires: 'Expires:',
+      at: 'at',
+      noOtherSessions: 'No other active sessions',
+      revokeSuccess: 'Session revoked successfully',
+      revokeAllSuccess: 'All other sessions have been revoked',
+      revokeAllConfirmTitle: 'Close all sessions?',
+      revokeAllConfirmMessage: 'This will close all other sessions. You will need to log in again on those devices.',
+      revokeAllConfirmButton: 'Close All',
+    },
+
+    // Activity Actions
+    activity: {
+      Login: 'Login',
+      Logout: 'Logout',
+      PasswordChange: 'Password Change',
+      PasswordReset: 'Password Reset',
+      ResetPassword: 'Password Reset',
+      ForgotPassword: 'Forgot Password Request',
+      FailedLoginAttempt: 'Failed Login Attempt',
+      '2FAEnabled': '2FA Enabled',
+      '2FADisabled': '2FA Disabled',
+      '2FAVerification': '2FA Verification',
+      '2FAVerificationFailed': '2FA Verification Failed',
+      EmailVerified: 'Email Verified',
+      EmailConfirmation: 'Email Confirmation',
+      ProfileUpdate: 'Profile Update',
+      RevokeSession: 'Session Revoked',
+      RevokeAllSessions: 'All Sessions Revoked',
+      SessionCreated: 'Session Created',
+      AccountLocked: 'Account Locked',
+      AccountUnlocked: 'Account Unlocked',
+      Register: 'User Registration',
+      RefreshToken: 'Token Refresh',
+    },
+
+    // Auth
+    auth: {
+      login: 'Sign In',
+      logout: 'Sign Out',
+      register: 'Sign Up',
+      email: 'Email Address',
+      password: 'Password',
+      passwordChangedSuccess: 'Password changed successfully!',
+      passwordChangedMessage: 'Please sign in with your new password to continue.',
+      passwordResetSuccess: 'Password reset successfully!',
+      passwordResetMessage: 'All sessions have been logged out. Please sign in with your new password.',
+      loggingOut: 'Logging out...',
+    },
+
+    // 2FA
+    twoFactor: {
+      title: 'Two-Step Verification',
+      subtitle: 'Enter the 6-digit code from your authenticator app',
+      setup: 'Setup Two-Factor Authentication',
+    },
+
+    // Change Password
+    changePassword: {
+      title: 'Change Password',
+      subtitle: 'Update your password to keep your account secure',
+      currentPassword: 'Current Password',
+      newPassword: 'New Password',
+      confirmNewPassword: 'Confirm New Password',
+      update: 'Update Password',
+    },
+
+    // Reset Password
+    resetPassword: {
+      title: 'Reset Password',
+      subtitle: 'Enter your new password',
+      newPassword: 'New Password',
+      newPasswordPlaceholder: 'Enter your new password',
+      confirmPassword: 'Confirm Password',
+      confirmPasswordPlaceholder: 'Confirm your new password',
+      confirmButton: 'Confirm',
+      confirming: 'Confirming...',
+      cancelButton: 'Cancel',
+      passwordsDoNotMatch: 'Passwords do not match',
+      invalidToken: 'Invalid or expired token',
+      successMessage: 'Your password has been reset successfully',
+    },
+
+    // Forgot Password
+    forgotPassword: {
+      title: 'Forgot Password',
+      subtitle: 'Enter your email and we\'ll send you a link to reset your password',
+      emailLabel: 'Email Address',
+      emailPlaceholder: 'your@email.com',
+      sendResetLink: 'Send Reset Link',
+      sending: 'Sending...',
+      backToLogin: 'Back to sign in',
+      checkEmailTitle: 'Check your email',
+      checkEmailMessage: 'We\'ve sent a reset link to',
+      checkEmailMessage2: 'if an account exists with that email',
+      emailNote: 'If you don\'t receive the email within a few minutes, check your spam folder',
+    },
+
+    // Register
+    register: {
+      passwordsDoNotMatch: 'Passwords do not match',
+    },
+  },
+};

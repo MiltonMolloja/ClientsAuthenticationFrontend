@@ -3,14 +3,18 @@ import { provideRouter, withPreloading, PreloadAllModules, withComponentInputBin
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ThemeService } from '@core/services/theme.service';
+import { LanguageService } from '@core/services/language.service';
+import { authInterceptor } from '@core/interceptors/auth.interceptor';
+import { errorInterceptor } from '@core/interceptors/error.interceptor';
 
 import { routes } from './app.routes';
 
-// Inicializar ThemeService al arranque de la aplicación
-function initializeTheme(themeService: ThemeService) {
+// Inicializar ThemeService y LanguageService al arranque de la aplicación
+function initializeApp(themeService: ThemeService, languageService: LanguageService) {
   return () => {
-    // El servicio se inyecta y el constructor se ejecuta automáticamente
-    console.log('ThemeService initialized:', themeService.themeMode());
+    // Los servicios se inyectan y sus constructores se ejecutan automáticamente
+    console.log('ThemeService initialized:', themeService.theme());
+    console.log('LanguageService initialized:', languageService.language());
   };
 }
 
@@ -27,13 +31,11 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions() // Enable view transitions API
     ),
 
-    // HTTP Client with XSRF protection
+    // HTTP Client with interceptors and XSRF protection
     provideHttpClient(
       withInterceptors([
-        // Interceptors will be added here in Part 2:
-        // - authInterceptor (for JWT token injection)
-        // - errorInterceptor (for global error handling)
-        // - loadingInterceptor (for loading state management)
+        authInterceptor,
+        errorInterceptor
       ]),
       withXsrfConfiguration({
         cookieName: 'XSRF-TOKEN',
@@ -44,11 +46,11 @@ export const appConfig: ApplicationConfig = {
     // Material animations
     provideAnimations(),
 
-    // Initialize ThemeService at app startup
+    // Initialize ThemeService and LanguageService at app startup
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeTheme,
-      deps: [ThemeService],
+      useFactory: initializeApp,
+      deps: [ThemeService, LanguageService],
       multi: true
     }
   ]

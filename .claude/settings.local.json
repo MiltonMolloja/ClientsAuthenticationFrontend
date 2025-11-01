@@ -45,7 +45,9 @@
       "Bash(ping:*)",
       "Bash(git push:*)",
       "Bash(git remote add:*)",
-      "Bash(if exist nul del nul)"
+      "Bash(if exist nul del nul)",
+      "Bash(npx @angular/cli@20 generate service:*)",
+      "Bash(npx @angular/cli@20 build:*)"
     ],
     "deny": [],
     "ask": []

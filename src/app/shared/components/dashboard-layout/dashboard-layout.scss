@@ -1,0 +1,235 @@
+@use '../../../../styles/variables' as vars;
+
+.dashboard-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--current-bg);
+}
+
+// Header
+.dashboard-header {
+  background-color: var(--header-bg-secondary);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  // Only override user info styles
+  ::ng-deep {
+    .user-info,
+    .user-greeting,
+    .user-email {
+      color: white !important;
+    }
+
+    .account-info,
+    .account-greeting,
+    .account-label {
+      color: white !important;
+    }
+  }
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+// Logo
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-box {
+  border: 2px solid #ff9900;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+}
+
+.logo-text {
+  color: #ff9900;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+// Navigation
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #d1d5db;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+
+  mat-icon {
+    font-size: 1.125rem;
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  &.active {
+    background-color: rgba(255, 153, 0, 0.15);
+    color: #ff9900;
+  }
+}
+
+// User Menu
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user-greeting {
+  color: white !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.user-email {
+  color: #d1d5db !important;
+  font-size: 0.75rem;
+}
+
+// Ensure text is visible
+.user-info {
+  span {
+    color: inherit !important;
+  }
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  font-size: 0.875rem;
+
+  mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+  }
+}
+
+// Main Content
+.dashboard-main {
+  flex: 1;
+  width: 100%;
+}
+
+// Footer
+.dashboard-footer {
+  background-color: var(--footer-bg);
+  padding: 1.5rem 1rem;
+  color: white;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  @media (min-width: vars.$breakpoint-sm) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (min-width: vars.$breakpoint-sm) {
+    justify-content: flex-start;
+  }
+}
+
+.footer-link {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.footer-copyright {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
+
+  @media (min-width: vars.$breakpoint-sm) {
+    text-align: right;
+  }
+}
+
+// Responsive
+@media (max-width: vars.$breakpoint-md) {
+  .nav-link span {
+    display: none;
+  }
+
+  .nav-links {
+    gap: 0.25rem;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .logout-button span {
+    display: none;
+  }
+}
+
+@media (max-width: vars.$breakpoint-sm) {
+  .header-container {
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex: 0;
+  }
+}

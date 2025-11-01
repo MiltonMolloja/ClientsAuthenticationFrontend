@@ -6,6 +6,28 @@
     </mat-card-header>
 
     <mat-card-content>
+      <!-- Password Changed Success Message -->
+      @if (showPasswordChangedMessage) {
+        <div class="success-alert">
+          <mat-icon>check_circle</mat-icon>
+          <div class="alert-content">
+            <p class="alert-title">{{ languageService.t('auth.passwordChangedSuccess') }}</p>
+            <p class="alert-message">{{ languageService.t('auth.passwordChangedMessage') }}</p>
+          </div>
+        </div>
+      }
+
+      <!-- Password Reset Success Message -->
+      @if (showPasswordResetMessage) {
+        <div class="success-alert">
+          <mat-icon>check_circle</mat-icon>
+          <div class="alert-content">
+            <p class="alert-title">{{ languageService.t('auth.passwordResetSuccess') }}</p>
+            <p class="alert-message">{{ languageService.t('auth.passwordResetMessage') }}</p>
+          </div>
+        </div>
+      }
+
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Field -->
         <mat-form-field appearance="outline" class="full-width">

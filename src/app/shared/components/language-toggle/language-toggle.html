@@ -1,0 +1,48 @@
+<!-- Selector de Idioma - Desktop -->
+<button mat-button class="language-button hide-xs" [matMenuTriggerFor]="languageMenu">
+  <div class="account-info">
+    <span class="account-greeting">{{ languageService.t('profile.language') }}</span>
+    <span class="account-label">{{ languageService.getLanguageName() }}</span>
+  </div>
+  <span class="mat-mdc-button-touch-target"></span>
+</button>
+
+<mat-menu #languageMenu="matMenu">
+  <button
+    mat-menu-item
+    (click)="setLanguage('es')"
+    [class.active]="languageService.language() === 'es'">
+    <mat-icon>language</mat-icon>
+    <span>{{ languageService.t('profile.languageSpanish') }}</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="setLanguage('en')"
+    [class.active]="languageService.language() === 'en'">
+    <mat-icon>language</mat-icon>
+    <span>{{ languageService.t('profile.languageEnglish') }}</span>
+  </button>
+</mat-menu>
+
+<!-- Icono de idioma - Móvil -->
+<button mat-icon-button class="hide-gt-xs" [matMenuTriggerFor]="languageMobileMenu">
+  <mat-icon>language</mat-icon>
+  <span class="mat-mdc-button-touch-target"></span>
+</button>
+
+<mat-menu #languageMobileMenu="matMenu">
+  <button
+    mat-menu-item
+    (click)="setLanguage('es')"
+    [class.active]="languageService.language() === 'es'">
+    <mat-icon>language</mat-icon>
+    <span>{{ languageService.t('profile.languageSpanish') }}</span>
+  </button>
+  <button
+    mat-menu-item
+    (click)="setLanguage('en')"
+    [class.active]="languageService.language() === 'en'">
+    <mat-icon>language</mat-icon>
+    <span>{{ languageService.t('profile.languageEnglish') }}</span>
+  </button>
+</mat-menu>

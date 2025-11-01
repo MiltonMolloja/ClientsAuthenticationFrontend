@@ -1,0 +1,103 @@
+<app-dashboard-layout>
+<div class="active-sessions-container">
+  <div class="page-header">
+    <div class="header-content">
+      <div>
+        <h1>{{ languageService.t('sessions.title') }}</h1>
+        <p>{{ languageService.t('sessions.subtitle') }}</p>
+      </div>
+      @if (nonCurrentSessions.length > 0) {
+        <button
+          mat-stroked-button
+          class="revoke-all-button"
+          (click)="revokeAllSessions()">
+          {{ languageService.t('sessions.revokeAll') }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Security Alert -->
+  <mat-card class="alert-card">
+    <mat-card-content>
+      <div class="alert-content">
+        <mat-icon class="alert-icon">warning</mat-icon>
+        <div>
+          <p class="alert-title">
+            <strong>{{ languageService.t('sessions.securityTipTitle') }}</strong> {{ languageService.t('sessions.securityTipText') }}
+          </p>
+          <p class="alert-text">
+            {{ languageService.t('sessions.securityTipDescription') }}
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>{{ languageService.t('common.loading') }}</p>
+    </div>
+  }
+
+  <!-- Sessions List -->
+  @if (!isLoading()) {
+    <div class="sessions-list">
+      @for (session of sessions(); track session.id) {
+        <mat-card class="session-card">
+          <mat-card-header>
+            <div class="session-header">
+              <div class="session-info">
+                <div class="device-icon">
+                  <mat-icon>{{ getDeviceIcon(session.deviceInfo) }}</mat-icon>
+                </div>
+                <div>
+                  <mat-card-title class="session-title">
+                    {{ getFormattedDeviceInfo(session.deviceInfo) }}
+                    @if (session.isCurrent) {
+                      <mat-chip class="current-chip">{{ languageService.t('sessions.current') }}</mat-chip>
+                    }
+                  </mat-card-title>
+                  <p class="session-ip">{{ session.ipAddress }}</p>
+                </div>
+              </div>
+              @if (!session.isCurrent) {
+                <button
+                  mat-stroked-button
+                  class="revoke-button"
+                  (click)="revokeSession(session)">
+                  {{ languageService.t('sessions.revoke') }}
+                </button>
+              }
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="session-details">
+              <p>
+                <span class="detail-label">{{ languageService.t('sessions.created') }}</span>
+                {{ formatDate(session.createdAt) }} {{ languageService.t('sessions.at') }} {{ formatTime(session.createdAt) }}
+              </p>
+              <p>
+                <span class="detail-label">{{ languageService.t('sessions.expires') }}</span>
+                {{ formatDate(session.expiresAt) }} {{ languageService.t('sessions.at') }} {{ formatTime(session.expiresAt) }}
+              </p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && nonCurrentSessions.length === 0) {
+    <mat-card class="empty-state-card">
+      <mat-card-content>
+        <p>{{ languageService.t('sessions.noOtherSessions') }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+</app-dashboard-layout>

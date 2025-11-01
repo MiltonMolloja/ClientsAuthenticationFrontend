@@ -1,8 +1,8 @@
 <!-- Selector de Tema - Desktop -->
 <button mat-button class="theme-button hide-xs" [matMenuTriggerFor]="themeMenu">
   <div class="account-info">
-    <span class="account-greeting">Tema</span>
-    <span class="account-label">{{ themeService.getThemeLabel() }}</span>
+    <span class="account-greeting">{{ languageService.t('profile.theme') }}</span>
+    <span class="account-label">{{ themeService.getThemeName(languageService.language()) }}</span>
   </div>
   <span class="mat-mdc-button-touch-target"></span>
 </button>
@@ -11,23 +11,23 @@
   <button
     mat-menu-item
     (click)="setTheme('light')"
-    [class.active]="themeService.themeMode() === 'light'">
+    [class.active]="themeService.theme() === 'light'">
     <mat-icon>light_mode</mat-icon>
-    <span>Claro</span>
+    <span>{{ languageService.t('profile.themeLight') }}</span>
   </button>
   <button
     mat-menu-item
     (click)="setTheme('dark')"
-    [class.active]="themeService.themeMode() === 'dark'">
+    [class.active]="themeService.theme() === 'dark'">
     <mat-icon>dark_mode</mat-icon>
-    <span>Oscuro</span>
+    <span>{{ languageService.t('profile.themeDark') }}</span>
   </button>
   <button
     mat-menu-item
     (click)="setTheme('auto')"
-    [class.active]="themeService.themeMode() === 'auto'">
+    [class.active]="themeService.theme() === 'auto'">
     <mat-icon>brightness_auto</mat-icon>
-    <span>Automático</span>
+    <span>{{ languageService.t('profile.themeAuto') }}</span>
   </button>
 </mat-menu>
 
@@ -41,22 +41,22 @@
   <button
     mat-menu-item
     (click)="setTheme('light')"
-    [class.active]="themeService.themeMode() === 'light'">
+    [class.active]="themeService.theme() === 'light'">
     <mat-icon>light_mode</mat-icon>
-    <span>Claro</span>
+    <span>{{ languageService.t('profile.themeLight') }}</span>
   </button>
   <button
     mat-menu-item
     (click)="setTheme('dark')"
-    [class.active]="themeService.themeMode() === 'dark'">
+    [class.active]="themeService.theme() === 'dark'">
     <mat-icon>dark_mode</mat-icon>
-    <span>Oscuro</span>
+    <span>{{ languageService.t('profile.themeDark') }}</span>
   </button>
   <button
     mat-menu-item
     (click)="setTheme('auto')"
-    [class.active]="themeService.themeMode() === 'auto'">
+    [class.active]="themeService.theme() === 'auto'">
     <mat-icon>brightness_auto</mat-icon>
-    <span>Automático</span>
+    <span>{{ languageService.t('profile.themeAuto') }}</span>
   </button>
 </mat-menu>

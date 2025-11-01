@@ -2,25 +2,23 @@ import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { ThemeService, Theme } from '@core/services/theme.service';
 import { LanguageService } from '@core/services/language.service';
 
 @Component({
-  selector: 'app-theme-toggle',
+  selector: 'app-language-toggle',
   standalone: true,
   imports: [
     MatIconModule,
     MatButtonModule,
     MatMenuModule
   ],
-  templateUrl: './theme-toggle.html',
-  styleUrl: './theme-toggle.scss',
+  templateUrl: './language-toggle.html',
+  styleUrl: './language-toggle.scss',
 })
-export class ThemeToggle {
-  public themeService = inject(ThemeService);
+export class LanguageToggle {
   public languageService = inject(LanguageService);
 
-  setTheme(mode: Theme): void {
-    this.themeService.setTheme(mode);
+  setLanguage(lang: 'es' | 'en'): void {
+    this.languageService.setLanguage(lang);
   }
 }

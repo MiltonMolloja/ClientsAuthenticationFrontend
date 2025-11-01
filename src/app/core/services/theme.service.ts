@@ -1,153 +1,140 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { Injectable, signal, computed, effect } from '@angular/core';
 
-export type ThemeMode = 'light' | 'dark' | 'auto';
+export type Theme = 'light' | 'dark' | 'auto';
+export type ResolvedTheme = 'light' | 'dark';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  private readonly THEME_STORAGE_KEY = 'app-theme-preference';
+  private readonly STORAGE_KEY = 'theme';
 
-  // Signal para el modo de tema seleccionado por el usuario
-  readonly themeMode = signal<ThemeMode>(this.getStoredTheme());
+  // Signal para el tema actual
+  private themeSignal = signal<Theme>(this.getInitialTheme());
 
-  // Signal para el tema efectivo (resuelve 'auto' a 'light' o 'dark')
-  readonly effectiveTheme = signal<'light' | 'dark'>('light');
+  // Signal para el tema resuelto (después de aplicar preferencias del sistema)
+  private resolvedThemeSignal = signal<ResolvedTheme>('light');
 
-  private mediaQuery: MediaQueryList;
-  private isExternalUpdate = false; // Flag para evitar guardar cuando viene de storage event
+  // Computed para exponer el tema actual (read-only)
+  theme = computed(() => this.themeSignal());
+
+  // Computed para exponer el tema resuelto (read-only)
+  resolvedTheme = computed(() => this.resolvedThemeSignal());
+
+  private mediaQuery?: MediaQueryList;
 
   constructor() {
-    console.log('🎨 ThemeService constructor called');
-
-    // Configurar listener para cambios en preferencias del sistema
-    this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    this.mediaQuery.addEventListener('change', () => this.updateEffectiveTheme());
-
-    // Listener para sincronización cross-tab/cross-project
-    // Detecta cambios en localStorage desde otras pestañas o proyectos
-    window.addEventListener('storage', (event: StorageEvent) => {
-      console.log('📢 Storage event detected:', event.key, event.newValue);
-
-      if (event.key === this.THEME_STORAGE_KEY && event.newValue) {
-        const newTheme = event.newValue as ThemeMode;
-        console.log('🔄 Theme storage key matched, new value:', newTheme);
-
-        if (newTheme === 'light' || newTheme === 'dark' || newTheme === 'auto') {
-          // Marcar como actualización externa para evitar guardar de nuevo
-          this.isExternalUpdate = true;
-          this.themeMode.set(newTheme);
-          this.isExternalUpdate = false;
-          console.log('✅ Theme synced from another tab/project:', newTheme);
-        }
-      }
-    });
-
-    console.log('✅ Storage event listener registered');
-
-    // Effect para aplicar el tema cuando cambia
+    // Effect para guardar en localStorage cuando cambie el tema
     effect(() => {
-      const mode = this.themeMode();
-      console.log('🎭 Effect triggered, current mode:', mode, 'isExternal:', this.isExternalUpdate);
-
-      // Solo guardar si no es una actualización externa
-      if (!this.isExternalUpdate) {
-        this.saveThemePreference(mode);
-        console.log('💾 Theme saved to localStorage:', mode);
-      }
-      this.updateEffectiveTheme();
+      const currentTheme = this.themeSignal();
+      localStorage.setItem(this.STORAGE_KEY, currentTheme);
+      this.updateTheme();
     });
 
-    // Aplicar tema inicial
-    this.updateEffectiveTheme();
+    // Inicializar el tema
+    this.updateTheme();
+
+    // Escuchar cambios en la preferencia del sistema si el tema es 'auto'
+    this.setupMediaQueryListener();
   }
 
   /**
-   * Cambia el modo de tema
+   * Obtiene el tema inicial desde localStorage o retorna 'auto' por defecto
    */
-  setThemeMode(mode: ThemeMode): void {
-    this.themeMode.set(mode);
+  private getInitialTheme(): Theme {
+    const stored = localStorage.getItem(this.STORAGE_KEY) as Theme;
+    return stored && ['light', 'dark', 'auto'].includes(stored) ? stored : 'auto';
   }
 
   /**
-   * Obtiene la preferencia de tema guardada en localStorage
+   * Configura el listener para cambios en las preferencias del sistema
    */
-  private getStoredTheme(): ThemeMode {
-    const stored = localStorage.getItem(this.THEME_STORAGE_KEY);
-    if (stored === 'light' || stored === 'dark' || stored === 'auto') {
-      return stored;
-    }
-    return 'auto'; // Default
-  }
+  private setupMediaQueryListener(): void {
+    this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-  /**
-   * Guarda la preferencia de tema en localStorage
-   */
-  private saveThemePreference(mode: ThemeMode): void {
-    localStorage.setItem(this.THEME_STORAGE_KEY, mode);
-  }
+    const handler = () => {
+      if (this.themeSignal() === 'auto') {
+        this.updateTheme();
+      }
+    };
 
-  /**
-   * Actualiza el tema efectivo basado en el modo seleccionado
-   */
-  private updateEffectiveTheme(): void {
-    const mode = this.themeMode();
-    let effective: 'light' | 'dark';
-
-    if (mode === 'auto') {
-      // Usar preferencias del sistema
-      effective = this.mediaQuery.matches ? 'dark' : 'light';
+    // Usar el método correcto según la disponibilidad
+    if (this.mediaQuery.addEventListener) {
+      this.mediaQuery.addEventListener('change', handler);
     } else {
-      effective = mode;
+      // Fallback para navegadores antiguos
+      this.mediaQuery.addListener(handler);
+    }
+  }
+
+  /**
+   * Actualiza el tema aplicado al documento
+   */
+  private updateTheme(): void {
+    const root = document.documentElement;
+    let effectiveTheme: ResolvedTheme = 'light';
+
+    if (this.themeSignal() === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      effectiveTheme = prefersDark ? 'dark' : 'light';
+    } else {
+      effectiveTheme = this.themeSignal() as ResolvedTheme;
     }
 
-    this.effectiveTheme.set(effective);
-    this.applyThemeToDocument(effective);
+    this.resolvedThemeSignal.set(effectiveTheme);
+
+    // Remover ambas clases primero
+    root.classList.remove('light-theme', 'dark-theme');
+
+    // Añadir la clase correspondiente
+    if (effectiveTheme === 'dark') {
+      root.classList.add('dark-theme');
+    } else {
+      root.classList.add('light-theme');
+    }
   }
 
   /**
-   * Aplica la clase de tema al documento
+   * Cambia el tema actual
    */
-  private applyThemeToDocument(theme: 'light' | 'dark'): void {
-    const htmlElement = document.documentElement;
-
-    // Remover clases de tema existentes
-    htmlElement.classList.remove('light-theme', 'dark-theme');
-
-    // Agregar la clase del tema actual
-    htmlElement.classList.add(`${theme}-theme`);
-
-    // Actualizar el atributo data-theme para mejor accesibilidad
-    htmlElement.setAttribute('data-theme', theme);
+  setTheme(theme: Theme): void {
+    this.themeSignal.set(theme);
   }
 
   /**
-   * Obtiene el ícono de Material correspondiente al modo actual
+   * Cicla entre los temas: light -> dark -> auto -> light
+   */
+  cycleTheme(): void {
+    const themes: Theme[] = ['light', 'dark', 'auto'];
+    const currentIndex = themes.indexOf(this.themeSignal());
+    const nextIndex = (currentIndex + 1) % themes.length;
+    this.setTheme(themes[nextIndex]);
+  }
+
+  /**
+   * Obtiene el nombre del tema actual traducido
+   */
+  getThemeName(language: 'es' | 'en' = 'es'): string {
+    const theme = this.themeSignal();
+    const names = {
+      es: { light: 'Claro', dark: 'Oscuro', auto: 'Automático' },
+      en: { light: 'Light', dark: 'Dark', auto: 'Automatic' }
+    };
+    return names[language][theme];
+  }
+
+  /**
+   * Obtiene el ícono del tema actual para Material Icons
    */
   getThemeIcon(): string {
-    const mode = this.themeMode();
-    switch (mode) {
+    const theme = this.themeSignal();
+    switch (theme) {
       case 'light':
         return 'light_mode';
       case 'dark':
         return 'dark_mode';
       case 'auto':
         return 'brightness_auto';
-    }
-  }
-
-  /**
-   * Obtiene el label en español para el modo actual
-   */
-  getThemeLabel(): string {
-    const mode = this.themeMode();
-    switch (mode) {
-      case 'light':
-        return 'Claro';
-      case 'dark':
-        return 'Oscuro';
-      case 'auto':
-        return 'Auto';
     }
   }
 }
