@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,6 +37,7 @@ export class SecuritySettings implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private router: Router,
     public languageService: LanguageService
   ) {}
 
@@ -89,5 +90,14 @@ export class SecuritySettings implements OnInit {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     return diffDays;
+  }
+
+  navigateTo2FA(): void {
+    console.log('Navigating to 2FA setup...', this.user?.twoFactorEnabled);
+    if (this.user?.twoFactorEnabled) {
+      this.router.navigate(['/2fa/disable']);
+    } else {
+      this.router.navigate(['/2fa/setup']);
+    }
   }
 }
