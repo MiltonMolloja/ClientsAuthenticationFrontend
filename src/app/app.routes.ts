@@ -3,10 +3,10 @@ import { authGuard } from '@core/guards/auth.guard';
 import { noAuthGuard } from '@core/guards/no-auth.guard';
 
 export const routes: Routes = [
-  // Root - Home page (public)
+  // Root - Redirect to login
   {
     path: '',
-    loadComponent: () => import('./features/home/pages/home/home').then(m => m.Home),
+    redirectTo: '/auth/login',
     pathMatch: 'full'
   },
 
@@ -42,9 +42,9 @@ export const routes: Routes = [
     data: { animation: 'AdminPage', requiredRole: 'admin' }
   },
 
-  // Wildcard route - redirect to home
+  // Wildcard route - redirect to login
   {
     path: '**',
-    redirectTo: '/'
+    redirectTo: '/auth/login'
   }
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,11 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import QRCode from 'qrcode';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
-import { Enable2FAResponse, Verify2FARequest } from '@core/models/auth.model';
+import { Enable2FAResponse } from '@core/models/auth.model';
 import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/dashboard-layout';
+import { LanguageService } from '@core/services/language.service';
 
 @Component({
   selector: 'app-setup-2fa',
@@ -32,7 +34,9 @@ import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/da
   templateUrl: './setup-2fa.html',
   styleUrl: './setup-2fa.scss',
 })
-export class Setup2FA implements OnInit {
+export class Setup2FA implements OnInit, AfterViewInit {
+  @ViewChild('qrCanvas', { static: false }) qrCanvas!: ElementRef<HTMLCanvasElement>;
+
   step = 1;
   isLoading = false;
   verifyForm!: FormGroup;
@@ -44,7 +48,8 @@ export class Setup2FA implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    public languageService: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -55,35 +60,46 @@ export class Setup2FA implements OnInit {
     this.loadSetupData();
   }
 
-  loadSetupData(): void {
-    // Mock setup data for now
-    this.setupData = {
-      succeeded: true,
-      secret: 'JBSWY3DPEHPK3PXP',
-      qrCodeUri: 'otpauth://totp/AuthApp:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=AuthApp',
-      backupCodes: [
-        'A1B2C3D4',
-        'E5F6G7H8',
-        'I9J0K1L2',
-        'M3N4O5P6',
-        'Q7R8S9T0',
-        'U1V2W3X4',
-        'Y5Z6A7B8',
-        'C9D0E1F2',
-        'G3H4I5J6',
-        'K7L8M9N0'
-      ]
-    };
+  ngAfterViewInit(): void {
+    // Generate QR code after view is initialized
+    if (this.setupData && this.step === 1) {
+      this.generateQRCode();
+    }
+  }
 
-    // TODO: Get from API
-    // this.authService.enable2FA().subscribe({
-    //   next: (response) => {
-    //     this.setupData = response;
-    //   },
-    //   error: () => {
-    //     this.notificationService.showError('Failed to load 2FA setup data');
-    //   }
-    // });
+  loadSetupData(): void {
+    this.isLoading = true;
+    this.authService.enable2FA().subscribe({
+      next: (response) => {
+        this.setupData = response;
+        this.isLoading = false;
+        // Generate QR code if canvas is ready
+        setTimeout(() => this.generateQRCode(), 100);
+      },
+      error: () => {
+        this.isLoading = false;
+        this.notificationService.showError('Failed to load 2FA setup data');
+      }
+    });
+  }
+
+  generateQRCode(): void {
+    if (!this.setupData || !this.qrCanvas) return;
+
+    const canvas = this.qrCanvas.nativeElement;
+    QRCode.toCanvas(canvas, this.setupData.qrCodeUri, {
+      width: 200,
+      margin: 2,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      }
+    }, (error) => {
+      if (error) {
+        console.error('Error generating QR code:', error);
+        this.notificationService.showError('Failed to generate QR code');
+      }
+    });
   }
 
   nextStep(): void {
@@ -101,32 +117,23 @@ export class Setup2FA implements OnInit {
   onVerifyCode(): void {
     if (this.verifyForm.valid) {
       this.isLoading = true;
-      const request: Verify2FARequest = {
-        code: this.verifyForm.value.code
-      };
+      const code = this.verifyForm.value.code;
 
-      // Mock verification
-      setTimeout(() => {
-        this.isLoading = false;
-        this.notificationService.showSuccess('Code verified successfully!');
-        this.step = 3;
-      }, 1500);
-
-      // TODO: Implement actual verification
-      // this.authService.verify2FA(request).subscribe({
-      //   next: (response) => {
-      //     this.isLoading = false;
-      //     if (response.succeeded) {
-      //       this.notificationService.showSuccess('Code verified successfully!');
-      //       this.step = 3;
-      //     } else {
-      //       this.notificationService.showError(response.message || 'Invalid code');
-      //     }
-      //   },
-      //   error: () => {
-      //     this.isLoading = false;
-      //   }
-      // });
+      this.authService.verify2FA(code).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          if (response.succeeded) {
+            this.notificationService.showSuccess('Code verified successfully!');
+            this.step = 3;
+          } else {
+            this.notificationService.showError(response.message || 'Invalid code');
+          }
+        },
+        error: () => {
+          this.isLoading = false;
+          this.notificationService.showError('Failed to verify code');
+        }
+      });
     }
   }
 

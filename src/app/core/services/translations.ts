@@ -171,6 +171,31 @@ export const translations: Record<Language, Translations> = {
       setup: 'Configurar Autenticación de Dos Factores',
     },
 
+    // Setup 2FA
+    setup2FA: {
+      title: 'Habilitar Autenticación de Dos Factores',
+      subtitle: 'Protege tu cuenta con una capa extra de seguridad',
+      step1Title: 'Paso 1: Escanear Código QR',
+      step1Description: 'Usa tu aplicación de autenticación para escanear este código QR',
+      step2Title: 'Paso 2: Verificar Código',
+      step2Description: 'Ingresa el código de 6 dígitos de tu aplicación de autenticación',
+      step3Title: 'Paso 3: Guardar Códigos de Respaldo',
+      step3Description: 'Guarda estos códigos en un lugar seguro',
+      scanInstructions: 'Escanea este código con Google Authenticator, Authy o cualquier app TOTP',
+      cannotScan: '¿No puedes escanear el código QR?',
+      manualEntry: 'Ingresa esta clave manualmente:',
+      verify: 'Siguiente: Verificar Código',
+      verifying: 'Verificando código...',
+      verifyCode: 'Verificar Código',
+      verificationCodeLabel: 'Código de Verificación',
+      verificationCodePlaceholder: '000000',
+      warningMessage: 'Guarda estos códigos de respaldo ahora. Puedes usarlos para acceder a tu cuenta si pierdes tu dispositivo autenticador.',
+      copy: 'Copiar Códigos',
+      copied: 'Copiado!',
+      downloadCodes: 'Descargar Códigos',
+      finish: 'Completar Configuración',
+    },
+
     // Change Password
     changePassword: {
       title: 'Cambiar Contraseña',
@@ -384,6 +409,31 @@ export const translations: Record<Language, Translations> = {
       title: 'Two-Step Verification',
       subtitle: 'Enter the 6-digit code from your authenticator app',
       setup: 'Setup Two-Factor Authentication',
+    },
+
+    // Setup 2FA
+    setup2FA: {
+      title: 'Enable Two-Factor Authentication',
+      subtitle: 'Protect your account with an extra layer of security',
+      step1Title: 'Step 1: Scan QR Code',
+      step1Description: 'Use your authenticator app to scan this QR code',
+      step2Title: 'Step 2: Verify Code',
+      step2Description: 'Enter the 6-digit code from your authenticator app',
+      step3Title: 'Step 3: Save Backup Codes',
+      step3Description: 'Store these codes in a safe place',
+      scanInstructions: 'Scan this code with Google Authenticator, Authy, or any TOTP app',
+      cannotScan: 'Can\'t scan the QR code?',
+      manualEntry: 'Enter this key manually:',
+      verify: 'Next: Verify Code',
+      verifying: 'Verifying code...',
+      verifyCode: 'Verify Code',
+      verificationCodeLabel: 'Verification Code',
+      verificationCodePlaceholder: '000000',
+      warningMessage: 'Save these backup codes now. You can use them to access your account if you lose your authenticator device.',
+      copy: 'Copy Codes',
+      copied: 'Copied!',
+      downloadCodes: 'Download Codes',
+      finish: 'Complete Setup',
     },
 
     // Change Password

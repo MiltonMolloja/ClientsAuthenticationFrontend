@@ -68,7 +68,7 @@ export class TwoFactorAuth implements OnInit {
       next: (response) => {
         if (response.succeeded) {
           this.notificationService.showSuccess('Authentication successful!');
-          this.router.navigate(['/']);
+          this.router.navigate(['/profile']);
         } else {
           this.notificationService.showError(response.message || '2FA verification failed');
           this.isLoading = false;
