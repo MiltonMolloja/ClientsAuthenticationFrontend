@@ -199,7 +199,17 @@ export class Setup2FA implements OnInit, AfterViewInit {
   }
 
   completeSetup(): void {
-    this.router.navigate(['/profile/security']);
+    // Refresh token to get updated JWT with TwoFactorEnabled: true
+    this.authService.refreshToken().subscribe({
+      next: () => {
+        this.notificationService.showSuccess('2FA enabled successfully!');
+        this.router.navigate(['/profile/security']);
+      },
+      error: () => {
+        // Even if refresh fails, navigate to security page
+        this.router.navigate(['/profile/security']);
+      }
+    });
   }
 
   getStepIcon(stepNumber: number): string {
