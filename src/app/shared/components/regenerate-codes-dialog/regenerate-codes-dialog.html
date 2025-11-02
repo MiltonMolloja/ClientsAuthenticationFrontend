@@ -1,0 +1,97 @@
+<div class="regenerate-codes-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="title-with-icon">
+      <div class="icon-wrapper danger">
+        <mat-icon>lock</mat-icon>
+      </div>
+      <h2>{{ languageService.t('security.regenerateCodesTitle') }}</h2>
+    </div>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <p class="dialog-description">
+      {{ languageService.t('security.regenerateCodesDescription') }}
+    </p>
+
+    <!-- Warning Alert -->
+    <div class="alert danger-alert">
+      <mat-icon class="alert-icon">warning</mat-icon>
+      <div class="alert-content">
+        {{ languageService.t('security.regenerateCodesWarning') }}
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="regenerateForm" class="regenerate-form">
+      <!-- Password Field -->
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>{{ languageService.t('security.enterPassword') }}</mat-label>
+        <input
+          matInput
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="••••••••"
+          [disabled]="isRegenerating"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="togglePasswordVisibility()"
+          [disabled]="isRegenerating"
+        >
+          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (regenerateForm.get('password')?.hasError('required') && regenerateForm.get('password')?.touched) {
+          <mat-error>{{ languageService.t('validation.passwordRequired') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- 2FA Code Field -->
+      <div class="code-section">
+        <label class="code-label">
+          {{ languageService.t('security.enter2FACode') }}
+        </label>
+        <div class="code-input-wrapper">
+          <app-code-input
+            [length]="6"
+            (codeComplete)="onCodeComplete($event)"
+            [disabled]="isRegenerating"
+          ></app-code-input>
+        </div>
+        @if (regenerateForm.get('code')?.hasError('required') && regenerateForm.get('code')?.touched) {
+          <p class="error-text">{{ languageService.t('validation.codeRequired') }}</p>
+        }
+        @if (regenerateForm.get('code')?.hasError('pattern') && regenerateForm.get('code')?.touched) {
+          <p class="error-text">{{ languageService.t('validation.codeInvalid') }}</p>
+        }
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button
+      mat-stroked-button
+      class="cancel-btn"
+      (click)="onCancel()"
+      [disabled]="isRegenerating"
+    >
+      {{ languageService.t('common.cancel') }}
+    </button>
+
+    <button
+      mat-flat-button
+      class="confirm-btn"
+      (click)="onConfirm()"
+      [disabled]="!regenerateForm.valid || isRegenerating"
+    >
+      @if (isRegenerating) {
+        <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+      }
+      @if (isRegenerating) {
+        <mat-icon class="spinning">refresh</mat-icon>
+      }
+      {{ languageService.t('security.regenerateButton') }}
+    </button>
+  </mat-dialog-actions>
+</div>

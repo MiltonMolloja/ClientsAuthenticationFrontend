@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '@core/services/auth.service';
 import { LanguageService } from '@core/services/language.service';
 import { NotificationService } from '@core/services/notification.service';
+import { RegenerateCodesDialogComponent } from '@shared/components/regenerate-codes-dialog/regenerate-codes-dialog';
 
 @Component({
   selector: 'app-backup-codes-dialog',
@@ -25,6 +26,8 @@ export class BackupCodesDialogComponent implements OnInit {
   backupCodes: string[] = [];
   isRegenerating = false;
   isLoading = true;
+
+  private dialog = inject(MatDialog);
 
   constructor(
     private dialogRef: MatDialogRef<BackupCodesDialogComponent>,
@@ -84,23 +87,17 @@ export class BackupCodesDialogComponent implements OnInit {
   }
 
   handleRegenerateCodes(): void {
-    this.isRegenerating = true;
+    const dialogRef = this.dialog.open(RegenerateCodesDialogComponent, {
+      width: '500px',
+      maxWidth: '90vw',
+      disableClose: false,
+      autoFocus: true
+    });
 
-    this.authService.regenerateBackupCodes().subscribe({
-      next: (response) => {
-        if (response.backupCodes && Array.isArray(response.backupCodes)) {
-          this.backupCodes = response.backupCodes;
-        }
-        this.isRegenerating = false;
-        this.notificationService.showSuccess(
-          this.languageService.t('security.codesRegenerated')
-        );
-      },
-      error: (error) => {
-        this.isRegenerating = false;
-        this.notificationService.showError(
-          error?.error?.message || 'Failed to regenerate backup codes'
-        );
+    dialogRef.afterClosed().subscribe(newCodes => {
+      // If newCodes is returned, update the current codes
+      if (newCodes && Array.isArray(newCodes)) {
+        this.backupCodes = newCodes;
       }
     });
   }
