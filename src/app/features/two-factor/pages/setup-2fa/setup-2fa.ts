@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import QRCode from 'qrcode';
 
 import { AuthService } from '@core/services/auth.service';
@@ -23,6 +24,7 @@ import { CodeInput } from '@shared/components/code-input/code-input';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -30,6 +32,7 @@ import { CodeInput } from '@shared/components/code-input/code-input';
     MatIconModule,
     MatChipsModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
     DashboardLayoutComponent,
     CodeInput
   ],
@@ -46,6 +49,7 @@ export class Setup2FA implements OnInit, AfterViewInit {
   copiedSecret = false;
   copiedCodes = false;
   verificationCode: string = '';
+  backupCodesSaved: boolean = false;
 
   constructor(
     private fb: FormBuilder,

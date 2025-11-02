@@ -166,10 +166,28 @@
           </button>
         </div>
 
+        <div class="confirmation-section">
+          <mat-checkbox
+            [(ngModel)]="backupCodesSaved"
+            class="confirmation-checkbox">
+            <span class="checkbox-label">
+              {{ languageService.t('setup2FA.confirmBackupSaved') }}
+            </span>
+          </mat-checkbox>
+
+          @if (!backupCodesSaved) {
+            <div class="confirmation-hint">
+              <mat-icon class="hint-icon">info</mat-icon>
+              <span>{{ languageService.t('setup2FA.confirmHint') }}</span>
+            </div>
+          }
+        </div>
+
         <button
           mat-raised-button
           class="full-width amazon-button"
-          (click)="completeSetup()">
+          (click)="completeSetup()"
+          [disabled]="!backupCodesSaved">
           {{ languageService.t('setup2FA.finish') }}
         </button>
       </mat-card-content>

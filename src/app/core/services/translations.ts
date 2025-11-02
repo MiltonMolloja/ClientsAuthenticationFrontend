@@ -193,6 +193,8 @@ export const translations: Record<Language, Translations> = {
       copy: 'Copiar Códigos',
       copied: 'Copiado!',
       downloadCodes: 'Descargar Códigos',
+      confirmBackupSaved: 'Confirmo que he guardado mis códigos de respaldo en un lugar seguro',
+      confirmHint: 'Por favor, copia o descarga los códigos antes de continuar. Los necesitarás si pierdes acceso a tu aplicación de autenticación.',
       finish: 'Completar Configuración',
     },
 
@@ -433,6 +435,8 @@ export const translations: Record<Language, Translations> = {
       copy: 'Copy Codes',
       copied: 'Copied!',
       downloadCodes: 'Download Codes',
+      confirmBackupSaved: 'I confirm that I have saved my backup codes in a secure location',
+      confirmHint: 'Please copy or download the codes before continuing. You will need them if you lose access to your authenticator app.',
       finish: 'Complete Setup',
     },
 
