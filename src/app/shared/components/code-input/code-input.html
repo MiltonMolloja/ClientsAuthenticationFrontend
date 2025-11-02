@@ -7,6 +7,7 @@
       maxlength="1"
       class="code-digit"
       [value]="digit"
+      [disabled]="disabled"
       (input)="onInput($event, i)"
       (keydown)="onKeyDown($event, i)"
       (paste)="onPaste($event)"

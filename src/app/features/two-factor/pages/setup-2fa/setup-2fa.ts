@@ -16,6 +16,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { Enable2FAResponse } from '@core/models/auth.model';
 import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/dashboard-layout';
 import { LanguageService } from '@core/services/language.service';
+import { CodeInput } from '@shared/components/code-input/code-input';
 
 @Component({
   selector: 'app-setup-2fa',
@@ -29,7 +30,8 @@ import { LanguageService } from '@core/services/language.service';
     MatIconModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    DashboardLayoutComponent
+    DashboardLayoutComponent,
+    CodeInput
   ],
   templateUrl: './setup-2fa.html',
   styleUrl: './setup-2fa.scss',
@@ -43,6 +45,7 @@ export class Setup2FA implements OnInit, AfterViewInit {
   setupData: Enable2FAResponse | null = null;
   copiedSecret = false;
   copiedCodes = false;
+  verificationCode: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -135,6 +138,31 @@ export class Setup2FA implements OnInit, AfterViewInit {
         }
       });
     }
+  }
+
+  onCodeComplete(code: string): void {
+    this.verificationCode = code;
+    this.isLoading = true;
+
+    // Simulate API call with timeout to match design reference
+    this.authService.verify2FA(code).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.succeeded) {
+          this.notificationService.showSuccess('Code verified successfully!');
+          // Advance to step 3 (backup codes)
+          setTimeout(() => {
+            this.step = 3;
+          }, 500);
+        } else {
+          this.notificationService.showError(response.message || 'Invalid code');
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        this.notificationService.showError('Failed to verify code');
+      }
+    });
   }
 
   copyToClipboard(text: string, type: 'secret' | 'codes'): void {

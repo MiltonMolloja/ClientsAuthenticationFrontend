@@ -14,14 +14,23 @@
   border-radius: 4px;
   outline: none;
   transition: border-color 0.2s ease;
+  background-color: #ffffff;
+  color: #1f2937;
 
   &:focus {
-    border-color: #3f51b5;
-    box-shadow: 0 0 0 1px #3f51b5;
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 1px #f59e0b;
   }
 
-  &:hover:not(:focus) {
+  &:hover:not(:focus):not(:disabled) {
     border-color: rgba(0, 0, 0, 0.87);
+  }
+
+  &:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 
   // Remove number input spinners

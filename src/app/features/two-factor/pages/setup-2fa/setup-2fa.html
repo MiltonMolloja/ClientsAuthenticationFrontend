@@ -94,52 +94,31 @@
       </mat-card-header>
 
       <mat-card-content>
-        <form [formGroup]="verifyForm" (ngSubmit)="onVerifyCode()">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ languageService.t('setup2FA.verificationCodeLabel') }}</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="code"
-              [placeholder]="languageService.t('setup2FA.verificationCodePlaceholder')"
-              maxlength="6"
-              inputmode="numeric"
-              required>
-            <mat-icon matPrefix>pin</mat-icon>
-            @if (verifyForm.get('code')?.hasError('required') && verifyForm.get('code')?.touched) {
-              <mat-error>Code is required</mat-error>
-            }
-            @if (verifyForm.get('code')?.hasError('pattern') && verifyForm.get('code')?.touched) {
-              <mat-error>Code must be 6 digits</mat-error>
-            }
-          </mat-form-field>
+        <div class="code-input-wrapper">
+          <app-code-input
+            [length]="6"
+            (codeComplete)="onCodeComplete($event)"
+            [disabled]="isLoading">
+          </app-code-input>
+        </div>
 
-          @if (isLoading) {
+        @if (isLoading) {
+          <div class="verifying-container">
+            <mat-spinner diameter="24"></mat-spinner>
             <p class="verifying-text">{{ languageService.t('setup2FA.verifying') }}</p>
-          }
-
-          <div class="form-actions">
-            <button
-              mat-stroked-button
-              type="button"
-              (click)="previousStep()"
-              class="back-button">
-              {{ languageService.t('common.back') }}
-            </button>
-            <button
-              mat-raised-button
-              type="submit"
-              class="verify-button amazon-button"
-              [disabled]="verifyForm.invalid || isLoading">
-              @if (isLoading) {
-                <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-                <span>{{ languageService.t('setup2FA.verifying') }}</span>
-              } @else {
-                <span>{{ languageService.t('setup2FA.verifyCode') }}</span>
-              }
-            </button>
           </div>
-        </form>
+        }
+
+        <div class="form-actions">
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="previousStep()"
+            class="back-button"
+            [disabled]="isLoading">
+            {{ languageService.t('common.back') }}
+          </button>
+        </div>
       </mat-card-content>
     </mat-card>
   }

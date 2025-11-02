@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 })
 export class CodeInput implements AfterViewInit {
   @Input() length: number = 6;
+  @Input() disabled: boolean = false;
   @Output() codeComplete = new EventEmitter<string>();
   @ViewChildren('codeInput') inputs!: QueryList<ElementRef<HTMLInputElement>>;
 

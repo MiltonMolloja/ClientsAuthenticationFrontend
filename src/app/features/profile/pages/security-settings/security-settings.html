@@ -63,9 +63,9 @@
               }
             </div>
           </div>
-          <a [routerLink]="user.twoFactorEnabled ? '/2fa/disable' : '/2fa/setup'">
-            <button mat-stroked-button class="action-button">{{ user.twoFactorEnabled ? languageService.t('security.disable') : languageService.t('security.enable') }} 2FA</button>
-          </a>
+          <button mat-stroked-button class="action-button" (click)="navigateTo2FA()">
+            {{ user.twoFactorEnabled ? languageService.t('security.disable') : languageService.t('security.enable') }} 2FA
+          </button>
         </div>
 
         @if (user.twoFactorEnabled) {

@@ -175,7 +175,7 @@
                 }
               </div>
             </div>
-            <a [routerLink]="user()!.twoFactorEnabled ? '/profile/security' : '/two-factor/setup'">
+            <a [routerLink]="user()!.twoFactorEnabled ? '/profile/security' : '/2fa/setup'">
               <button mat-stroked-button class="action-button">
                 {{ user()!.twoFactorEnabled ? languageService.t('security.manage') : languageService.t('security.enable') }}
               </button>
