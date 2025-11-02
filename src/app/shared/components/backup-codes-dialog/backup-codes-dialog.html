@@ -1,0 +1,98 @@
+<div class="backup-codes-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <div class="title-with-icon">
+      <div class="icon-wrapper">
+        <mat-icon>shield</mat-icon>
+      </div>
+      <h2>{{ languageService.t('security.backupCodesTitle') }}</h2>
+    </div>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <p class="dialog-description">
+      {{ languageService.t('security.backupCodesModalDescription') }}
+    </p>
+
+    <!-- Warning Alert -->
+    <div class="alert warning-alert">
+      <mat-icon class="alert-icon">warning</mat-icon>
+      <div class="alert-content">
+        <strong>{{ languageService.t('security.warningTitle') }}</strong>
+        {{ languageService.t('security.backupCodesWarning') }}
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading) {
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p class="loading-text">{{ languageService.t('security.loadingCodes') }}</p>
+      </div>
+    }
+
+    <!-- Backup Codes Grid -->
+    @if (!isLoading && backupCodes.length > 0) {
+      <div class="codes-container">
+        <div class="codes-grid">
+          @for (code of backupCodes; track code; let i = $index) {
+            <div class="code-card">
+              <span class="code-number">#{{ (i + 1).toString().padStart(2, '0') }}</span>
+              <span class="code-value">{{ code }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Info Alert -->
+      <div class="alert info-alert">
+        <mat-icon class="alert-icon">lightbulb</mat-icon>
+        <div class="alert-content">
+          <strong>{{ languageService.t('security.tip') }}</strong>
+          {{ languageService.t('security.backupCodesTip') }}
+        </div>
+      </div>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <div class="action-buttons">
+      <button
+        mat-stroked-button
+        class="action-btn"
+        (click)="handleCopyAllCodes()"
+        [disabled]="isLoading || backupCodes.length === 0"
+      >
+        <mat-icon>content_copy</mat-icon>
+        {{ languageService.t('security.copyAllCodes') }}
+      </button>
+
+      <button
+        mat-stroked-button
+        class="action-btn"
+        (click)="handleDownloadCodes()"
+        [disabled]="isLoading || backupCodes.length === 0"
+      >
+        <mat-icon>download</mat-icon>
+        {{ languageService.t('security.downloadCodes') }}
+      </button>
+
+      <button
+        mat-stroked-button
+        class="action-btn regenerate-btn"
+        (click)="handleRegenerateCodes()"
+        [disabled]="isLoading || isRegenerating"
+      >
+        <mat-icon [class.spinning]="isRegenerating">refresh</mat-icon>
+        {{ languageService.t('security.regenerateCodes') }}
+      </button>
+    </div>
+
+    <button
+      mat-flat-button
+      class="close-btn"
+      (click)="close()"
+    >
+      {{ languageService.t('security.close') }}
+    </button>
+  </mat-dialog-actions>
+</div>

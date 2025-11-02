@@ -150,10 +150,14 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/v1/identity/2fa/disable`, request);
   }
 
-  regenerateBackupCodes(request: RegenerateBackupCodesRequest): Observable<RegenerateBackupCodesResponse> {
+  getBackupCodes(): Observable<{ backupCodes: string[] }> {
+    return this.http.get<{ backupCodes: string[] }>(`${this.API_URL}/v1/identity/2fa/backup-codes`);
+  }
+
+  regenerateBackupCodes(request?: RegenerateBackupCodesRequest): Observable<RegenerateBackupCodesResponse> {
     return this.http.post<RegenerateBackupCodesResponse>(
       `${this.API_URL}/v1/identity/2fa/backup-codes/regenerate`,
-      request
+      request || {}
     );
   }
 

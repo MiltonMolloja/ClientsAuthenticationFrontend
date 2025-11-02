@@ -7,12 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { User } from '@core/models/user.model';
 import { AuditLog } from '@core/models/audit-log.model';
 import { AuthService } from '@core/services/auth.service';
 import { LanguageService } from '@core/services/language.service';
+import { NotificationService } from '@core/services/notification.service';
 import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/dashboard-layout';
+import { BackupCodesDialogComponent } from '@shared/components/backup-codes-dialog/backup-codes-dialog';
 
 @Component({
   selector: 'app-security-settings',
@@ -25,6 +29,8 @@ import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/da
     MatChipsModule,
     MatDividerModule,
     MatTableModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
     DashboardLayoutComponent
   ],
   templateUrl: './security-settings.html',
@@ -38,6 +44,8 @@ export class SecuritySettings implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private dialog: MatDialog,
+    private notificationService: NotificationService,
     public languageService: LanguageService
   ) {}
 
@@ -102,10 +110,16 @@ export class SecuritySettings implements OnInit {
   }
 
   viewBackupCodes(): void {
-    // TODO: Implement backup codes viewing functionality
-    // This could open a dialog or navigate to a dedicated page
-    console.log('View backup codes clicked');
-    // For now, we'll navigate to a backup codes page (to be created)
-    // this.router.navigate(['/2fa/backup-codes']);
+    const dialogRef = this.dialog.open(BackupCodesDialogComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      disableClose: false,
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // Handle dialog close if needed
+      console.log('Backup codes dialog closed');
+    });
   }
 }
