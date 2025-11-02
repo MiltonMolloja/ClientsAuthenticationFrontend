@@ -1,0 +1,119 @@
+<app-dashboard-layout>
+  <div class="disable-2fa-container">
+    @if (!success) {
+      <div class="page-header">
+        <h1>{{ languageService.t('disable2FA.title') }}</h1>
+        <p>{{ languageService.t('disable2FA.subtitle') }}</p>
+      </div>
+
+      <!-- Warning Banner -->
+      <div class="warning-banner">
+        <mat-icon class="warning-icon">warning</mat-icon>
+        <div class="warning-content">
+          <strong>{{ languageService.t('disable2FA.warningTitle') }}:</strong>
+          {{ languageService.t('disable2FA.warningMessage') }}
+        </div>
+      </div>
+
+      <!-- Main Card -->
+      <mat-card class="disable-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>shield</mat-icon>
+            {{ languageService.t('disable2FA.title') }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ languageService.t('disable2FA.verifyIdentity') }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="disableForm" (ngSubmit)="onSubmit()">
+            <!-- Password Field -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ languageService.t('disable2FA.currentPassword') }}</mat-label>
+              <input
+                matInput
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                [placeholder]="languageService.t('disable2FA.passwordPlaceholder')"
+                required>
+              <mat-icon matPrefix>lock</mat-icon>
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="togglePasswordVisibility()"
+                [disabled]="isLoading">
+                <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (disableForm.get('password')?.hasError('required') && disableForm.get('password')?.touched) {
+                <mat-error>{{ languageService.t('common.required') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- 2FA Code -->
+            <div class="code-section">
+              <label class="code-label">{{ languageService.t('disable2FA.verificationCode') }}</label>
+              <p class="code-description">
+                {{ languageService.t('disable2FA.codeDescription') }}
+              </p>
+              <div class="code-input-wrapper">
+                <app-code-input
+                  [length]="6"
+                  (codeComplete)="onCodeComplete($event)"
+                  [disabled]="isLoading">
+                </app-code-input>
+              </div>
+            </div>
+
+            @if (isLoading) {
+              <div class="loading-container">
+                <mat-spinner diameter="24"></mat-spinner>
+                <p class="loading-text">{{ languageService.t('disable2FA.disabling') }}</p>
+              </div>
+            }
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+              <button
+                mat-raised-button
+                type="submit"
+                class="disable-button"
+                [disabled]="disableForm.invalid || isLoading">
+                {{ languageService.t('disable2FA.disableButton') }}
+              </button>
+              <button
+                mat-stroked-button
+                type="button"
+                class="cancel-button"
+                (click)="onCancel()"
+                [disabled]="isLoading">
+                {{ languageService.t('common.cancel') }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Security Recommendation -->
+      <div class="info-banner">
+        <mat-icon class="info-icon">lightbulb</mat-icon>
+        <p>{{ languageService.t('disable2FA.recommendation') }}</p>
+      </div>
+    }
+
+    @if (success) {
+      <mat-card class="success-card">
+        <mat-card-content class="success-content">
+          <div class="success-icon-wrapper">
+            <mat-icon class="success-icon">check_circle</mat-icon>
+          </div>
+          <h2>{{ languageService.t('common.success') }}</h2>
+          <p>{{ languageService.t('disable2FA.successMessage') }}</p>
+          <p class="redirect-text">{{ languageService.t('disable2FA.redirecting') }}</p>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</app-dashboard-layout>

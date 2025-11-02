@@ -1,0 +1,237 @@
+.disable-2fa-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    color: #1f2937 !important;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: #6b7280 !important;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+// Warning Banner
+.warning-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #fef3c7 !important;
+  border: 1px solid #fde68a !important;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  .warning-icon {
+    color: #d97706 !important;
+    flex-shrink: 0;
+  }
+
+  .warning-content {
+    font-size: 0.875rem;
+    color: #78350f !important;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+}
+
+// Main Card
+.disable-card {
+  margin-bottom: 1.5rem;
+}
+
+.card-title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937 !important;
+
+  mat-icon {
+    color: #f59e0b !important;
+  }
+}
+
+// Form Styles
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.code-section {
+  margin-bottom: 1.5rem;
+
+  .code-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151 !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .code-description {
+    font-size: 0.875rem;
+    color: #6b7280 !important;
+    margin-bottom: 1rem;
+  }
+
+  .code-input-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+
+  .loading-text {
+    font-size: 0.875rem;
+    color: #6b7280 !important;
+    margin: 0;
+  }
+}
+
+// Buttons
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+
+  button {
+    flex: 1;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+.disable-button {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+
+  &:hover:not(:disabled) {
+    background-color: #b91c1c !important;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.cancel-button {
+  color: #6b7280 !important;
+  border-color: #d1d5db !important;
+  background-color: #ffffff !important;
+
+  &:hover:not(:disabled) {
+    background-color: #f9fafb !important;
+    border-color: #9ca3af !important;
+  }
+}
+
+// Info Banner
+.info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #dbeafe !important;
+  border: 1px solid #93c5fd !important;
+  border-radius: 0.5rem;
+
+  .info-icon {
+    color: #2563eb !important;
+    flex-shrink: 0;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #1e40af !important;
+    margin: 0;
+  }
+}
+
+// Success Card
+.success-card {
+  text-align: center;
+  padding: 2rem;
+}
+
+.success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  .success-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background-color: #d1fae5 !important;
+    border-radius: 50%;
+
+    .success-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      color: #16a34a !important;
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937 !important;
+    margin: 0;
+  }
+
+  p {
+    color: #6b7280 !important;
+    margin: 0;
+  }
+
+  .redirect-text {
+    font-size: 0.875rem;
+    color: #9ca3af !important;
+  }
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .disable-2fa-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}

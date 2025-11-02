@@ -100,4 +100,12 @@ export class SecuritySettings implements OnInit {
       this.router.navigate(['/2fa/setup']);
     }
   }
+
+  viewBackupCodes(): void {
+    // TODO: Implement backup codes viewing functionality
+    // This could open a dialog or navigate to a dedicated page
+    console.log('View backup codes clicked');
+    // For now, we'll navigate to a backup codes page (to be created)
+    // this.router.navigate(['/2fa/backup-codes']);
+  }
 }

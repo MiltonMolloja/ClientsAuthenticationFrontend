@@ -5,6 +5,10 @@ export const TWO_FACTOR_ROUTES: Routes = [
     path: 'setup',
     loadComponent: () => import('./pages/setup-2fa/setup-2fa').then(m => m.Setup2FA)
   },
+  {
+    path: 'disable',
+    loadComponent: () => import('./pages/disable-2fa/disable-2fa').then(m => m.Disable2FA)
+  },
   // Verify 2FA route will be implemented later
   // {
   //   path: 'verify',

@@ -76,7 +76,7 @@
               <p class="info-value">{{ languageService.t('security.backupCodes') }}</p>
               <p class="info-label">{{ languageService.t('security.backupCodesSubtitle') }}</p>
             </div>
-            <button mat-stroked-button class="action-button">
+            <button mat-stroked-button class="action-button" (click)="viewBackupCodes()">
               <mat-icon>download</mat-icon>
               {{ languageService.t('security.viewCodes') }}
             </button>

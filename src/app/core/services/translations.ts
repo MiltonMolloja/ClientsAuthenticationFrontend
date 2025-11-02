@@ -198,6 +198,24 @@ export const translations: Record<Language, Translations> = {
       finish: 'Completar Configuración',
     },
 
+    // Disable 2FA
+    disable2FA: {
+      title: 'Deshabilitar Autenticación de Dos Factores',
+      subtitle: 'Remover la capa extra de seguridad de tu cuenta',
+      warningTitle: 'Advertencia',
+      warningMessage: 'Al deshabilitar 2FA, tu cuenta será menos segura. Solo tu contraseña protegerá tu cuenta.',
+      verifyIdentity: 'Para deshabilitar la autenticación de dos factores, necesitamos verificar tu identidad',
+      currentPassword: 'Contraseña Actual',
+      passwordPlaceholder: 'Ingresa tu contraseña',
+      verificationCode: 'Código de Verificación',
+      codeDescription: 'Ingresa el código de 6 dígitos de tu aplicación de autenticación',
+      disableButton: 'Deshabilitar 2FA',
+      disabling: 'Deshabilitando...',
+      successMessage: 'La autenticación de dos factores ha sido deshabilitada',
+      redirecting: 'Redirigiendo a configuración de seguridad...',
+      recommendation: 'Recomendación: La autenticación de dos factores es una de las mejores formas de proteger tu cuenta. Considera dejarla habilitada para mayor seguridad.',
+    },
+
     // Change Password
     changePassword: {
       title: 'Cambiar Contraseña',
@@ -438,6 +456,24 @@ export const translations: Record<Language, Translations> = {
       confirmBackupSaved: 'I confirm that I have saved my backup codes in a secure location',
       confirmHint: 'Please copy or download the codes before continuing. You will need them if you lose access to your authenticator app.',
       finish: 'Complete Setup',
+    },
+
+    // Disable 2FA
+    disable2FA: {
+      title: 'Disable Two-Factor Authentication',
+      subtitle: 'Remove the extra layer of security from your account',
+      warningTitle: 'Warning',
+      warningMessage: 'By disabling 2FA, your account will be less secure. Only your password will protect your account.',
+      verifyIdentity: 'To disable two-factor authentication, we need to verify your identity',
+      currentPassword: 'Current Password',
+      passwordPlaceholder: 'Enter your password',
+      verificationCode: 'Verification Code',
+      codeDescription: 'Enter the 6-digit code from your authenticator app',
+      disableButton: 'Disable 2FA',
+      disabling: 'Disabling...',
+      successMessage: 'Two-factor authentication has been disabled',
+      redirecting: 'Redirecting to security settings...',
+      recommendation: 'Recommendation: Two-factor authentication is one of the best ways to protect your account. Consider keeping it enabled for enhanced security.',
     },
 
     // Change Password
