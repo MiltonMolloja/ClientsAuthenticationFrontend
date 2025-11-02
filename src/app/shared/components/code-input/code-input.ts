@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   templateUrl: './code-input.html',
   styleUrl: './code-input.scss',
 })
-export class CodeInput implements AfterViewInit {
+export class CodeInput implements OnInit, AfterViewInit {
   @Input() length: number = 6;
   @Input() disabled: boolean = false;
   @Output() codeComplete = new EventEmitter<string>();
@@ -18,8 +18,11 @@ export class CodeInput implements AfterViewInit {
 
   digits: string[] = [];
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.digits = new Array(this.length).fill('');
+  }
+
+  ngAfterViewInit(): void {
     setTimeout(() => {
       this.inputs.first?.nativeElement.focus();
     });
