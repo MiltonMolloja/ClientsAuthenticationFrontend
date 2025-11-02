@@ -148,11 +148,13 @@ export class Setup2FA implements OnInit, AfterViewInit {
     this.verificationCode = code;
     this.isLoading = true;
 
-    // Simulate API call with timeout to match design reference
     this.authService.verify2FA(code).subscribe({
       next: (response) => {
         this.isLoading = false;
-        if (response.succeeded) {
+        // Check if response has succeeded property, otherwise assume success
+        const isSuccess = response.succeeded !== undefined ? response.succeeded : true;
+
+        if (isSuccess) {
           this.notificationService.showSuccess('Code verified successfully!');
           // Advance to step 3 (backup codes)
           setTimeout(() => {
@@ -162,9 +164,10 @@ export class Setup2FA implements OnInit, AfterViewInit {
           this.notificationService.showError(response.message || 'Invalid code');
         }
       },
-      error: () => {
+      error: (err) => {
         this.isLoading = false;
-        this.notificationService.showError('Failed to verify code');
+        const errorMessage = err?.error?.message || err?.message || 'Failed to verify code';
+        this.notificationService.showError(errorMessage);
       }
     });
   }
