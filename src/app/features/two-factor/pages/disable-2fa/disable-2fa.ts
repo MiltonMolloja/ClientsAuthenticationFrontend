@@ -64,7 +64,15 @@ export class Disable2FA implements OnInit {
     if (this.disableForm.valid) {
       this.isLoading = true;
 
+      const userId = this.authService.currentUser?.id;
+      if (!userId) {
+        this.notificationService.showError('User not found');
+        this.isLoading = false;
+        return;
+      }
+
       const request = {
+        userId: userId,
         password: this.disableForm.value.password,
         code: this.disableForm.value.code
       };
