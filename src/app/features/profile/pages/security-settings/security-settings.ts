@@ -110,16 +110,7 @@ export class SecuritySettings implements OnInit {
   }
 
   viewBackupCodes(): void {
-    const dialogRef = this.dialog.open(BackupCodesDialogComponent, {
-      width: '800px',
-      maxWidth: '90vw',
-      disableClose: false,
-      autoFocus: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      // Handle dialog close if needed
-      console.log('Backup codes dialog closed');
-    });
+    // Navigate to backup codes page
+    this.router.navigate(['/2fa/backup-codes']);
   }
 }
