@@ -1,0 +1,229 @@
+<app-dashboard-layout>
+  <div class="regenerate-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <button mat-icon-button class="back-button" (click)="onBack()" [disabled]="!canGoBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <h1>{{ languageService.t('regenerate2fa.title') || 'Regenerar Códigos de Respaldo' }}</h1>
+        <p>{{ languageService.t('regenerate2fa.subtitle') || 'Genera nuevos códigos de respaldo para tu cuenta' }}</p>
+      </div>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step" [class.active]="isCurrentStep('confirm')" [class.completed]="isCompletedStep('confirm')">
+        <div class="step-badge">
+          <mat-icon *ngIf="isCompletedStep('confirm')">check</mat-icon>
+          <span *ngIf="!isCompletedStep('confirm')">1</span>
+        </div>
+        <span class="step-label">{{ getStepLabel('confirm') }}</span>
+      </div>
+      <div class="step-line" [class.completed]="isCompletedStep('success')"></div>
+      <div class="step" [class.active]="isCurrentStep('success')" [class.completed]="isCompletedStep('success')">
+        <div class="step-badge">
+          <mat-icon *ngIf="isCompletedStep('success')">check</mat-icon>
+          <span *ngIf="!isCompletedStep('success')">2</span>
+        </div>
+        <span class="step-label">{{ getStepLabel('success') }}</span>
+      </div>
+    </div>
+
+    <!-- Step 1: Confirmation -->
+    <div *ngIf="step === 'confirm'" class="step-content">
+      <!-- Warning Alert -->
+      <div class="alert warning-alert">
+        <mat-icon class="alert-icon">warning</mat-icon>
+        <div class="alert-content">
+          <strong>{{ languageService.t('regenerate2fa.warning.title') || 'ADVERTENCIA IMPORTANTE' }}</strong>
+          <ul>
+            <li>{{ languageService.t('regenerate2fa.warning.item1') || 'Tus códigos de respaldo actuales dejarán de funcionar inmediatamente' }}</li>
+            <li>{{ languageService.t('regenerate2fa.warning.item2') || 'Se generarán 8 nuevos códigos de respaldo' }}</li>
+            <li>{{ languageService.t('regenerate2fa.warning.item3') || 'Asegúrate de guardar los nuevos códigos en un lugar seguro' }}</li>
+            <li>{{ languageService.t('regenerate2fa.warning.item4') || 'Esta acción no se puede deshacer' }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Regenerate Form Card -->
+      <mat-card class="regenerate-card">
+        <mat-card-header>
+          <mat-card-title class="card-title">
+            <mat-icon>verified_user</mat-icon>
+            {{ languageService.t('regenerate2fa.verify.title') || 'Verificar Identidad' }}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="regenerateForm" (ngSubmit)="onRegenerateSubmit()">
+            <!-- Password Field -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ languageService.t('common.password') || 'Contraseña' }}</mat-label>
+              <input
+                matInput
+                [type]="showPassword ? 'text' : 'password'"
+                formControlName="password"
+                [placeholder]="languageService.t('common.passwordPlaceholder') || 'Ingresa tu contraseña'"
+                required
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="'Toggle password visibility'"
+              >
+                <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="regenerateForm.get('password')?.hasError('required')">
+                {{ languageService.t('validation.password.required') || 'La contraseña es requerida' }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 2FA Code Input -->
+            <div class="form-field">
+              <label class="field-label">{{ languageService.t('common.2faCode') || 'Código de Autenticación' }}</label>
+              <app-code-input
+                [length]="6"
+                (codeComplete)="onCodeComplete($event)"
+                [disabled]="isRegenerating"
+              ></app-code-input>
+              <div class="field-hint">
+                {{ languageService.t('regenerate2fa.codeHint') || 'Ingresa el código de 6 dígitos de tu aplicación de autenticación' }}
+              </div>
+            </div>
+
+            <!-- Understanding Checkbox -->
+            <div class="checkbox-container" [class.highlight]="!understood">
+              <mat-checkbox
+                [(ngModel)]="understood"
+                [ngModelOptions]="{standalone: true}"
+                color="primary"
+              >
+                {{ languageService.t('regenerate2fa.understand') || 'Entiendo que mis códigos actuales dejarán de funcionar' }}
+              </mat-checkbox>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="onCancel()"
+                [disabled]="isRegenerating"
+              >
+                <mat-icon>close</mat-icon>
+                {{ languageService.t('common.cancel') || 'Cancelar' }}
+              </button>
+
+              <button
+                mat-raised-button
+                color="warn"
+                type="submit"
+                [disabled]="!canRegenerateSubmit() || isRegenerating"
+              >
+                <mat-spinner *ngIf="isRegenerating" diameter="20"></mat-spinner>
+                <mat-icon *ngIf="!isRegenerating">refresh</mat-icon>
+                {{ languageService.t('regenerate2fa.regenerateButton') || 'Regenerar Códigos' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Step 2: Success -->
+    <div *ngIf="step === 'success'" class="step-content">
+      <!-- Success Alert -->
+      <div class="alert success-alert">
+        <mat-icon class="alert-icon">check_circle</mat-icon>
+        <div class="alert-content">
+          <strong>{{ languageService.t('regenerate2fa.success.title') || '¡Códigos Regenerados Exitosamente!' }}</strong>
+          <p>{{ languageService.t('regenerate2fa.success.message') || 'Tus nuevos códigos de respaldo están listos. Guárdalos en un lugar seguro.' }}</p>
+        </div>
+      </div>
+
+      <!-- New Codes Card -->
+      <mat-card class="codes-card">
+        <mat-card-header>
+          <mat-card-title class="card-title">
+            <mat-icon>vpn_key</mat-icon>
+            {{ languageService.t('regenerate2fa.newCodes.title') || 'Nuevos Códigos de Respaldo' }}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- Codes Grid -->
+          <div class="codes-container">
+            <div class="codes-grid">
+              <div *ngFor="let code of newBackupCodes; let i = index" class="code-card">
+                <span class="code-number">#{{ i + 1 }}</span>
+                <span class="code-value">{{ code }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button
+              mat-stroked-button
+              class="action-btn"
+              (click)="handleCopyCodes()"
+            >
+              <mat-icon [class.success-icon]="actionsTaken.copied">
+                {{ actionsTaken.copied ? 'check_circle' : 'content_copy' }}
+              </mat-icon>
+              {{ languageService.t('regenerate2fa.actions.copy') || 'Copiar' }}
+            </button>
+
+            <button
+              mat-stroked-button
+              class="action-btn"
+              (click)="handleDownloadCodes()"
+            >
+              <mat-icon [class.success-icon]="actionsTaken.downloaded">
+                {{ actionsTaken.downloaded ? 'check_circle' : 'download' }}
+              </mat-icon>
+              {{ languageService.t('regenerate2fa.actions.download') || 'Descargar' }}
+            </button>
+
+            <button
+              mat-stroked-button
+              class="action-btn"
+              (click)="handlePrintCodes()"
+            >
+              <mat-icon [class.success-icon]="actionsTaken.printed">
+                {{ actionsTaken.printed ? 'check_circle' : 'print' }}
+              </mat-icon>
+              {{ languageService.t('regenerate2fa.actions.print') || 'Imprimir' }}
+            </button>
+          </div>
+
+          <!-- Saved Confirmation -->
+          <div class="saved-confirmation">
+            <mat-checkbox
+              [(ngModel)]="savedCodes"
+              color="primary"
+            >
+              {{ languageService.t('regenerate2fa.confirmSaved') || 'He guardado mis códigos de respaldo de forma segura' }}
+            </mat-checkbox>
+          </div>
+
+          <!-- Back Button -->
+          <div class="back-action">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onBack()"
+              [disabled]="!savedCodes"
+            >
+              <mat-icon>arrow_back</mat-icon>
+              {{ languageService.t('common.back') || 'Volver' }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</app-dashboard-layout>

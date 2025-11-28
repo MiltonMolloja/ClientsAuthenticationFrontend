@@ -110,7 +110,7 @@ export class SecuritySettings implements OnInit {
   }
 
   viewBackupCodes(): void {
-    // Navigate to backup codes page
-    this.router.navigate(['/2fa/backup-codes']);
+    // Navigate to regenerate codes page
+    this.router.navigate(['/2fa/regenerate']);
   }
 }

@@ -48,7 +48,15 @@
       "Bash(if exist nul del nul)",
       "Bash(npx @angular/cli@20 generate service:*)",
       "Bash(npx @angular/cli@20 build:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(if exist .angularcache rmdir /s /q .angularcache)",
+      "Bash(nul)",
+      "Bash(exit 0)",
+      "Bash(del /q .angularcache20.3.7identity-frontend.tsbuildinfo 2)",
+      "Bash(npm cache clean:*)",
+      "WebSearch",
+      "Bash(del /q nul 2)",
+      "Bash(del /q \"C:\\Source\\ClientsAuthenticationFrontend\\src\\app\\features\\two-factor\\pages\\backup-codes\\*.*\")"
     ],
     "deny": [],
     "ask": []

@@ -82,7 +82,12 @@ export class Login implements OnInit {
     // We need to allow it for cross-app authentication
     if (url.includes('://')) {
       // Validate it's from allowed origins (security check)
-      const allowedOrigins = ['http://localhost:4200', 'http://localhost:4400'];
+      const allowedOrigins = [
+        'http://localhost:4200',
+        'http://localhost:4400',
+        'https://localhost:4200',
+        'https://localhost:4400'
+      ];
       try {
         const urlObj = new URL(url);
         const origin = `${urlObj.protocol}//${urlObj.host}`;

@@ -1,7 +1,11 @@
+@use '../../../../../styles/variables' as vars;
+
 .disable-2fa-container {
-  max-width: 600px;
+  max-width: 48rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+  background-color: var(--current-bg);
+  min-height: 100vh;
 }
 
 .page-header {
@@ -10,13 +14,13 @@
   h1 {
     font-size: 1.875rem;
     font-weight: 600;
-    color: #1f2937 !important;
-    margin: 0 0 0.5rem 0;
+    color: var(--text-primary) !important;
+    margin: 0 0 0.25rem;
   }
 
   p {
-    color: #6b7280 !important;
     font-size: 1rem;
+    color: var(--text-secondary) !important;
     margin: 0;
   }
 }
@@ -47,9 +51,49 @@
   }
 }
 
+// Dark theme for warning
+html.dark-theme {
+  .warning-banner {
+    background-color: #78350f !important;
+    border-color: #92400e !important;
+
+    .warning-icon {
+      color: #fbbf24 !important;
+    }
+
+    .warning-content {
+      color: #fef3c7 !important;
+
+      strong {
+        color: #fef3c7 !important;
+      }
+    }
+  }
+}
+
 // Main Card
 .disable-card {
+  width: 100%;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color);
   margin-bottom: 1.5rem;
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding: 1.5rem 1.5rem 0;
+      background-color: var(--card-bg) !important;
+    }
+
+    .mdc-card {
+      background-color: var(--card-bg) !important;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  mat-card-content {
+    padding: 1.5rem;
+    background-color: var(--card-bg) !important;
+  }
 }
 
 .card-title-with-icon {
@@ -58,7 +102,7 @@
   gap: 0.5rem;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937 !important;
+  color: var(--text-primary) !important;
 
   mat-icon {
     color: #f59e0b !important;
@@ -78,13 +122,13 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #374151 !important;
+    color: var(--text-primary) !important;
     margin-bottom: 0.5rem;
   }
 
   .code-description {
     font-size: 0.875rem;
-    color: #6b7280 !important;
+    color: var(--text-secondary) !important;
     margin-bottom: 1rem;
   }
 
@@ -104,47 +148,80 @@
 
   .loading-text {
     font-size: 0.875rem;
-    color: #6b7280 !important;
+    color: var(--text-secondary) !important;
     margin: 0;
+  }
+}
+
+// Placeholder styles
+::ng-deep {
+  .disable-card {
+    input::placeholder {
+      color: #9ca3af !important;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    input:focus::placeholder {
+      opacity: 1;
+    }
+
+    .mat-mdc-form-field-should-float input::placeholder {
+      opacity: 1;
+    }
   }
 }
 
 // Buttons
 .form-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   margin-top: 1.5rem;
+}
 
-  button {
-    flex: 1;
-    height: 48px;
-    font-size: 1rem;
-    font-weight: 500;
+.cancel-button {
+  flex: 1;
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-color) !important;
+  background-color: var(--card-bg) !important;
+
+  &:hover:not(:disabled) {
+    background-color: var(--card-hover-bg) !important;
+    border-color: var(--text-secondary) !important;
   }
 }
 
 .disable-button {
+  flex: 1;
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 500;
   background-color: #dc2626 !important;
   color: #ffffff !important;
 
+  span {
+    color: #ffffff !important;
+  }
+
   &:hover:not(:disabled) {
     background-color: #b91c1c !important;
+
+    span {
+      color: #ffffff !important;
+    }
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
-}
 
-.cancel-button {
-  color: #6b7280 !important;
-  border-color: #d1d5db !important;
-  background-color: #ffffff !important;
-
-  &:hover:not(:disabled) {
-    background-color: #f9fafb !important;
-    border-color: #9ca3af !important;
+  .button-spinner {
+    display: inline-block;
+    margin-right: 8px;
   }
 }
 
@@ -170,10 +247,27 @@
   }
 }
 
+// Dark theme for info banner
+html.dark-theme {
+  .info-banner {
+    background-color: #1e3a8a !important;
+    border-color: #1e40af !important;
+
+    .info-icon {
+      color: #93c5fd !important;
+    }
+
+    p {
+      color: #dbeafe !important;
+    }
+  }
+}
+
 // Success Card
 .success-card {
   text-align: center;
   padding: 2rem;
+  background-color: var(--card-bg) !important;
 }
 
 .success-content {
@@ -202,35 +296,61 @@
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1f2937 !important;
+    color: var(--text-primary) !important;
     margin: 0;
   }
 
   p {
-    color: #6b7280 !important;
+    color: var(--text-secondary) !important;
     margin: 0;
   }
 
   .redirect-text {
     font-size: 0.875rem;
-    color: #9ca3af !important;
+    color: var(--text-secondary) !important;
+  }
+}
+
+// Dark theme for success
+html.dark-theme {
+  .success-content {
+    .success-icon-wrapper {
+      background-color: #065f46 !important;
+
+      .success-icon {
+        color: #6ee7b7 !important;
+      }
+    }
   }
 }
 
 // Responsive
-@media (max-width: 640px) {
+@media (max-width: vars.$breakpoint-sm) {
   .disable-2fa-container {
     padding: 1rem 0.5rem;
   }
 
-  .page-header h1 {
-    font-size: 1.5rem;
+  .page-header {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .disable-card {
+    ::ng-deep .mat-mdc-card-header {
+      padding: 1rem 1rem 0;
+    }
+
+    mat-card-content {
+      padding: 1rem;
+    }
   }
 
   .form-actions {
     flex-direction: column;
 
-    button {
+    .cancel-button,
+    .disable-button {
       width: 100%;
     }
   }

@@ -1,0 +1,688 @@
+@use '../../../../../styles/variables' as vars;
+
+.regenerate-container {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background-color: var(--current-bg);
+  min-height: 100vh;
+}
+
+// Page Header
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  .back-button {
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+
+  .header-content {
+    flex: 1;
+
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 600;
+      color: var(--text-primary) !important;
+      margin: 0 0 0.25rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: var(--text-secondary) !important;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+}
+
+// Step Indicator
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 0;
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    .step-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: var(--border-color) !important;
+      color: var(--text-secondary) !important;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+
+    .step-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary) !important;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    &.active {
+      .step-badge {
+        background-color: #146eb4 !important;
+        color: #ffffff !important;
+      }
+
+      .step-label {
+        color: #146eb4 !important;
+        font-weight: 600;
+      }
+    }
+
+    &.completed {
+      .step-badge {
+        background-color: #10b981 !important;
+        color: #ffffff !important;
+      }
+
+      .step-label {
+        color: #10b981 !important;
+      }
+    }
+  }
+
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background-color: var(--border-color) !important;
+    transition: background-color 0.3s ease;
+
+    &.completed {
+      background-color: #10b981 !important;
+    }
+  }
+}
+
+// Step Content
+.step-content {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Alert Styles
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+
+  .alert-icon {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .alert-content {
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    strong {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    ul {
+      margin: 0.5rem 0 0 0;
+      padding-left: 1.5rem;
+
+      li {
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+}
+
+.warning-alert {
+  background-color: #fef3c7 !important;
+  border: 1px solid #fde68a !important;
+
+  .alert-icon {
+    color: #d97706 !important;
+  }
+
+  .alert-content {
+    color: #78350f !important;
+
+    strong {
+      color: #78350f !important;
+    }
+
+    ul li {
+      color: #78350f !important;
+    }
+  }
+}
+
+.success-alert {
+  background-color: #d1fae5 !important;
+  border: 1px solid #6ee7b7 !important;
+
+  .alert-icon {
+    color: #059669 !important;
+  }
+
+  .alert-content {
+    color: #065f46 !important;
+
+    strong {
+      color: #065f46 !important;
+    }
+
+    p {
+      color: #065f46 !important;
+    }
+  }
+}
+
+// Dark theme for alerts
+html.dark-theme {
+  .warning-alert {
+    background-color: #78350f !important;
+    border-color: #92400e !important;
+
+    .alert-icon {
+      color: #fbbf24 !important;
+    }
+
+    .alert-content {
+      color: #fef3c7 !important;
+
+      strong {
+        color: #fef3c7 !important;
+      }
+
+      ul li {
+        color: #fef3c7 !important;
+      }
+    }
+  }
+
+  .success-alert {
+    background-color: #065f46 !important;
+    border-color: #047857 !important;
+
+    .alert-icon {
+      color: #6ee7b7 !important;
+    }
+
+    .alert-content {
+      color: #d1fae5 !important;
+
+      strong {
+        color: #d1fae5 !important;
+      }
+
+      p {
+        color: #d1fae5 !important;
+      }
+    }
+  }
+}
+
+// Regenerate Card
+.regenerate-card {
+  width: 100%;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding: 1.5rem 1.5rem 0;
+      background-color: var(--card-bg) !important;
+    }
+
+    .mdc-card {
+      background-color: var(--card-bg) !important;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  mat-card-content {
+    padding: 1.5rem;
+    background-color: var(--card-bg) !important;
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary) !important;
+
+    mat-icon {
+      color: #f59e0b !important;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .form-field {
+    margin-bottom: 1.5rem;
+
+    .field-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary) !important;
+      margin-bottom: 0.5rem;
+    }
+
+    .field-hint {
+      font-size: 0.75rem;
+      color: var(--text-secondary) !important;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .checkbox-container {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+
+    &.highlight {
+      border-color: #f59e0b !important;
+      background-color: #fff7ed !important;
+    }
+
+    ::ng-deep .mat-mdc-checkbox-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      height: 48px;
+      font-size: 1rem;
+      font-weight: 500;
+
+      mat-spinner {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+// Dark theme for checkbox
+html.dark-theme {
+  .regenerate-card .checkbox-container {
+    &.highlight {
+      background-color: #78350f !important;
+    }
+  }
+}
+
+// Placeholder styles
+::ng-deep {
+  .regenerate-card {
+    input::placeholder {
+      color: #9ca3af !important;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    input:focus::placeholder {
+      opacity: 1;
+    }
+
+    .mat-mdc-form-field-should-float input::placeholder {
+      opacity: 1;
+    }
+  }
+}
+
+// Codes Card
+.codes-card {
+  width: 100%;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      padding: 1.5rem 1.5rem 0;
+      background-color: var(--card-bg) !important;
+    }
+
+    .mdc-card {
+      background-color: var(--card-bg) !important;
+      color: var(--text-primary) !important;
+    }
+  }
+
+  mat-card-content {
+    padding: 1.5rem;
+    background-color: var(--card-bg) !important;
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary) !important;
+
+    mat-icon {
+      color: #f59e0b !important;
+    }
+  }
+}
+
+// Codes Container
+.codes-container {
+  background-color: var(--card-hover-bg) !important;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 2px solid var(--border-color) !important;
+  margin-bottom: 1.5rem;
+}
+
+.codes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.code-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--card-bg) !important;
+  border-radius: 0.5rem;
+  border: 2px solid var(--border-color) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--text-secondary) !important;
+  }
+
+  .code-number {
+    font-size: 0.75rem;
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+  }
+
+  .code-value {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary) !important;
+    letter-spacing: 0.1em;
+    user-select: all;
+    cursor: pointer;
+  }
+}
+
+// Action Buttons
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    height: 48px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+    background-color: var(--card-bg) !important;
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+      transition: color 0.3s ease;
+
+      &.success-icon {
+        color: #10b981 !important;
+      }
+    }
+
+    &:hover:not(:disabled) {
+      background-color: var(--card-hover-bg) !important;
+      border-color: var(--text-secondary) !important;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Saved Confirmation
+.saved-confirmation {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--card-hover-bg) !important;
+  border: 2px solid var(--border-color) !important;
+  margin-bottom: 1.5rem;
+
+  ::ng-deep .mat-mdc-checkbox-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary) !important;
+  }
+}
+
+// Back Action
+.back-action {
+  display: flex;
+  justify-content: center;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #f59e0b !important;
+    color: #000000 !important;
+
+    span {
+      color: #000000 !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #d97706 !important;
+
+      span {
+        color: #000000 !important;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Button styles
+.cancel-button {
+  color: var(--text-secondary) !important;
+  border-color: var(--border-color) !important;
+  background-color: var(--card-bg) !important;
+
+  &:hover:not(:disabled) {
+    background-color: var(--card-hover-bg) !important;
+    border-color: var(--text-secondary) !important;
+  }
+}
+
+.amazon-button {
+  background-color: #f59e0b !important;
+  color: #000000 !important;
+
+  span {
+    color: #000000 !important;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #d97706 !important;
+
+    span {
+      color: #000000 !important;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .button-spinner {
+    display: inline-block;
+    margin-right: 8px;
+  }
+}
+
+// Responsive
+@media (max-width: vars.$breakpoint-sm) {
+  .regenerate-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .page-header {
+    .header-content h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .step-indicator {
+    padding: 1rem 0;
+
+    .step {
+      .step-badge {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.875rem;
+
+        mat-icon {
+          font-size: 1.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+
+      .step-label {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .regenerate-card,
+  .codes-card {
+    ::ng-deep .mat-mdc-card-header {
+      padding: 1rem 1rem 0;
+    }
+
+    mat-card-content {
+      padding: 1rem;
+    }
+  }
+
+  .codes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .code-card {
+    padding: 0.75rem;
+
+    .code-value {
+      font-size: 0.875rem;
+    }
+  }
+
+  .regenerate-card .form-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
+}

@@ -10,8 +10,8 @@ export const TWO_FACTOR_ROUTES: Routes = [
     loadComponent: () => import('./pages/disable-2fa/disable-2fa').then(m => m.Disable2FA)
   },
   {
-    path: 'backup-codes',
-    loadComponent: () => import('./pages/backup-codes/backup-codes').then(m => m.BackupCodes)
+    path: 'regenerate',
+    loadComponent: () => import('./pages/regenerate-2fa/regenerate-2fa').then(m => m.Regenerate2FA)
   },
   // Verify 2FA route will be implemented later
   // {

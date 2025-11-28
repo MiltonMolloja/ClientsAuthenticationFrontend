@@ -1,37 +1,192 @@
-<div class="two-factor-container">
+<app-auth-layout>
   <mat-card class="two-factor-card">
+    <!-- Card Header -->
     <mat-card-header>
-      <mat-card-title>Two-Factor Authentication</mat-card-title>
-      <mat-card-subtitle>Enter the 6-digit code from your authenticator app</mat-card-subtitle>
+      <div class="icon-wrapper">
+        <mat-icon class="shield-icon">shield</mat-icon>
+      </div>
+      <mat-card-title>
+        {{ languageService.t('twoFactorAuth.title') || 'Autenticación de Dos Factores' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        @if (useBackupCode) {
+          {{ languageService.t('twoFactorAuth.subtitleBackup') || 'Ingresa uno de tus códigos de respaldo de 8 caracteres' }}
+        } @else {
+          {{ languageService.t('twoFactorAuth.subtitle') || 'Ingresa el código de 6 dígitos de tu aplicación autenticadora' }}
+        }
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <div class="code-input-wrapper">
-        <app-code-input [length]="6" (codeComplete)="onCodeComplete($event)"></app-code-input>
-      </div>
-
-      <div class="remember-device">
-        <mat-checkbox [(ngModel)]="rememberDevice">
-          Remember this device for 30 days
-        </mat-checkbox>
-      </div>
-
-      @if (isLoading) {
-        <div class="loading-container">
-          <mat-spinner diameter="40"></mat-spinner>
-          <p>Verifying code...</p>
+      <!-- Error Alert -->
+      @if (error) {
+        <div class="alert error-alert">
+          <mat-icon class="alert-icon">warning</mat-icon>
+          <div class="alert-content">
+            {{ error }}
+          </div>
         </div>
       }
 
-      <div class="backup-code-link">
-        <a routerLink="/auth/2fa/backup" class="link">Use a backup code instead</a>
+      <!-- Attempts Warning -->
+      @if (attemptsLeft < 3 && attemptsLeft > 0) {
+        <div class="alert warning-alert">
+          <mat-icon class="alert-icon">warning</mat-icon>
+          <div class="alert-content">
+            {{ languageService.t('twoFactorAuth.warning.attempts')?.replace('{attempts}', attemptsLeft.toString()) || '⚠️ Atención: Solo te quedan ' + attemptsLeft + ' intento(s) antes del bloqueo' }}
+          </div>
+        </div>
+      }
+
+      <!-- Authentication Method Toggle -->
+      <div class="method-toggle">
+        <div class="toggle-icon">
+          @if (useBackupCode) {
+            <mat-icon>vpn_key</mat-icon>
+          } @else {
+            <mat-icon>shield</mat-icon>
+          }
+        </div>
+        <div class="toggle-text">
+          @if (useBackupCode) {
+            {{ languageService.t('twoFactorAuth.method.backup') || 'Usando código de respaldo' }}
+          } @else {
+            {{ languageService.t('twoFactorAuth.method.authenticator') || 'Usando aplicación autenticadora' }}
+          }
+        </div>
+      </div>
+
+      <!-- Code Input Forms -->
+      @if (!useBackupCode) {
+        <!-- Authenticator Code -->
+        <div class="code-section">
+          <label class="code-label">
+            {{ languageService.t('twoFactorAuth.codeLabel') || 'Código de 6 dígitos' }}
+          </label>
+          <div class="code-input-wrapper">
+            <app-code-input
+              [length]="6"
+              (codeComplete)="onCodeComplete($event)"
+              [disabled]="isLoading"
+            ></app-code-input>
+          </div>
+        </div>
+
+        <!-- Help Text -->
+        <div class="help-box">
+          <mat-icon class="help-icon">help_outline</mat-icon>
+          <p class="help-text">
+            {{ languageService.t('twoFactorAuth.help.authenticator') || 'Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.) e ingresa el código de 6 dígitos.' }}
+          </p>
+        </div>
+
+        <!-- Switch to Backup Code -->
+        <div class="switch-method">
+          <button
+            type="button"
+            class="link-button"
+            (click)="toggleBackupCode()"
+            [disabled]="isLoading"
+          >
+            {{ languageService.t('twoFactorAuth.switch.toBackup') || '¿Perdiste tu dispositivo? Usa un código de respaldo' }}
+          </button>
+        </div>
+      } @else {
+        <!-- Backup Code Input -->
+        <div class="code-section">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>
+              {{ languageService.t('twoFactorAuth.backupCodeLabel') || 'Código de Respaldo' }}
+            </mat-label>
+            <input
+              matInput
+              type="text"
+              [placeholder]="languageService.t('twoFactorAuth.backupCodePlaceholder') || 'Ej: ABCD1234'"
+              [(ngModel)]="backupCode"
+              [disabled]="isLoading"
+              class="backup-input"
+              maxlength="10"
+              (keydown)="onBackupCodeKeyDown($event)"
+            />
+          </mat-form-field>
+        </div>
+
+        <!-- Help Text for Backup Codes -->
+        <div class="help-box warning">
+          <mat-icon class="help-icon">warning</mat-icon>
+          <p class="help-text">
+            {{ languageService.t('twoFactorAuth.help.backupWarning') || 'Los códigos de respaldo son de un solo uso. Una vez utilizado, este código no funcionará nuevamente.' }}
+          </p>
+        </div>
+
+        <!-- Submit Button for Backup Code -->
+        <button
+          mat-raised-button
+          color="primary"
+          class="submit-button"
+          (click)="handleSubmit()"
+          [disabled]="isLoading || !backupCode || backupCode.length < 8"
+        >
+          @if (isLoading) {
+            <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+            {{ languageService.t('twoFactorAuth.verifying') || 'Verificando...' }}
+          } @else {
+            <mat-icon>shield</mat-icon>
+            {{ languageService.t('twoFactorAuth.verify') || 'Verificar' }}
+          }
+        </button>
+
+        <!-- Switch to Authenticator -->
+        <div class="switch-method">
+          <button
+            type="button"
+            class="link-button"
+            (click)="toggleBackupCode()"
+            [disabled]="isLoading"
+          >
+            {{ languageService.t('twoFactorAuth.switch.toAuthenticator') || 'Volver a usar aplicación autenticadora' }}
+          </button>
+        </div>
+      }
+
+      <!-- Remember Device -->
+      <div class="remember-device">
+        <mat-checkbox [(ngModel)]="rememberDevice" color="primary">
+          {{ languageService.t('twoFactorAuth.rememberDevice') || 'Recordar este dispositivo por 30 días' }}
+        </mat-checkbox>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">{{ languageService.t('common.or') || 'o' }}</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Back to Login -->
+      <div class="back-to-login">
+        <a routerLink="/auth/login" class="back-link">
+          <mat-icon>arrow_back</mat-icon>
+          {{ languageService.t('twoFactorAuth.backToLogin') || 'Volver al inicio de sesión' }}
+        </a>
+      </div>
+
+      <!-- Security Notice -->
+      <div class="security-notice">
+        <div class="notice-box">
+          <mat-icon class="notice-icon">shield</mat-icon>
+          <p class="notice-text">
+            {{ languageService.t('twoFactorAuth.securityNotice') || 'Tu cuenta está protegida con autenticación de dos factores. Nunca compartas tus códigos con nadie.' }}
+          </p>
+        </div>
       </div>
     </mat-card-content>
 
     <mat-card-footer class="card-footer">
-      <p class="back-text">
-        <a routerLink="/auth/login" class="back-link">← Back to login</a>
+      <p class="footer-text">
+        {{ languageService.t('twoFactorAuth.needHelp') || '¿Necesitas ayuda?' }}
+        <a href="#" class="footer-link">{{ languageService.t('twoFactorAuth.contactSupport') || 'Contacta soporte' }}</a>
       </p>
     </mat-card-footer>
   </mat-card>
-</div>
+</app-auth-layout>

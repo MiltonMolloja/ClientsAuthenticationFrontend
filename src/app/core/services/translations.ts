@@ -18,6 +18,17 @@ export const translations: Record<Language, Translations> = {
       error: 'Error',
       success: 'Éxito',
       unknown: 'Desconocido',
+      password: 'Contraseña',
+      '2faCode': 'Código de Autenticación',
+      passwordPlaceholder: 'Ingresa tu contraseña',
+    },
+
+    // Validation
+    validation: {
+      password: {
+        required: 'La contraseña es requerida',
+        placeholder: 'Ingresa tu contraseña',
+      },
     },
 
     // Profile
@@ -239,6 +250,38 @@ export const translations: Record<Language, Translations> = {
       recommendation: 'Recomendación: La autenticación de dos factores es una de las mejores formas de proteger tu cuenta. Considera dejarla habilitada para mayor seguridad.',
     },
 
+    // Regenerate 2FA Codes
+    regenerate2fa: {
+      title: 'Regenerar Códigos de Respaldo',
+      subtitle: 'Genera nuevos códigos de respaldo para tu cuenta',
+      warning: {
+        title: 'ADVERTENCIA IMPORTANTE',
+        item1: 'Tus códigos de respaldo actuales dejarán de funcionar inmediatamente',
+        item2: 'Se generarán 8 nuevos códigos de respaldo',
+        item3: 'Asegúrate de guardar los nuevos códigos en un lugar seguro',
+        item4: 'Esta acción no se puede deshacer',
+      },
+      verify: {
+        title: 'Verificar Identidad',
+      },
+      codeHint: 'Ingresa el código de 6 dígitos de tu aplicación de autenticación',
+      understand: 'Entiendo que mis códigos actuales dejarán de funcionar',
+      regenerateButton: 'Regenerar Códigos',
+      success: {
+        title: '¡Códigos Regenerados Exitosamente!',
+        message: 'Tus nuevos códigos de respaldo están listos. Guárdalos en un lugar seguro.',
+      },
+      newCodes: {
+        title: 'Nuevos Códigos de Respaldo',
+      },
+      actions: {
+        copy: 'Copiar',
+        download: 'Descargar',
+        print: 'Imprimir',
+      },
+      confirmSaved: 'He guardado mis códigos de respaldo de forma segura',
+    },
+
     // Change Password
     changePassword: {
       title: 'Cambiar Contraseña',
@@ -263,6 +306,48 @@ export const translations: Record<Language, Translations> = {
       passwordsDoNotMatch: 'Las contraseñas no coinciden',
       invalidToken: 'Token inválido o expirado',
       successMessage: 'Tu contraseña ha sido restablecida exitosamente',
+    },
+
+    // Two-Factor Authentication
+    twoFactorAuth: {
+      title: 'Autenticación de Dos Factores',
+      subtitle: 'Ingresa el código de 6 dígitos de tu aplicación autenticadora',
+      subtitleBackup: 'Ingresa uno de tus códigos de respaldo de 8 caracteres',
+      codeLabel: 'Código de 6 dígitos',
+      backupCodeLabel: 'Código de Respaldo',
+      backupCodePlaceholder: 'Ej: ABCD1234',
+      verify: 'Verificar',
+      verifying: 'Verificando...',
+      success: 'Autenticación exitosa',
+      rememberDevice: 'Recordar este dispositivo por 30 días',
+      backToLogin: 'Volver al inicio de sesión',
+      securityNotice: 'Tu cuenta está protegida con autenticación de dos factores. Nunca compartas tus códigos con nadie.',
+      needHelp: '¿Necesitas ayuda?',
+      contactSupport: 'Contacta soporte',
+      method: {
+        authenticator: 'Usando aplicación autenticadora',
+        backup: 'Usando código de respaldo',
+      },
+      switch: {
+        toBackup: '¿Perdiste tu dispositivo? Usa un código de respaldo',
+        toAuthenticator: 'Volver a usar aplicación autenticadora',
+      },
+      help: {
+        authenticator: 'Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.) e ingresa el código de 6 dígitos.',
+        backupWarning: 'Los códigos de respaldo son de un solo uso. Una vez utilizado, este código no funcionará nuevamente.',
+      },
+      warning: {
+        attempts: '⚠️ Atención: Solo te quedan {attempts} intento(s) antes del bloqueo',
+      },
+      error: {
+        required: 'Por favor ingresa el código',
+        invalid6digits: 'El código debe tener 6 dígitos',
+        invalidBackup: 'El código de respaldo no es válido',
+        incorrect: 'Código incorrecto',
+        incorrectCode: 'Código incorrecto. Te quedan {attempts} intento(s)',
+        locked: 'Demasiados intentos fallidos. Tu sesión ha sido bloqueada.',
+        accountLocked: 'Cuenta bloqueada',
+      },
     },
 
     // Forgot Password
@@ -299,6 +384,17 @@ export const translations: Record<Language, Translations> = {
       error: 'Error',
       success: 'Success',
       unknown: 'Unknown',
+      password: 'Password',
+      '2faCode': 'Authentication Code',
+      passwordPlaceholder: 'Enter your password',
+    },
+
+    // Validation
+    validation: {
+      password: {
+        required: 'Password is required',
+        placeholder: 'Enter your password',
+      },
     },
 
     // Profile
@@ -522,6 +618,38 @@ export const translations: Record<Language, Translations> = {
       recommendation: 'Recommendation: Two-factor authentication is one of the best ways to protect your account. Consider keeping it enabled for enhanced security.',
     },
 
+    // Regenerate 2FA Codes
+    regenerate2fa: {
+      title: 'Regenerate Backup Codes',
+      subtitle: 'Generate new backup codes for your account',
+      warning: {
+        title: 'IMPORTANT WARNING',
+        item1: 'Your current backup codes will stop working immediately',
+        item2: '8 new backup codes will be generated',
+        item3: 'Make sure to save the new codes in a safe place',
+        item4: 'This action cannot be undone',
+      },
+      verify: {
+        title: 'Verify Identity',
+      },
+      codeHint: 'Enter the 6-digit code from your authenticator app',
+      understand: 'I understand that my current codes will stop working',
+      regenerateButton: 'Regenerate Codes',
+      success: {
+        title: 'Codes Successfully Regenerated!',
+        message: 'Your new backup codes are ready. Save them in a safe place.',
+      },
+      newCodes: {
+        title: 'New Backup Codes',
+      },
+      actions: {
+        copy: 'Copy',
+        download: 'Download',
+        print: 'Print',
+      },
+      confirmSaved: 'I have saved my backup codes securely',
+    },
+
     // Change Password
     changePassword: {
       title: 'Change Password',
@@ -546,6 +674,48 @@ export const translations: Record<Language, Translations> = {
       passwordsDoNotMatch: 'Passwords do not match',
       invalidToken: 'Invalid or expired token',
       successMessage: 'Your password has been reset successfully',
+    },
+
+    // Two-Factor Authentication
+    twoFactorAuth: {
+      title: 'Two-Factor Authentication',
+      subtitle: 'Enter the 6-digit code from your authenticator app',
+      subtitleBackup: 'Enter one of your 8-character backup codes',
+      codeLabel: '6-digit code',
+      backupCodeLabel: 'Backup Code',
+      backupCodePlaceholder: 'e.g., ABCD1234',
+      verify: 'Verify',
+      verifying: 'Verifying...',
+      success: 'Authentication successful',
+      rememberDevice: 'Remember this device for 30 days',
+      backToLogin: 'Back to sign in',
+      securityNotice: 'Your account is protected with two-factor authentication. Never share your codes with anyone.',
+      needHelp: 'Need help?',
+      contactSupport: 'Contact support',
+      method: {
+        authenticator: 'Using authenticator app',
+        backup: 'Using backup code',
+      },
+      switch: {
+        toBackup: 'Lost your device? Use a backup code',
+        toAuthenticator: 'Back to authenticator app',
+      },
+      help: {
+        authenticator: 'Open your authenticator app (Google Authenticator, Authy, etc.) and enter the 6-digit code.',
+        backupWarning: 'Backup codes are single-use only. Once used, this code will no longer work.',
+      },
+      warning: {
+        attempts: '⚠️ Warning: Only {attempts} attempt(s) remaining before lockout',
+      },
+      error: {
+        required: 'Please enter the code',
+        invalid6digits: 'Code must be 6 digits',
+        invalidBackup: 'Invalid backup code',
+        incorrect: 'Incorrect code',
+        incorrectCode: 'Incorrect code. {attempts} attempt(s) remaining',
+        locked: 'Too many failed attempts. Your session has been locked.',
+        accountLocked: 'Account locked',
+      },
     },
 
     // Forgot Password
