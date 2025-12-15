@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { of, throwError } from 'rxjs';
+import { of, throwError, Subject } from 'rxjs';
+import { signal } from '@angular/core';
 import { Login } from './login';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -12,55 +13,67 @@ describe('Login', () => {
   let component: Login;
   let fixture: ComponentFixture<Login>;
   let authService: jasmine.SpyObj<AuthService>;
-  let router: jasmine.SpyObj<Router>;
+  let router: Router;
   let notificationService: jasmine.SpyObj<NotificationService>;
-  let languageService: jasmine.SpyObj<LanguageService>;
-  let activatedRoute: { snapshot: { queryParams: Record<string, string> } };
 
-  beforeEach(async () => {
+  const setupTestBed = async (queryParams: Record<string, string> = {}) => {
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     const notificationServiceSpy = jasmine.createSpyObj('NotificationService', [
       'showSuccess',
       'showError',
     ]);
-    const languageServiceSpy = jasmine.createSpyObj('LanguageService', ['t']);
 
-    activatedRoute = {
-      snapshot: {
-        queryParams: {},
-      },
+    // Create a more complete mock for LanguageService
+    const languageServiceMock = {
+      t: jasmine.createSpy('t').and.callFake((key: string) => key),
+      getLanguageName: jasmine.createSpy('getLanguageName').and.returnValue('Español'),
+      language: signal('es'),
+      setLanguage: jasmine.createSpy('setLanguage'),
+      toggleLanguage: jasmine.createSpy('toggleLanguage'),
     };
 
     await TestBed.configureTestingModule({
       imports: [Login, ReactiveFormsModule],
       providers: [
         provideAnimations(),
+        provideRouter([]),
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy },
         { provide: NotificationService, useValue: notificationServiceSpy },
-        { provide: LanguageService, useValue: languageServiceSpy },
-        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: LanguageService, useValue: languageServiceMock },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParams } },
+        },
       ],
     }).compileComponents();
 
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    router = TestBed.inject(Router);
     notificationService = TestBed.inject(
       NotificationService,
     ) as jasmine.SpyObj<NotificationService>;
-    languageService = TestBed.inject(LanguageService) as jasmine.SpyObj<LanguageService>;
+
+    spyOn(router, 'navigate');
 
     fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  };
+
+  afterEach(() => {
+    TestBed.resetTestingModule();
   });
 
-  it('should create', () => {
+  it('should create', async () => {
+    await setupTestBed();
     expect(component).toBeTruthy();
   });
 
   describe('Form Initialization', () => {
+    beforeEach(async () => {
+      await setupTestBed();
+    });
+
     it('should initialize login form with empty values', () => {
       expect(component.loginForm).toBeDefined();
       expect(component.loginForm.get('email')?.value).toBe('');
@@ -88,6 +101,10 @@ describe('Login', () => {
   });
 
   describe('Login Success', () => {
+    beforeEach(async () => {
+      await setupTestBed();
+    });
+
     it('should login successfully and redirect to home', (done) => {
       const mockResponse = {
         succeeded: true,
@@ -142,6 +159,10 @@ describe('Login', () => {
   });
 
   describe('Login Error', () => {
+    beforeEach(async () => {
+      await setupTestBed();
+    });
+
     it('should show error message on login failure', (done) => {
       authService.login.and.returnValue(
         throwError(() => ({ status: 401, error: { message: 'Invalid credentials' } })),
@@ -196,6 +217,10 @@ describe('Login', () => {
   });
 
   describe('Password Visibility', () => {
+    beforeEach(async () => {
+      await setupTestBed();
+    });
+
     it('should toggle password visibility', () => {
       expect(component.hidePassword).toBe(true);
 
@@ -208,15 +233,14 @@ describe('Login', () => {
   });
 
   describe('Loading State', () => {
+    beforeEach(async () => {
+      await setupTestBed();
+    });
+
     it('should set loading to true during login', () => {
-      authService.login.and.returnValue(
-        of({
-          succeeded: true,
-          accessToken: 'token',
-          refreshToken: 'refresh',
-          requires2FA: false,
-        }),
-      );
+      // Use a Subject to control when the observable emits
+      const loginSubject = new Subject<any>();
+      authService.login.and.returnValue(loginSubject.asObservable());
 
       component.loginForm.patchValue({
         email: 'test@test.com',
@@ -227,40 +251,42 @@ describe('Login', () => {
 
       component.onSubmit();
 
+      // isLoading should be true while waiting for response
       expect(component.isLoading).toBe(true);
+
+      // Now emit the response
+      loginSubject.next({
+        succeeded: true,
+        accessToken: 'token',
+        refreshToken: 'refresh',
+        requires2FA: false,
+      });
+      loginSubject.complete();
     });
   });
 
   describe('Query Parameters', () => {
-    it('should show password changed message when query param is set', () => {
-      activatedRoute.snapshot.queryParams = { passwordChanged: 'true' };
+    afterEach(() => {
+      TestBed.resetTestingModule();
+    });
 
-      component.ngOnInit();
-
+    it('should show password changed message when query param is set', async () => {
+      await setupTestBed({ passwordChanged: 'true' });
       expect(component.showPasswordChangedMessage).toBe(true);
     });
 
-    it('should show password reset message when query param is set', () => {
-      activatedRoute.snapshot.queryParams = { passwordReset: 'true' };
-
-      component.ngOnInit();
-
+    it('should show password reset message when query param is set', async () => {
+      await setupTestBed({ passwordReset: 'true' });
       expect(component.showPasswordResetMessage).toBe(true);
     });
 
-    it('should set returnUrl from query params', () => {
-      activatedRoute.snapshot.queryParams = { returnUrl: '/profile' };
-
-      component.ngOnInit();
-
+    it('should set returnUrl from query params', async () => {
+      await setupTestBed({ returnUrl: '/profile' });
       expect(component.returnUrl).toBe('/profile');
     });
 
-    it('should sanitize returnUrl that starts with /auth', () => {
-      activatedRoute.snapshot.queryParams = { returnUrl: '/auth/login' };
-
-      component.ngOnInit();
-
+    it('should sanitize returnUrl that starts with /auth', async () => {
+      await setupTestBed({ returnUrl: '/auth/login' });
       expect(component.returnUrl).toBe('/');
     });
   });

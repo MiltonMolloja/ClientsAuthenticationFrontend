@@ -51,7 +51,7 @@ describe('emailVerifiedGuard', () => {
     const result = TestBed.runInInjectionContext(() => emailVerifiedGuard(route, state));
 
     expect(result).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/auth/confirm-email']);
+    expect(router.navigate).toHaveBeenCalledWith(['/auth/verify-email']);
   });
 
   it('should deny access when no user is logged in', () => {
@@ -66,6 +66,6 @@ describe('emailVerifiedGuard', () => {
     const result = TestBed.runInInjectionContext(() => emailVerifiedGuard(route, state));
 
     expect(result).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/auth/confirm-email']);
+    expect(router.navigate).toHaveBeenCalledWith(['/auth/verify-email']);
   });
 });

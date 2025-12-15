@@ -178,13 +178,16 @@ describe('TokenService', () => {
 
   describe('getTokenExpirationDate', () => {
     it('should return expiration date for valid token', () => {
-      const expTimestamp = Math.floor(new Date('2099-01-01').getTime() / 1000);
+      // Use a fixed date far in the future
+      const futureDate = new Date('2099-06-15T12:00:00Z');
+      const expTimestamp = Math.floor(futureDate.getTime() / 1000);
       const token = `header.${btoa(JSON.stringify({ exp: expTimestamp }))}.signature`;
 
       const expirationDate = service.getTokenExpirationDate(token);
 
       expect(expirationDate).toBeTruthy();
-      expect(expirationDate?.getFullYear()).toBe(2099);
+      // Check that the year is 2099 (accounting for timezone differences)
+      expect(expirationDate!.getUTCFullYear()).toBe(2099);
     });
 
     it('should return null for token without exp claim', () => {
