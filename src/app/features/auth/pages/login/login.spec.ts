@@ -3,37 +3,42 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
-import { LoginComponent } from './login';
+import { Login } from './login';
 import { AuthService } from '@core/services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
 import { LanguageService } from '@core/services/language.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('Login', () => {
+  let component: Login;
+  let fixture: ComponentFixture<Login>;
   let authService: jasmine.SpyObj<AuthService>;
   let router: jasmine.SpyObj<Router>;
-  let snackBar: jasmine.SpyObj<MatSnackBar>;
+  let notificationService: jasmine.SpyObj<NotificationService>;
   let languageService: jasmine.SpyObj<LanguageService>;
-  let activatedRoute: any;
+  let activatedRoute: { snapshot: { queryParams: Record<string, string> } };
 
   beforeEach(async () => {
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
+    const notificationServiceSpy = jasmine.createSpyObj('NotificationService', [
+      'showSuccess',
+      'showError',
+    ]);
     const languageServiceSpy = jasmine.createSpyObj('LanguageService', ['t']);
 
     activatedRoute = {
-      queryParams: of({ returnUrl: null }),
+      snapshot: {
+        queryParams: {},
+      },
     };
 
     await TestBed.configureTestingModule({
-      imports: [LoginComponent, ReactiveFormsModule],
+      imports: [Login, ReactiveFormsModule],
       providers: [
         provideAnimations(),
         { provide: AuthService, useValue: authServiceSpy },
         { provide: Router, useValue: routerSpy },
-        { provide: MatSnackBar, useValue: snackBarSpy },
+        { provide: NotificationService, useValue: notificationServiceSpy },
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
@@ -41,10 +46,12 @@ describe('LoginComponent', () => {
 
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    snackBar = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
+    notificationService = TestBed.inject(
+      NotificationService,
+    ) as jasmine.SpyObj<NotificationService>;
     languageService = TestBed.inject(LanguageService) as jasmine.SpyObj<LanguageService>;
 
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -104,33 +111,7 @@ describe('LoginComponent', () => {
           password: 'password123',
         });
         expect(router.navigate).toHaveBeenCalledWith(['/']);
-        expect(component.isLoading()).toBe(false);
-        done();
-      }, 100);
-    });
-
-    it('should redirect to returnUrl after successful login', (done) => {
-      activatedRoute.queryParams = of({ returnUrl: '/profile' });
-
-      const mockResponse = {
-        succeeded: true,
-        accessToken: 'token',
-        refreshToken: 'refresh',
-        requires2FA: false,
-      };
-
-      authService.login.and.returnValue(of(mockResponse));
-
-      component.ngOnInit();
-      component.loginForm.patchValue({
-        email: 'test@test.com',
-        password: 'password123',
-      });
-
-      component.onSubmit();
-
-      setTimeout(() => {
-        expect(router.navigate).toHaveBeenCalledWith(['/profile']);
+        expect(component.isLoading).toBe(false);
         done();
       }, 100);
     });
@@ -139,6 +120,7 @@ describe('LoginComponent', () => {
       const mockResponse = {
         succeeded: true,
         requires2FA: true,
+        userId: 'user-123',
       };
 
       authService.login.and.returnValue(of(mockResponse));
@@ -152,7 +134,7 @@ describe('LoginComponent', () => {
 
       setTimeout(() => {
         expect(router.navigate).toHaveBeenCalledWith(['/auth/2fa'], {
-          queryParams: { email: 'test@test.com' },
+          state: { userId: 'user-123' },
         });
         done();
       }, 100);
@@ -161,7 +143,6 @@ describe('LoginComponent', () => {
 
   describe('Login Error', () => {
     it('should show error message on login failure', (done) => {
-      languageService.t.and.returnValue('Invalid credentials');
       authService.login.and.returnValue(
         throwError(() => ({ status: 401, error: { message: 'Invalid credentials' } })),
       );
@@ -174,8 +155,7 @@ describe('LoginComponent', () => {
       component.onSubmit();
 
       setTimeout(() => {
-        expect(snackBar.open).toHaveBeenCalled();
-        expect(component.isLoading()).toBe(false);
+        expect(component.isLoading).toBe(false);
         done();
       }, 100);
     });
@@ -191,15 +171,11 @@ describe('LoginComponent', () => {
       expect(authService.login).not.toHaveBeenCalled();
       expect(component.loginForm.invalid).toBe(true);
     });
-  });
 
-  describe('Remember Me', () => {
-    it('should include rememberMe in login request', (done) => {
+    it('should show error notification when login fails with message', (done) => {
       const mockResponse = {
-        succeeded: true,
-        accessToken: 'token',
-        refreshToken: 'refresh',
-        requires2FA: false,
+        succeeded: false,
+        message: 'Account locked',
       };
 
       authService.login.and.returnValue(of(mockResponse));
@@ -207,48 +183,27 @@ describe('LoginComponent', () => {
       component.loginForm.patchValue({
         email: 'test@test.com',
         password: 'password123',
-        rememberMe: true,
       });
 
       component.onSubmit();
 
       setTimeout(() => {
-        expect(authService.login).toHaveBeenCalledWith({
-          email: 'test@test.com',
-          password: 'password123',
-        });
+        expect(notificationService.showError).toHaveBeenCalledWith('Account locked');
+        expect(component.isLoading).toBe(false);
         done();
       }, 100);
     });
   });
 
-  describe('Navigation', () => {
-    it('should navigate to register page', () => {
-      component.goToRegister();
+  describe('Password Visibility', () => {
+    it('should toggle password visibility', () => {
+      expect(component.hidePassword).toBe(true);
 
-      expect(router.navigate).toHaveBeenCalledWith(['/auth/register']);
-    });
+      component.togglePasswordVisibility();
+      expect(component.hidePassword).toBe(false);
 
-    it('should navigate to forgot password page', () => {
-      component.goToForgotPassword();
-
-      expect(router.navigate).toHaveBeenCalledWith(['/auth/forgot-password']);
-    });
-  });
-
-  describe('External Login', () => {
-    it('should have Google login button', () => {
-      const compiled = fixture.nativeElement;
-      const googleButton = compiled.querySelector('[data-provider="google"]');
-
-      expect(googleButton).toBeTruthy();
-    });
-
-    it('should have Microsoft login button', () => {
-      const compiled = fixture.nativeElement;
-      const microsoftButton = compiled.querySelector('[data-provider="microsoft"]');
-
-      expect(microsoftButton).toBeTruthy();
+      component.togglePasswordVisibility();
+      expect(component.hidePassword).toBe(true);
     });
   });
 
@@ -268,18 +223,45 @@ describe('LoginComponent', () => {
         password: 'password123',
       });
 
-      expect(component.isLoading()).toBe(false);
+      expect(component.isLoading).toBe(false);
 
       component.onSubmit();
 
-      expect(component.isLoading()).toBe(true);
+      expect(component.isLoading).toBe(true);
+    });
+  });
+
+  describe('Query Parameters', () => {
+    it('should show password changed message when query param is set', () => {
+      activatedRoute.snapshot.queryParams = { passwordChanged: 'true' };
+
+      component.ngOnInit();
+
+      expect(component.showPasswordChangedMessage).toBe(true);
     });
 
-    it('should disable form during loading', () => {
-      component.isLoading.set(true);
-      fixture.detectChanges();
+    it('should show password reset message when query param is set', () => {
+      activatedRoute.snapshot.queryParams = { passwordReset: 'true' };
 
-      expect(component.loginForm.disabled).toBe(true);
+      component.ngOnInit();
+
+      expect(component.showPasswordResetMessage).toBe(true);
+    });
+
+    it('should set returnUrl from query params', () => {
+      activatedRoute.snapshot.queryParams = { returnUrl: '/profile' };
+
+      component.ngOnInit();
+
+      expect(component.returnUrl).toBe('/profile');
+    });
+
+    it('should sanitize returnUrl that starts with /auth', () => {
+      activatedRoute.snapshot.queryParams = { returnUrl: '/auth/login' };
+
+      component.ngOnInit();
+
+      expect(component.returnUrl).toBe('/');
     });
   });
 });

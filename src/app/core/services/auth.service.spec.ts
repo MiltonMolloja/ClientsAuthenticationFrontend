@@ -109,6 +109,7 @@ describe('AuthService', () => {
       const registerData = {
         email: 'new@test.com',
         password: 'Password123!',
+        confirmPassword: 'Password123!',
         firstName: 'John',
         lastName: 'Doe',
       };
@@ -128,6 +129,7 @@ describe('AuthService', () => {
       const registerData = {
         email: 'existing@test.com',
         password: 'Password123!',
+        confirmPassword: 'Password123!',
         firstName: 'John',
         lastName: 'Doe',
       };
@@ -223,7 +225,7 @@ describe('AuthService', () => {
 
   describe('2FA operations', () => {
     it('should authenticate with 2FA code', (done) => {
-      service.authenticate2FA({ email: 'test@test.com', code: '123456' }).subscribe((response) => {
+      service.authenticate2FA({ userId: 'user-123', code: '123456' }).subscribe((response) => {
         expect(response.succeeded).toBe(true);
         expect(tokenService.setTokens).toHaveBeenCalled();
         done();
@@ -237,15 +239,16 @@ describe('AuthService', () => {
     it('should enable 2FA', (done) => {
       service.enable2FA().subscribe((response) => {
         expect(response.qrCodeUri).toBeDefined();
-        expect(response.sharedKey).toBeDefined();
+        expect(response.secret).toBeDefined();
         done();
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/v1/identity/2fa/enable`);
       expect(req.request.method).toBe('POST');
       req.flush({
+        succeeded: true,
         qrCodeUri: 'otpauth://...',
-        sharedKey: 'ABCD1234',
+        secret: 'ABCD1234',
         backupCodes: ['code1', 'code2'],
       });
     });
@@ -263,7 +266,7 @@ describe('AuthService', () => {
     });
 
     it('should disable 2FA', (done) => {
-      service.disable2FA({ password: 'password' }).subscribe((response) => {
+      service.disable2FA({ password: 'password', code: '123456' }).subscribe((response) => {
         expect(response.succeeded).toBe(true);
         done();
       });
@@ -303,6 +306,7 @@ describe('AuthService', () => {
       const request = {
         currentPassword: 'oldPass',
         newPassword: 'newPass123!',
+        confirmPassword: 'newPass123!',
       };
 
       service.changePassword(request).subscribe((response) => {
@@ -332,6 +336,7 @@ describe('AuthService', () => {
         email: 'test@test.com',
         token: 'reset-token',
         newPassword: 'newPass123!',
+        confirmPassword: 'newPass123!',
       };
 
       service.resetPassword(request).subscribe((response) => {
@@ -350,12 +355,10 @@ describe('AuthService', () => {
     it('should confirm email and refresh token', (done) => {
       tokenService.getRefreshToken.and.returnValue('mock-refresh-token');
 
-      service
-        .confirmEmail({ email: 'test@test.com', token: 'confirm-token' })
-        .subscribe((response) => {
-          expect(response.succeeded).toBe(true);
-          done();
-        });
+      service.confirmEmail({ userId: 'user-123', token: 'confirm-token' }).subscribe((response) => {
+        expect(response.succeeded).toBe(true);
+        done();
+      });
 
       const confirmReq = httpMock.expectOne(`${environment.apiUrl}/v1/identity/confirm-email`);
       confirmReq.flush({ succeeded: true });
