@@ -10,7 +10,8 @@
     "lint": "eslint \"src/**/*.{ts,html}\"",
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,scss,css,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\""
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\"",
+    "prepare": "husky"
   },
   "prettier": {
     "printWidth": 100,
@@ -22,6 +23,14 @@
           "parser": "angular"
         }
       }
+    ]
+  },
+  "lint-staged": {
+    "src/**/*.{ts,html}": [
+      "prettier --write"
+    ],
+    "src/**/*.{scss,css,json}": [
+      "prettier --write"
     ]
   },
   "private": true,
@@ -54,12 +63,15 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "eslint": "^9.38.0",
+    "husky": "^9.1.7",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3"
   }
 }

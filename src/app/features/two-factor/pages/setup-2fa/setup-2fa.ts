@@ -1,6 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,7 +16,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import QRCode from 'qrcode';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -34,7 +39,7 @@ import { CodeInput } from '@shared/components/code-input/code-input';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     DashboardLayoutComponent,
-    CodeInput
+    CodeInput,
   ],
   templateUrl: './setup-2fa.html',
   styleUrl: './setup-2fa.scss',
@@ -56,12 +61,12 @@ export class Setup2FA implements OnInit, AfterViewInit {
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
     this.verifyForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
     });
 
     this.loadSetupData();
@@ -86,27 +91,30 @@ export class Setup2FA implements OnInit, AfterViewInit {
       error: () => {
         this.isLoading = false;
         this.notificationService.showError('Failed to load 2FA setup data');
-      }
+      },
     });
   }
 
-  generateQRCode(): void {
+  async generateQRCode(): Promise<void> {
     if (!this.setupData || !this.qrCanvas) return;
 
-    const canvas = this.qrCanvas.nativeElement;
-    QRCode.toCanvas(canvas, this.setupData.qrCodeUri, {
-      width: 200,
-      margin: 2,
-      color: {
-        dark: '#000000',
-        light: '#FFFFFF'
-      }
-    }, (error) => {
-      if (error) {
-        console.error('Error generating QR code:', error);
-        this.notificationService.showError('Failed to generate QR code');
-      }
-    });
+    try {
+      // Lazy load QRCode library
+      const QRCode = (await import('qrcode')).default;
+
+      const canvas = this.qrCanvas.nativeElement;
+      await QRCode.toCanvas(canvas, this.setupData.qrCodeUri, {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF',
+        },
+      });
+    } catch (error) {
+      console.error('Error generating QR code:', error);
+      this.notificationService.showError('Failed to generate QR code');
+    }
   }
 
   nextStep(): void {
@@ -139,7 +147,7 @@ export class Setup2FA implements OnInit, AfterViewInit {
         error: () => {
           this.isLoading = false;
           this.notificationService.showError('Failed to verify code');
-        }
+        },
       });
     }
   }
@@ -168,7 +176,7 @@ export class Setup2FA implements OnInit, AfterViewInit {
         this.isLoading = false;
         const errorMessage = err?.error?.message || err?.message || 'Failed to verify code';
         this.notificationService.showError(errorMessage);
-      }
+      },
     });
   }
 
@@ -208,7 +216,7 @@ export class Setup2FA implements OnInit, AfterViewInit {
       error: () => {
         // Even if refresh fails, navigate to security page
         this.router.navigate(['/profile/security']);
-      }
+      },
     });
   }
 

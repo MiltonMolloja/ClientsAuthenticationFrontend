@@ -6,6 +6,7 @@ import { tap, catchError, finalize, switchMap } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { TokenService } from './token.service';
+import { LoggerService } from './logger.service';
 import { User } from '@core/models/user.model';
 import {
   LoginRequest,
@@ -19,11 +20,11 @@ import {
   Enable2FAResponse,
   Disable2FARequest,
   RegenerateBackupCodesRequest,
-  RegenerateBackupCodesResponse
+  RegenerateBackupCodesResponse,
 } from '@core/models/auth.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly API_URL = environment.apiUrl;
@@ -34,10 +35,11 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService,
   ) {
     this.checkAuthStatus();
-    
+
     // Escuchar eventos de logout desde otras aplicaciones (e-commerce en puerto 4200)
     if (typeof window !== 'undefined') {
       window.addEventListener('storage', (event) => {
@@ -51,13 +53,14 @@ export class AuthService {
 
   // Authentication
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API_URL}/v1/identity/authentication`, request)
+    return this.http
+      .post<LoginResponse>(`${this.API_URL}/v1/identity/authentication`, request)
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (response.succeeded && !response.requires2FA) {
             this.handleAuthSuccess(response);
           }
-        })
+        }),
       );
   }
 
@@ -67,50 +70,51 @@ export class AuthService {
 
   logout(): Observable<any> {
     const refreshToken = this.tokenService.getRefreshToken();
-    
+
     // Emitir evento de logout para sincronizar con otras aplicaciones
     localStorage.setItem(this.logoutEventKey, 'true');
     setTimeout(() => {
       localStorage.removeItem(this.logoutEventKey);
     }, 1000);
-    
-    return this.http.post(`${this.API_URL}/v1/identity/revoke-token`, { refreshToken })
-      .pipe(
-        finalize(() => {
-          this.clearAuthData();
-          this.router.navigate(['/auth/login']);
-        })
-      );
+
+    return this.http.post(`${this.API_URL}/v1/identity/revoke-token`, { refreshToken }).pipe(
+      finalize(() => {
+        this.clearAuthData();
+        this.router.navigate(['/auth/login']);
+      }),
+    );
   }
 
   refreshToken(): Observable<LoginResponse> {
     const refreshToken = this.tokenService.getRefreshToken();
-    return this.http.post<LoginResponse>(`${this.API_URL}/v1/identity/refresh-token`, { refreshToken })
+    return this.http
+      .post<LoginResponse>(`${this.API_URL}/v1/identity/refresh-token`, { refreshToken })
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (response.succeeded) {
             this.tokenService.setTokens(response.accessToken!, response.refreshToken!);
             // Update currentUserSignal with new JWT data
             this.loadCurrentUser();
           }
         }),
-        catchError(err => {
+        catchError((err) => {
           this.clearAuthData();
           this.router.navigate(['/auth/login']);
           return throwError(() => err);
-        })
+        }),
       );
   }
 
   // 2FA
   authenticate2FA(request: TwoFactorAuthRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API_URL}/v1/identity/2fa/authenticate`, request)
+    return this.http
+      .post<LoginResponse>(`${this.API_URL}/v1/identity/2fa/authenticate`, request)
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (response.succeeded) {
             this.handleAuthSuccess(response);
           }
-        })
+        }),
       );
   }
 
@@ -124,11 +128,10 @@ export class AuthService {
   }
 
   resetPassword(request: ResetPasswordRequest): Observable<any> {
-    console.log('📨 AuthService.resetPassword called with:', {
+    this.logger.debug('AuthService.resetPassword called', {
       url: `${this.API_URL}/v1/identity/reset-password`,
-      request: request,
       email: request.email,
-      tokenLength: request.token.length
+      tokenLength: request.token.length,
     });
 
     // Send email and token in the body (not in Authorization header)
@@ -137,18 +140,17 @@ export class AuthService {
 
   // Email Confirmation
   confirmEmail(request: ConfirmEmailRequest): Observable<any> {
-    return this.http.post(`${this.API_URL}/v1/identity/confirm-email`, request)
-      .pipe(
-        switchMap(response => {
-          // After successful email confirmation, refresh the token to get updated JWT
-          return this.refreshToken().pipe(
-            catchError(refreshError => {
-              // Return the original confirmation response even if refresh fails
-              return throwError(() => refreshError);
-            })
-          );
-        })
-      );
+    return this.http.post(`${this.API_URL}/v1/identity/confirm-email`, request).pipe(
+      switchMap((response) => {
+        // After successful email confirmation, refresh the token to get updated JWT
+        return this.refreshToken().pipe(
+          catchError((refreshError) => {
+            // Return the original confirmation response even if refresh fails
+            return throwError(() => refreshError);
+          }),
+        );
+      }),
+    );
   }
 
   resendEmailConfirmation(email: string): Observable<any> {
@@ -172,10 +174,12 @@ export class AuthService {
     return this.http.get<{ backupCodes: string[] }>(`${this.API_URL}/v1/identity/2fa/backup-codes`);
   }
 
-  regenerateBackupCodes(request?: RegenerateBackupCodesRequest): Observable<RegenerateBackupCodesResponse> {
+  regenerateBackupCodes(
+    request?: RegenerateBackupCodesRequest,
+  ): Observable<RegenerateBackupCodesResponse> {
     return this.http.post<RegenerateBackupCodesResponse>(
       `${this.API_URL}/v1/identity/2fa/backup-codes/regenerate`,
-      request || {}
+      request || {},
     );
   }
 
@@ -215,13 +219,21 @@ export class AuthService {
         firstName: decoded.unique_name || decoded.name || decoded.given_name || '',
         lastName: decoded.family_name || decoded.surname || '',
         email: decoded.email,
-        emailConfirmed: decoded.EmailConfirmed === 'true' || decoded.emailConfirmed === 'true' || decoded.email_verified === true,
+        emailConfirmed:
+          decoded.EmailConfirmed === 'true' ||
+          decoded.emailConfirmed === 'true' ||
+          decoded.email_verified === true,
         phoneNumber: decoded.phoneNumber || decoded.phone_number,
-        phoneNumberConfirmed: decoded.PhoneNumberConfirmed === 'true' || decoded.phoneNumberConfirmed === 'true',
-        twoFactorEnabled: decoded.TwoFactorEnabled === 'true' || decoded.twoFactorEnabled === 'true',
+        phoneNumberConfirmed:
+          decoded.PhoneNumberConfirmed === 'true' || decoded.phoneNumberConfirmed === 'true',
+        twoFactorEnabled:
+          decoded.TwoFactorEnabled === 'true' || decoded.twoFactorEnabled === 'true',
         lockoutEnabled: false,
         accessFailedCount: 0,
-        passwordChangedAt: decoded.PasswordChangedAt || decoded.passwordChangedAt ? new Date(decoded.PasswordChangedAt || decoded.passwordChangedAt) : undefined
+        passwordChangedAt:
+          decoded.PasswordChangedAt || decoded.passwordChangedAt
+            ? new Date(decoded.PasswordChangedAt || decoded.passwordChangedAt)
+            : undefined,
       };
       this.currentUserSignal.set(user);
     }
@@ -234,13 +246,20 @@ export class AuthService {
       firstName: decoded.unique_name || decoded.name || decoded.given_name || '',
       lastName: decoded.family_name || decoded.surname || '',
       email: decoded.email,
-      emailConfirmed: decoded.EmailConfirmed === 'true' || decoded.emailConfirmed === 'true' || decoded.email_verified === true,
+      emailConfirmed:
+        decoded.EmailConfirmed === 'true' ||
+        decoded.emailConfirmed === 'true' ||
+        decoded.email_verified === true,
       phoneNumber: decoded.phoneNumber || decoded.phone_number,
-      phoneNumberConfirmed: decoded.PhoneNumberConfirmed === 'true' || decoded.phoneNumberConfirmed === 'true',
+      phoneNumberConfirmed:
+        decoded.PhoneNumberConfirmed === 'true' || decoded.phoneNumberConfirmed === 'true',
       twoFactorEnabled: decoded.TwoFactorEnabled === 'true' || decoded.twoFactorEnabled === 'true',
       lockoutEnabled: false,
       accessFailedCount: 0,
-      passwordChangedAt: decoded.PasswordChangedAt || decoded.passwordChangedAt ? new Date(decoded.PasswordChangedAt || decoded.passwordChangedAt) : undefined
+      passwordChangedAt:
+        decoded.PasswordChangedAt || decoded.passwordChangedAt
+          ? new Date(decoded.PasswordChangedAt || decoded.passwordChangedAt)
+          : undefined,
     };
     this.currentUserSignal.set(user);
     this.isAuthenticatedSignal.set(true);
@@ -253,38 +272,35 @@ export class AuthService {
 
   get isAuthenticated(): boolean {
     return this.isAuthenticatedSignal();
-
   }
   // Get current user from API
   getCurrentUserFromApi(): Observable<User> {
-    return this.http.get<User>(`${this.API_URL}/v1/identity/me`)
-      .pipe(
-        tap(user => {
-          this.currentUserSignal.set(user);
-        })
-      );
+    return this.http.get<User>(`${this.API_URL}/v1/identity/me`).pipe(
+      tap((user) => {
+        this.currentUserSignal.set(user);
+      }),
+    );
   }
 
   // Update user profile
   updateUserProfile(firstName: string, lastName: string): Observable<any> {
-    return this.http.put(`${this.API_URL}/v1/identity/profile`, { firstName, lastName })
-      .pipe(
-        tap(() => {
-          // Update local user data immediately for instant UI update
-          const currentUser = this.currentUserSignal();
-          if (currentUser) {
-            this.currentUserSignal.set({
-              ...currentUser,
-              firstName,
-              lastName
-            });
-          }
+    return this.http.put(`${this.API_URL}/v1/identity/profile`, { firstName, lastName }).pipe(
+      tap(() => {
+        // Update local user data immediately for instant UI update
+        const currentUser = this.currentUserSignal();
+        if (currentUser) {
+          this.currentUserSignal.set({
+            ...currentUser,
+            firstName,
+            lastName,
+          });
+        }
 
-          // Note: The JWT token still contains old firstName/lastName
-          // The token will be updated on next login or manual refresh
-          // For now, local state update is sufficient for UI consistency
-        })
-      );
+        // Note: The JWT token still contains old firstName/lastName
+        // The token will be updated on next login or manual refresh
+        // For now, local state update is sufficient for UI consistency
+      }),
+    );
   }
 
   /**

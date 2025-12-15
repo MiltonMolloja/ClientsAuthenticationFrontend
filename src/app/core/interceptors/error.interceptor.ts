@@ -1,17 +1,38 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { catchError, switchMap } from 'rxjs/operators';
-import { throwError, of } from 'rxjs';
+import { catchError, switchMap, retry } from 'rxjs/operators';
+import { throwError, of, timer } from 'rxjs';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LoggerService } from '@core/services/logger.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const notificationService = inject(NotificationService);
   const router = inject(Router);
+  const logger = inject(LoggerService);
+
+  // Retry logic for network errors (not for 4xx/5xx errors)
+  const shouldRetry = (error: HttpErrorResponse): boolean => {
+    // Only retry on network errors (status 0) or 5xx server errors
+    return error.status === 0 || (error.status >= 500 && error.status < 600);
+  };
 
   return next(req).pipe(
+    retry({
+      count: 2,
+      delay: (error: HttpErrorResponse, retryCount: number) => {
+        if (!shouldRetry(error)) {
+          throw error;
+        }
+        const delayMs = Math.min(1000 * Math.pow(2, retryCount - 1), 5000);
+        logger.warn(`Retrying request (attempt ${retryCount}) after ${delayMs}ms`, {
+          url: req.url,
+        });
+        return timer(delayMs);
+      },
+    }),
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An error occurred';
 
@@ -37,7 +58,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
                 authService.logout().subscribe();
                 router.navigate(['/auth/login']);
                 return throwError(() => new Error('Session expired'));
-              })
+              }),
             );
           case 403:
             errorMessage = 'Access forbidden';
@@ -56,8 +77,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
+      logger.error('HTTP Error', error, { url: req.url, status: error.status });
       notificationService.showError(errorMessage);
       return throwError(() => error);
-    })
+    }),
   );
 };

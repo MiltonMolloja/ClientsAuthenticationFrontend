@@ -10,9 +10,15 @@
       </mat-card-title>
       <mat-card-subtitle>
         @if (useBackupCode) {
-          {{ languageService.t('twoFactorAuth.subtitleBackup') || 'Ingresa uno de tus códigos de respaldo de 8 caracteres' }}
+          {{
+            languageService.t('twoFactorAuth.subtitleBackup') ||
+              'Ingresa uno de tus códigos de respaldo de 8 caracteres'
+          }}
         } @else {
-          {{ languageService.t('twoFactorAuth.subtitle') || 'Ingresa el código de 6 dígitos de tu aplicación autenticadora' }}
+          {{
+            languageService.t('twoFactorAuth.subtitle') ||
+              'Ingresa el código de 6 dígitos de tu aplicación autenticadora'
+          }}
         }
       </mat-card-subtitle>
     </mat-card-header>
@@ -33,7 +39,12 @@
         <div class="alert warning-alert">
           <mat-icon class="alert-icon">warning</mat-icon>
           <div class="alert-content">
-            {{ languageService.t('twoFactorAuth.warning.attempts')?.replace('{attempts}', attemptsLeft.toString()) || '⚠️ Atención: Solo te quedan ' + attemptsLeft + ' intento(s) antes del bloqueo' }}
+            {{
+              (
+                languageService.t('twoFactorAuth.warning.attempts') ||
+                '⚠️ Atención: Solo te quedan {attempts} intento(s) antes del bloqueo'
+              ).replace('{attempts}', attemptsLeft.toString())
+            }}
           </div>
         </div>
       }
@@ -51,7 +62,10 @@
           @if (useBackupCode) {
             {{ languageService.t('twoFactorAuth.method.backup') || 'Usando código de respaldo' }}
           } @else {
-            {{ languageService.t('twoFactorAuth.method.authenticator') || 'Usando aplicación autenticadora' }}
+            {{
+              languageService.t('twoFactorAuth.method.authenticator') ||
+                'Usando aplicación autenticadora'
+            }}
           }
         </div>
       </div>
@@ -76,7 +90,10 @@
         <div class="help-box">
           <mat-icon class="help-icon">help_outline</mat-icon>
           <p class="help-text">
-            {{ languageService.t('twoFactorAuth.help.authenticator') || 'Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.) e ingresa el código de 6 dígitos.' }}
+            {{
+              languageService.t('twoFactorAuth.help.authenticator') ||
+                'Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.) e ingresa el código de 6 dígitos.'
+            }}
           </p>
         </div>
 
@@ -88,7 +105,10 @@
             (click)="toggleBackupCode()"
             [disabled]="isLoading"
           >
-            {{ languageService.t('twoFactorAuth.switch.toBackup') || '¿Perdiste tu dispositivo? Usa un código de respaldo' }}
+            {{
+              languageService.t('twoFactorAuth.switch.toBackup') ||
+                '¿Perdiste tu dispositivo? Usa un código de respaldo'
+            }}
           </button>
         </div>
       } @else {
@@ -101,7 +121,9 @@
             <input
               matInput
               type="text"
-              [placeholder]="languageService.t('twoFactorAuth.backupCodePlaceholder') || 'Ej: ABCD1234'"
+              [placeholder]="
+                languageService.t('twoFactorAuth.backupCodePlaceholder') || 'Ej: ABCD1234'
+              "
               [(ngModel)]="backupCode"
               [disabled]="isLoading"
               class="backup-input"
@@ -115,7 +137,10 @@
         <div class="help-box warning">
           <mat-icon class="help-icon">warning</mat-icon>
           <p class="help-text">
-            {{ languageService.t('twoFactorAuth.help.backupWarning') || 'Los códigos de respaldo son de un solo uso. Una vez utilizado, este código no funcionará nuevamente.' }}
+            {{
+              languageService.t('twoFactorAuth.help.backupWarning') ||
+                'Los códigos de respaldo son de un solo uso. Una vez utilizado, este código no funcionará nuevamente.'
+            }}
           </p>
         </div>
 
@@ -131,8 +156,10 @@
             <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
             {{ languageService.t('twoFactorAuth.verifying') || 'Verificando...' }}
           } @else {
-            <mat-icon>shield</mat-icon>
-            {{ languageService.t('twoFactorAuth.verify') || 'Verificar' }}
+            <ng-container>
+              <mat-icon>shield</mat-icon>
+              {{ languageService.t('twoFactorAuth.verify') || 'Verificar' }}
+            </ng-container>
           }
         </button>
 
@@ -144,7 +171,10 @@
             (click)="toggleBackupCode()"
             [disabled]="isLoading"
           >
-            {{ languageService.t('twoFactorAuth.switch.toAuthenticator') || 'Volver a usar aplicación autenticadora' }}
+            {{
+              languageService.t('twoFactorAuth.switch.toAuthenticator') ||
+                'Volver a usar aplicación autenticadora'
+            }}
           </button>
         </div>
       }
@@ -152,7 +182,10 @@
       <!-- Remember Device -->
       <div class="remember-device">
         <mat-checkbox [(ngModel)]="rememberDevice" color="primary">
-          {{ languageService.t('twoFactorAuth.rememberDevice') || 'Recordar este dispositivo por 30 días' }}
+          {{
+            languageService.t('twoFactorAuth.rememberDevice') ||
+              'Recordar este dispositivo por 30 días'
+          }}
         </mat-checkbox>
       </div>
 
@@ -176,7 +209,10 @@
         <div class="notice-box">
           <mat-icon class="notice-icon">shield</mat-icon>
           <p class="notice-text">
-            {{ languageService.t('twoFactorAuth.securityNotice') || 'Tu cuenta está protegida con autenticación de dos factores. Nunca compartas tus códigos con nadie.' }}
+            {{
+              languageService.t('twoFactorAuth.securityNotice') ||
+                'Tu cuenta está protegida con autenticación de dos factores. Nunca compartas tus códigos con nadie.'
+            }}
           </p>
         </div>
       </div>
@@ -185,7 +221,9 @@
     <mat-card-footer class="card-footer">
       <p class="footer-text">
         {{ languageService.t('twoFactorAuth.needHelp') || '¿Necesitas ayuda?' }}
-        <a href="#" class="footer-link">{{ languageService.t('twoFactorAuth.contactSupport') || 'Contacta soporte' }}</a>
+        <a href="#" class="footer-link">{{
+          languageService.t('twoFactorAuth.contactSupport') || 'Contacta soporte'
+        }}</a>
       </p>
     </mat-card-footer>
   </mat-card>
