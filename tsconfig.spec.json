@@ -6,7 +6,15 @@
     "outDir": "./out-tsc/spec",
     "types": [
       "jasmine"
-    ]
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@features/*": ["src/app/features/*"],
+      "@layout/*": ["src/app/layout/*"],
+      "@environments/*": ["src/environments/*"]
+    }
   },
   "include": [
     "src/**/*.ts"
