@@ -38,22 +38,34 @@
   gap: 2rem;
 }
 
-// Logo
+// Logo - ECommerce Style
 .logo {
   display: flex;
   align-items: center;
-}
+  gap: 0.5rem;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: border-color 0.2s ease;
 
-.logo-box {
-  border: 2px solid #ff9900;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.25rem;
-}
+  &:hover {
+    border-color: white;
+  }
 
-.logo-text {
-  color: #ff9900;
-  font-size: 1.125rem;
-  font-weight: 600;
+  .logo-icon {
+    color: white;
+    font-size: 1.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .logo-text {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
 }
 
 // Navigation

@@ -2,12 +2,12 @@
   <!-- Header -->
   <header class="auth-header">
     <div class="auth-header-container">
-      <div class="auth-logo">
-        <div class="logo-box">
-          <span class="logo-text">AuthApp</span>
-        </div>
-      </div>
+      <a routerLink="/" class="logo">
+        <mat-icon class="logo-icon">shopping_bag</mat-icon>
+        <span class="logo-text">ECommerce</span>
+      </a>
       <div class="auth-actions">
+        <app-language-toggle></app-language-toggle>
         <app-theme-toggle></app-theme-toggle>
       </div>
     </div>
@@ -24,12 +24,12 @@
   <footer class="auth-footer">
     <div class="auth-footer-container">
       <div class="footer-links">
-        <a href="#" class="footer-link">Conditions of Use</a>
-        <a href="#" class="footer-link">Privacy Notice</a>
-        <a href="#" class="footer-link">Help</a>
+        <a href="#" class="footer-link">{{ languageService.t('footer.conditions') }}</a>
+        <a href="#" class="footer-link">{{ languageService.t('footer.privacy') }}</a>
+        <a href="#" class="footer-link">{{ languageService.t('footer.help') }}</a>
       </div>
       <p class="footer-copyright">
-        © {{ currentYear }} AuthApp, Inc.
+        © {{ currentYear }} ECommerce, Inc.
       </p>
     </div>
   </footer>

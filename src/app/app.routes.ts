@@ -11,10 +11,10 @@ export const routes: Routes = [
   },
 
   // Auth feature - No authentication required (redirect if already authenticated)
+  // Excepción: logout no tiene guard para permitir cerrar sesión desde cualquier estado
   {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
-    canActivate: [noAuthGuard],
     data: { animation: 'AuthPage' }
   },
 

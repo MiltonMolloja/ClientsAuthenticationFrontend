@@ -1,10 +1,26 @@
-.confirm-email-card {
-  border: 1px solid #e5e7eb;
-  background-color: #ffffff;
+@use '../../../../../styles/variables' as vars;
 
-  ::ng-deep .mat-mdc-card-header {
-    display: block;
-    padding: 2rem 1.5rem 0;
+.confirm-email-card {
+  border: 1px solid var(--card-border) !important;
+  background-color: var(--card-bg) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  // Force Material card background
+  ::ng-deep {
+    &.mat-mdc-card,
+    .mdc-card {
+      background-color: var(--card-bg) !important;
+    }
+
+    .mat-mdc-card-header {
+      display: block;
+      padding: 2rem 1.5rem 0;
+      background-color: var(--card-bg) !important;
+    }
+
+    .mat-mdc-card-content {
+      background-color: var(--card-bg) !important;
+    }
   }
 
   .text-center {
@@ -37,17 +53,19 @@
   .card-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--text-primary) !important;
     margin: 0.5rem 0;
     text-align: center;
+    transition: color 0.3s ease;
   }
 
   .card-description {
     font-size: 0.875rem;
     line-height: 1.5;
-    color: #6b7280;
+    color: var(--text-secondary) !important;
     margin: 0.5rem 0 1.5rem;
     text-align: center;
+    transition: color 0.3s ease;
   }
 
   .card-content {
@@ -76,11 +94,15 @@
     font-weight: 500;
     margin-bottom: 1rem;
     position: relative;
-    background-color: #f59e0b;
-    color: #1f2937;
+    background-color: #f59e0b !important;
+    color: #000000 !important;
+
+    span {
+      color: #000000 !important;
+    }
 
     &:hover:not(:disabled) {
-      background-color: #d97706;
+      background-color: #d97706 !important;
     }
 
     &:disabled {
@@ -107,6 +129,38 @@
       &:hover {
         color: #1d4ed8;
         text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Dark theme specific styles
+html.dark-theme {
+  .confirm-email-card {
+    .icon-container {
+      background-color: rgba(37, 99, 235, 0.15);
+
+      .email-icon {
+        color: #60a5fa;
+      }
+    }
+
+    .info-box {
+      background-color: rgba(37, 99, 235, 0.1);
+      border-color: rgba(37, 99, 235, 0.3);
+
+      .info-text {
+        color: #93c5fd;
+      }
+    }
+
+    .back-link-container {
+      .back-link {
+        color: #60a5fa;
+
+        &:hover {
+          color: #93c5fd;
+        }
       }
     }
   }

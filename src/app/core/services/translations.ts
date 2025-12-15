@@ -23,6 +23,18 @@ export const translations: Record<Language, Translations> = {
       passwordPlaceholder: 'Ingresa tu contraseña',
     },
 
+    // Footer
+    footer: {
+      conditions: 'Condiciones de Uso',
+      privacy: 'Aviso de Privacidad',
+      help: 'Ayuda',
+    },
+
+    // Dashboard
+    dashboard: {
+      hello: 'Hola',
+    },
+
     // Validation
     validation: {
       password: {
@@ -196,6 +208,83 @@ export const translations: Record<Language, Translations> = {
       passwordResetSuccess: '¡Contraseña restablecida exitosamente!',
       passwordResetMessage: 'Todas las sesiones han sido cerradas. Por favor, inicia sesión con tu nueva contraseña.',
       loggingOut: 'Cerrando sesión...',
+    },
+
+    // Login Page
+    loginPage: {
+      title: 'Bienvenido de Nuevo',
+      subtitle: 'Inicia sesión en tu cuenta para continuar',
+      emailLabel: 'Correo Electrónico',
+      emailPlaceholder: 'john.doe@example.com',
+      emailRequired: 'El correo electrónico es requerido',
+      emailInvalid: 'Por favor ingresa un correo electrónico válido',
+      passwordLabel: 'Contraseña',
+      passwordPlaceholder: 'Ingresa tu contraseña',
+      passwordRequired: 'La contraseña es requerida',
+      rememberMe: 'Recordarme',
+      forgotPassword: '¿Olvidaste tu contraseña?',
+      signIn: 'Iniciar Sesión',
+      signingIn: 'Iniciando sesión...',
+      noAccount: '¿No tienes una cuenta?',
+      signUp: 'Regístrate',
+    },
+
+    // Register Page
+    registerPage: {
+      title: 'Crear Cuenta',
+      subtitle: 'Regístrate para comenzar',
+      firstName: 'Nombre',
+      firstNamePlaceholder: 'Juan',
+      firstNameRequired: 'El nombre es requerido',
+      lastName: 'Apellido',
+      lastNamePlaceholder: 'Pérez',
+      lastNameRequired: 'El apellido es requerido',
+      emailLabel: 'Correo Electrónico',
+      emailPlaceholder: 'john.doe@example.com',
+      emailRequired: 'El correo electrónico es requerido',
+      emailInvalid: 'Por favor ingresa un correo electrónico válido',
+      passwordLabel: 'Contraseña',
+      passwordPlaceholder: 'Crea una contraseña',
+      passwordRequired: 'La contraseña es requerida',
+      confirmPassword: 'Confirmar Contraseña',
+      confirmPasswordPlaceholder: 'Confirma tu contraseña',
+      confirmPasswordRequired: 'La confirmación de contraseña es requerida',
+      passwordsDoNotMatch: 'Las contraseñas no coinciden',
+      termsAgree: 'Acepto los',
+      termsLink: 'Términos y Condiciones',
+      termsRequired: 'Debes aceptar los términos y condiciones',
+      createAccount: 'Crear Cuenta',
+      creatingAccount: 'Creando cuenta...',
+      haveAccount: '¿Ya tienes una cuenta?',
+      signIn: 'Inicia sesión',
+    },
+
+    // Forgot Password Page
+    forgotPasswordPage: {
+      title: '¿Olvidaste tu Contraseña?',
+      subtitle: 'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
+      emailLabel: 'Correo Electrónico',
+      emailPlaceholder: 'john.doe@example.com',
+      emailRequired: 'El correo electrónico es requerido',
+      emailInvalid: 'Por favor ingresa un correo electrónico válido',
+      sendResetLink: 'Enviar Enlace de Restablecimiento',
+      sending: 'Enviando...',
+      backToSignIn: 'Volver a Iniciar Sesión',
+      checkEmailTitle: 'Revisa tu Correo',
+      checkEmailSubtitle: 'Si existe una cuenta para',
+      checkEmailMessage: 'recibirás un enlace para restablecer tu contraseña en breve.',
+      emailNote: 'El correo puede tardar unos minutos en llegar. Por favor revisa tu carpeta de spam si no lo ves.',
+    },
+
+    // Confirm Email Page
+    confirmEmailPage: {
+      title: 'Verifica tu Correo Electrónico',
+      subtitle: 'Hemos enviado un correo de verificación a tu bandeja de entrada. Por favor revisa tu correo y haz clic en el enlace de verificación para activar tu cuenta.',
+      infoText: '¿No recibiste el correo? Revisa tu carpeta de spam o solicita un nuevo correo de verificación.',
+      resendEmail: 'Reenviar Correo de Verificación',
+      resending: 'Reenviando...',
+      backToSignIn: 'Volver a Iniciar Sesión',
+      resendSuccess: 'Correo de verificación reenviado exitosamente',
     },
 
     // 2FA
@@ -389,12 +478,16 @@ export const translations: Record<Language, Translations> = {
       passwordPlaceholder: 'Enter your password',
     },
 
-    // Validation
-    validation: {
-      password: {
-        required: 'Password is required',
-        placeholder: 'Enter your password',
-      },
+// Footer
+    footer: {
+      conditions: 'Conditions of Use',
+      privacy: 'Privacy Notice',
+      help: 'Help',
+    },
+
+    // Dashboard
+    dashboard: {
+      hello: 'Hello',
     },
 
     // Profile
@@ -564,6 +657,83 @@ export const translations: Record<Language, Translations> = {
       passwordResetSuccess: 'Password reset successfully!',
       passwordResetMessage: 'All sessions have been logged out. Please sign in with your new password.',
       loggingOut: 'Logging out...',
+    },
+
+    // Login Page
+    loginPage: {
+      title: 'Welcome Back',
+      subtitle: 'Sign in to your account to continue',
+      emailLabel: 'Email',
+      emailPlaceholder: 'john.doe@example.com',
+      emailRequired: 'Email is required',
+      emailInvalid: 'Please enter a valid email',
+      passwordLabel: 'Password',
+      passwordPlaceholder: 'Enter your password',
+      passwordRequired: 'Password is required',
+      rememberMe: 'Remember me',
+      forgotPassword: 'Forgot password?',
+      signIn: 'Sign In',
+      signingIn: 'Signing in...',
+      noAccount: "Don't have an account?",
+      signUp: 'Sign up',
+    },
+
+    // Register Page
+    registerPage: {
+      title: 'Create Account',
+      subtitle: 'Sign up to get started',
+      firstName: 'First Name',
+      firstNamePlaceholder: 'John',
+      firstNameRequired: 'First name is required',
+      lastName: 'Last Name',
+      lastNamePlaceholder: 'Doe',
+      lastNameRequired: 'Last name is required',
+      emailLabel: 'Email',
+      emailPlaceholder: 'john.doe@example.com',
+      emailRequired: 'Email is required',
+      emailInvalid: 'Please enter a valid email',
+      passwordLabel: 'Password',
+      passwordPlaceholder: 'Create a password',
+      passwordRequired: 'Password is required',
+      confirmPassword: 'Confirm Password',
+      confirmPasswordPlaceholder: 'Confirm your password',
+      confirmPasswordRequired: 'Password confirmation is required',
+      passwordsDoNotMatch: 'Passwords do not match',
+      termsAgree: 'I agree to the',
+      termsLink: 'Terms and Conditions',
+      termsRequired: 'You must agree to the terms and conditions',
+      createAccount: 'Create Account',
+      creatingAccount: 'Creating account...',
+      haveAccount: 'Already have an account?',
+      signIn: 'Sign in',
+    },
+
+    // Forgot Password Page
+    forgotPasswordPage: {
+      title: 'Forgot Password?',
+      subtitle: "Enter your email address and we'll send you a link to reset your password",
+      emailLabel: 'Email',
+      emailPlaceholder: 'john.doe@example.com',
+      emailRequired: 'Email is required',
+      emailInvalid: 'Please enter a valid email',
+      sendResetLink: 'Send Reset Link',
+      sending: 'Sending...',
+      backToSignIn: 'Back to Sign In',
+      checkEmailTitle: 'Check Your Email',
+      checkEmailSubtitle: 'If an account exists for',
+      checkEmailMessage: 'you will receive a password reset link shortly.',
+      emailNote: 'The email may take a few minutes to arrive. Please check your spam folder if you don\'t see it.',
+    },
+
+    // Confirm Email Page
+    confirmEmailPage: {
+      title: 'Verify Your Email',
+      subtitle: "We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.",
+      infoText: "Didn't receive the email? Check your spam folder or request a new verification email.",
+      resendEmail: 'Resend Verification Email',
+      resending: 'Resending...',
+      backToSignIn: 'Back to Sign In',
+      resendSuccess: 'Verification email resent successfully',
     },
 
     // 2FA

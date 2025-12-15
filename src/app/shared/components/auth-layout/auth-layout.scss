@@ -4,13 +4,15 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--amazon-bg);
+  background-color: var(--current-bg);
+  transition: background-color 0.3s ease;
 }
 
 // Header
 .auth-header {
-  background-color: var(--amazon-dark);
+  background-color: var(--header-bg-primary);
   padding: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .auth-header-container {
@@ -22,22 +24,40 @@
   justify-content: space-between;
 }
 
-.auth-logo {
+// Logo - ECommerce Style
+.logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: white;
+  }
+
+  .logo-icon {
+    color: white;
+    font-size: 1.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .logo-text {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
 }
 
-.logo-box {
-  border: 2px solid var(--amazon-orange);
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.25rem;
-}
-
-.logo-text {
-  color: var(--amazon-orange);
-  font-size: 1.125rem;
-  font-weight: 500;
+.auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 // Main Content
@@ -56,9 +76,10 @@
 
 // Footer
 .auth-footer {
-  background-color: var(--amazon-dark);
+  background-color: var(--footer-bg);
   padding: 1.5rem 1rem;
   color: white;
+  transition: background-color 0.3s ease;
 }
 
 .auth-footer-container {
@@ -83,7 +104,7 @@
 }
 
 .footer-link {
-  color: #d1d5db; // gray-300
+  color: #d1d5db;
   text-decoration: none;
   transition: color vars.$transition-fast;
 
@@ -95,5 +116,5 @@
 .footer-copyright {
   margin: 0;
   font-size: 0.875rem;
-  color: #9ca3af; // gray-400
+  color: #9ca3af;
 }

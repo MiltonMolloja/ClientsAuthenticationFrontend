@@ -29,6 +29,7 @@ export class AuthService {
   private readonly API_URL = environment.apiUrl;
   private currentUserSignal = signal<User | null>(null);
   private isAuthenticatedSignal = signal<boolean>(false);
+  private readonly logoutEventKey = 'auth_logout_event';
 
   constructor(
     private http: HttpClient,
@@ -36,6 +37,16 @@ export class AuthService {
     private router: Router
   ) {
     this.checkAuthStatus();
+    
+    // Escuchar eventos de logout desde otras aplicaciones (e-commerce en puerto 4200)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', (event) => {
+        if (event.key === this.logoutEventKey && event.newValue === 'true') {
+          // Otra aplicación cerró sesión, limpiar tokens locales sin redirigir
+          this.clearAuthData();
+        }
+      });
+    }
   }
 
   // Authentication
@@ -56,6 +67,13 @@ export class AuthService {
 
   logout(): Observable<any> {
     const refreshToken = this.tokenService.getRefreshToken();
+    
+    // Emitir evento de logout para sincronizar con otras aplicaciones
+    localStorage.setItem(this.logoutEventKey, 'true');
+    setTimeout(() => {
+      localStorage.removeItem(this.logoutEventKey);
+    }, 1000);
+    
     return this.http.post(`${this.API_URL}/v1/identity/revoke-token`, { refreshToken })
       .pipe(
         finalize(() => {

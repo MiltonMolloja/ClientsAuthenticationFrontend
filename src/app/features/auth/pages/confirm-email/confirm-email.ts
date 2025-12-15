@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LanguageService } from '@core/services/language.service';
 import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout';
 
 @Component({
@@ -25,6 +26,8 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
   styleUrl: './confirm-email.scss',
 })
 export class ConfirmEmail implements OnInit {
+  public languageService = inject(LanguageService);
+  
   email: string = '';
   isResending = false;
 
@@ -51,7 +54,7 @@ export class ConfirmEmail implements OnInit {
     this.isResending = true;
     this.authService.resendEmailConfirmation(this.email).subscribe({
       next: () => {
-        this.notificationService.showSuccess('Verification email sent! Please check your inbox.');
+        this.notificationService.showSuccess(this.languageService.t('confirmEmailPage.resendSuccess'));
         this.isResending = false;
       },
       error: () => {

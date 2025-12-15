@@ -1,27 +1,32 @@
-// Botón de tema - Desktop
+// Botón de tema - Desktop (ECommerce Style)
 .theme-button {
-  color: white;
-  height: 40px;
+  color: white !important;
+  padding: 0.5rem !important;
+  border: 1px solid transparent !important;
+  border-radius: 2px !important;
+
+  &:hover {
+    border-color: white !important;
+  }
 
   .account-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    text-align: left;
     line-height: 1.2;
 
     .account-greeting {
-      font-size: 12px;
-      opacity: 0.7;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: white;
     }
 
     .account-label {
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: white;
     }
-  }
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.08);
   }
 }
 

@@ -6,16 +6,16 @@
           <mat-icon class="email-icon">mail</mat-icon>
         </div>
       </div>
-      <mat-card-title class="card-title">Verify Your Email</mat-card-title>
+      <mat-card-title class="card-title">{{ languageService.t('confirmEmailPage.title') }}</mat-card-title>
       <mat-card-subtitle class="card-description">
-        We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.
+        {{ languageService.t('confirmEmailPage.subtitle') }}
       </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content class="card-content">
       <div class="info-box">
         <p class="info-text">
-          Didn't receive the email? Check your spam folder or request a new verification email.
+          {{ languageService.t('confirmEmailPage.infoText') }}
         </p>
       </div>
 
@@ -24,13 +24,17 @@
         class="resend-button"
         (click)="resendVerificationEmail()"
         [disabled]="isResending">
-        <mat-spinner *ngIf="isResending" diameter="20" class="button-spinner"></mat-spinner>
-        <span *ngIf="!isResending">Resend Verification Email</span>
+        @if (isResending) {
+          <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+          <span>{{ languageService.t('confirmEmailPage.resending') }}</span>
+        } @else {
+          <span>{{ languageService.t('confirmEmailPage.resendEmail') }}</span>
+        }
       </button>
 
       <div class="back-link-container">
         <a routerLink="/auth/login" class="back-link">
-          Back to Sign In
+          {{ languageService.t('confirmEmailPage.backToSignIn') }}
         </a>
       </div>
     </mat-card-content>

@@ -1,8 +1,8 @@
 <app-auth-layout>
   <mat-card class="login-card">
     <mat-card-header>
-      <mat-card-title>Welcome Back</mat-card-title>
-      <mat-card-subtitle>Sign in to your account to continue</mat-card-subtitle>
+      <mat-card-title>{{ languageService.t('loginPage.title') }}</mat-card-title>
+      <mat-card-subtitle>{{ languageService.t('loginPage.subtitle') }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -31,43 +31,43 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email Field -->
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="john.doe@example.com" required>
+          <mat-label>{{ languageService.t('loginPage.emailLabel') }}</mat-label>
+          <input matInput type="email" formControlName="email" [placeholder]="languageService.t('loginPage.emailPlaceholder')" required>
           <mat-icon matPrefix>email</mat-icon>
           @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
-            <mat-error>Email is required</mat-error>
+            <mat-error>{{ languageService.t('loginPage.emailRequired') }}</mat-error>
           }
           @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
-            <mat-error>Please enter a valid email</mat-error>
+            <mat-error>{{ languageService.t('loginPage.emailInvalid') }}</mat-error>
           }
         </mat-form-field>
 
         <!-- Password Field -->
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" required>
+          <mat-label>{{ languageService.t('loginPage.passwordLabel') }}</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [placeholder]="languageService.t('loginPage.passwordPlaceholder')" required>
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="!hidePassword">
             <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
           </button>
           @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
-            <mat-error>Password is required</mat-error>
+            <mat-error>{{ languageService.t('loginPage.passwordRequired') }}</mat-error>
           }
         </mat-form-field>
 
         <!-- Remember Me & Forgot Password -->
         <div class="form-actions">
-          <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-          <a routerLink="/auth/forgot-password" class="forgot-password-link">Forgot password?</a>
+          <mat-checkbox formControlName="rememberMe">{{ languageService.t('loginPage.rememberMe') }}</mat-checkbox>
+          <a routerLink="/auth/forgot-password" class="forgot-password-link">{{ languageService.t('loginPage.forgotPassword') }}</a>
         </div>
 
         <!-- Submit Button -->
         <button mat-raised-button type="submit" class="submit-button full-width amazon-button" [disabled]="loginForm.invalid || isLoading">
           @if (isLoading) {
             <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-            <span>Signing in...</span>
+            <span>{{ languageService.t('loginPage.signingIn') }}</span>
           } @else {
-            <span>Sign In</span>
+            <span>{{ languageService.t('loginPage.signIn') }}</span>
           }
         </button>
       </form>
@@ -75,8 +75,8 @@
 
     <mat-card-footer class="card-footer">
       <p class="signup-text">
-        Don't have an account?
-        <a routerLink="/auth/register" class="signup-link">Sign up</a>
+        {{ languageService.t('loginPage.noAccount') }}
+        <a routerLink="/auth/register" class="signup-link">{{ languageService.t('loginPage.signUp') }}</a>
       </p>
     </mat-card-footer>
   </mat-card>

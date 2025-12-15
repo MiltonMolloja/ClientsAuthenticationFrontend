@@ -2,25 +2,45 @@
 
 .register-card {
   width: 100%;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 
-  ::ng-deep .mat-mdc-card-header {
-    display: block;
-    padding: 1.5rem 1.5rem 1rem;
+  // Force Material card background
+  ::ng-deep {
+    &.mat-mdc-card,
+    .mdc-card {
+      background-color: var(--card-bg) !important;
+    }
+
+    .mat-mdc-card-header {
+      display: block;
+      padding: 1.5rem 1.5rem 1rem;
+      background-color: var(--card-bg) !important;
+    }
+
+    .mat-mdc-card-content {
+      background-color: var(--card-bg) !important;
+    }
+
+    .mat-mdc-card-footer {
+      background-color: var(--card-bg) !important;
+    }
   }
 
   mat-card-title {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1f2937;
+    color: var(--text-primary) !important;
     margin: 0 0 0.25rem;
+    transition: color 0.3s ease;
   }
 
   mat-card-subtitle {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--text-secondary) !important;
     margin: 0;
+    transition: color 0.3s ease;
   }
 
   mat-card-content {
@@ -52,12 +72,31 @@
 ::ng-deep {
   .register-card {
     mat-icon[matPrefix] {
-      color: #1f2937 !important; // Same as card title
+      color: var(--text-primary) !important;
+      transition: color 0.3s ease;
+    }
+
+    // Input text color
+    .mat-mdc-input-element {
+      color: var(--text-primary) !important;
+    }
+
+    // Label color
+    .mat-mdc-floating-label,
+    .mdc-floating-label {
+      color: var(--text-secondary) !important;
+    }
+
+    // Outline color
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--card-border) !important;
     }
 
     // Placeholder styles - only show when focused
     input::placeholder {
-      color: #9ca3af !important;
+      color: var(--text-secondary) !important;
       opacity: 0;
       transition: opacity 0.2s;
     }
@@ -75,25 +114,39 @@
 .terms-checkbox {
   mat-checkbox {
     font-size: 0.875rem;
-    color: #4b5563; // gray-600
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
   }
 
   .terms-link {
-    color: #2563eb; // blue-600
+    color: #2563eb;
     text-decoration: none;
     font-weight: 500;
 
     &:hover {
-      color: #1d4ed8; // blue-700
+      color: #1d4ed8;
       text-decoration: underline;
     }
   }
 
   .terms-error {
     font-size: 0.75rem;
-    color: #dc2626; // red-600
+    color: #dc2626;
     margin-top: 0.25rem;
     display: block;
+  }
+}
+
+// Dark theme link colors
+html.dark-theme {
+  .terms-checkbox {
+    .terms-link {
+      color: #60a5fa;
+
+      &:hover {
+        color: #93c5fd;
+      }
+    }
   }
 }
 
@@ -134,12 +187,14 @@
   border-top: none;
   display: flex;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: var(--card-bg) !important;
+  transition: background-color 0.3s ease;
 
   .signin-text {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--text-secondary);
     margin: 0;
+    transition: color 0.3s ease;
 
     .signin-link {
       color: #2563eb;
@@ -150,6 +205,21 @@
       &:hover {
         color: #1d4ed8;
         text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Dark theme signin link
+html.dark-theme {
+  .card-footer {
+    .signin-text {
+      .signin-link {
+        color: #60a5fa;
+
+        &:hover {
+          color: #93c5fd;
+        }
       }
     }
   }

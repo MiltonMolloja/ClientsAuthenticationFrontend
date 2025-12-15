@@ -1,10 +1,10 @@
-<!-- Selector de Idioma - Desktop -->
+<!-- Selector de Idioma - Desktop (ECommerce Style) -->
 <button mat-button class="language-button hide-xs" [matMenuTriggerFor]="languageMenu">
-  <div class="account-info">
-    <span class="account-greeting">{{ languageService.t('profile.language') }}</span>
-    <span class="account-label">{{ languageService.getLanguageName() }}</span>
+  <mat-icon class="language-icon">language</mat-icon>
+  <div class="language-info">
+    <span class="language-label">{{ languageService.t('profile.language') }}</span>
+    <span class="language-current">{{ languageService.getLanguageName() }}</span>
   </div>
-  <span class="mat-mdc-button-touch-target"></span>
 </button>
 
 <mat-menu #languageMenu="matMenu">
@@ -12,22 +12,27 @@
     mat-menu-item
     (click)="setLanguage('es')"
     [class.active]="languageService.language() === 'es'">
-    <mat-icon>language</mat-icon>
-    <span>{{ languageService.t('profile.languageSpanish') }}</span>
+    <span class="flag">🇪🇸</span>
+    <span class="language-name">{{ languageService.t('profile.languageSpanish') }}</span>
+    @if (languageService.language() === 'es') {
+      <mat-icon class="check-icon">check</mat-icon>
+    }
   </button>
   <button
     mat-menu-item
     (click)="setLanguage('en')"
     [class.active]="languageService.language() === 'en'">
-    <mat-icon>language</mat-icon>
-    <span>{{ languageService.t('profile.languageEnglish') }}</span>
+    <span class="flag">🇺🇸</span>
+    <span class="language-name">{{ languageService.t('profile.languageEnglish') }}</span>
+    @if (languageService.language() === 'en') {
+      <mat-icon class="check-icon">check</mat-icon>
+    }
   </button>
 </mat-menu>
 
 <!-- Icono de idioma - Móvil -->
-<button mat-icon-button class="hide-gt-xs" [matMenuTriggerFor]="languageMobileMenu">
+<button mat-icon-button class="language-button-mobile hide-gt-xs" [matMenuTriggerFor]="languageMobileMenu">
   <mat-icon>language</mat-icon>
-  <span class="mat-mdc-button-touch-target"></span>
 </button>
 
 <mat-menu #languageMobileMenu="matMenu">
@@ -35,14 +40,20 @@
     mat-menu-item
     (click)="setLanguage('es')"
     [class.active]="languageService.language() === 'es'">
-    <mat-icon>language</mat-icon>
-    <span>{{ languageService.t('profile.languageSpanish') }}</span>
+    <span class="flag">🇪🇸</span>
+    <span class="language-name">{{ languageService.t('profile.languageSpanish') }}</span>
+    @if (languageService.language() === 'es') {
+      <mat-icon class="check-icon">check</mat-icon>
+    }
   </button>
   <button
     mat-menu-item
     (click)="setLanguage('en')"
     [class.active]="languageService.language() === 'en'">
-    <mat-icon>language</mat-icon>
-    <span>{{ languageService.t('profile.languageEnglish') }}</span>
+    <span class="flag">🇺🇸</span>
+    <span class="language-name">{{ languageService.t('profile.languageEnglish') }}</span>
+    @if (languageService.language() === 'en') {
+      <mat-icon class="check-icon">check</mat-icon>
+    }
   </button>
 </mat-menu>

@@ -1,29 +1,100 @@
-.language-button,
-.account-info {
+:host {
+  display: flex;
+  align-items: center;
+}
+
+// Botón desktop - estilo igual al de ECommerce
+.language-button {
+  color: white !important;
+  padding: 0.5rem !important;
+  border: 1px solid transparent !important;
+  border-radius: 2px !important;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  &:hover {
+    border-color: white !important;
+  }
+
+  .language-icon {
+    font-size: 1.25rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .language-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    line-height: 1.2;
+  }
+
+  .language-label {
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+
+  .language-current {
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
 }
 
-.account-info {
-  flex-direction: column;
-  align-items: flex-start;
+// Botón mobile
+.language-button-mobile {
+  color: white !important;
+  border: 1px solid transparent !important;
+  border-radius: 2px !important;
+
+  &:hover {
+    border-color: white !important;
+  }
 }
 
-.account-greeting {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+// Responsive utilities
+.hide-xs {
+  @media (max-width: 599px) {
+    display: none !important;
+  }
 }
 
-.account-label {
-  font-size: 0.875rem;
-  font-weight: 500;
+.hide-gt-xs {
+  @media (min-width: 600px) {
+    display: none !important;
+  }
 }
 
-mat-menu-item.active {
-  background-color: rgba(var(--primary-rgb), 0.1);
-  
-  mat-icon {
-    color: var(--primary);
+// Estilos del menú
+.flag {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.language-name {
+  flex: 1;
+}
+
+.check-icon {
+  margin-left: 8px;
+  color: #ff9900;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+button.active {
+  background-color: rgba(0, 0, 0, 0.04);
+
+  .language-name {
+    font-weight: 500;
+  }
+}
+
+// Dark theme support
+html.dark-theme {
+  button.active {
+    background-color: rgba(255, 255, 255, 0.08);
   }
 }

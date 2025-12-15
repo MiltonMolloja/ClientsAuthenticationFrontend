@@ -3,11 +3,10 @@
   <header class="dashboard-header">
     <div class="header-container">
       <!-- Logo -->
-      <div class="logo">
-        <div class="logo-box">
-          <span class="logo-text">AuthApp</span>
-        </div>
-      </div>
+      <a href="https://localhost:4200" class="logo">
+        <mat-icon class="logo-icon">shopping_bag</mat-icon>
+        <span class="logo-text">ECommerce</span>
+      </a>
 
       <!-- Navigation -->
       <nav class="nav-links">
@@ -34,7 +33,7 @@
         <app-language-toggle></app-language-toggle>
 
         <div class="user-info">
-          <span class="user-greeting">Hello, {{ userFirstName() }}</span>
+          <span class="user-greeting">{{ languageService.t('dashboard.hello') }}, {{ userFirstName() }}</span>
           <span class="user-email">{{ userEmail() }}</span>
         </div>
 
@@ -55,12 +54,12 @@
   <footer class="dashboard-footer">
     <div class="footer-container">
       <div class="footer-links">
-        <a href="#" class="footer-link">Conditions of Use</a>
-        <a href="#" class="footer-link">Privacy Notice</a>
-        <a href="#" class="footer-link">Help</a>
+        <a href="#" class="footer-link">{{ languageService.t('footer.conditions') }}</a>
+        <a href="#" class="footer-link">{{ languageService.t('footer.privacy') }}</a>
+        <a href="#" class="footer-link">{{ languageService.t('footer.help') }}</a>
       </div>
       <p class="footer-copyright">
-        © {{ currentYear }} AuthApp, Inc
+        © {{ currentYear }} ECommerce, Inc
       </p>
     </div>
   </footer>

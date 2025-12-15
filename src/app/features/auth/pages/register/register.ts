@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LanguageService } from '@core/services/language.service';
 import { RegisterRequest } from '@core/models/auth.model';
 import { PasswordStrength } from '@shared/components/password-strength/password-strength';
 import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout';
@@ -36,6 +37,8 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
   styleUrl: './register.scss',
 })
 export class Register implements OnInit {
+  public languageService = inject(LanguageService);
+  
   registerForm!: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;

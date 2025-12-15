@@ -18,6 +18,10 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () => import('./pages/callback/callback').then(m => m.Callback)
   },
   {
+    path: 'logout',
+    loadComponent: () => import('./pages/logout/logout').then(m => m.Logout)
+  },
+  {
     path: 'forgot-password',
     loadComponent: () => import('./pages/forgot-password/forgot-password').then(m => m.ForgotPassword)
   },

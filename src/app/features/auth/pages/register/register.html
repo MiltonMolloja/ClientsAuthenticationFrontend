@@ -1,8 +1,8 @@
 <app-auth-layout>
   <mat-card class="register-card">
     <mat-card-header>
-      <mat-card-title>Create Account</mat-card-title>
-      <mat-card-subtitle>Enter your information to get started</mat-card-subtitle>
+      <mat-card-title>{{ languageService.t('registerPage.title') }}</mat-card-title>
+      <mat-card-subtitle>{{ languageService.t('registerPage.subtitle') }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -10,55 +10,46 @@
         <!-- First Name & Last Name -->
         <div class="name-row">
           <mat-form-field appearance="outline">
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" placeholder="John" required>
+            <mat-label>{{ languageService.t('registerPage.firstName') }}</mat-label>
+            <input matInput formControlName="firstName" [placeholder]="languageService.t('registerPage.firstNamePlaceholder')" required>
             <mat-icon matPrefix>person</mat-icon>
             @if (registerForm.get('firstName')?.hasError('required') && registerForm.get('firstName')?.touched) {
-              <mat-error>First name is required</mat-error>
-            }
-            @if (registerForm.get('firstName')?.hasError('minlength')) {
-              <mat-error>Minimum 2 characters</mat-error>
+              <mat-error>{{ languageService.t('registerPage.firstNameRequired') }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Last Name</mat-label>
-            <input matInput formControlName="lastName" placeholder="Doe" required>
+            <mat-label>{{ languageService.t('registerPage.lastName') }}</mat-label>
+            <input matInput formControlName="lastName" [placeholder]="languageService.t('registerPage.lastNamePlaceholder')" required>
             @if (registerForm.get('lastName')?.hasError('required') && registerForm.get('lastName')?.touched) {
-              <mat-error>Last name is required</mat-error>
-            }
-            @if (registerForm.get('lastName')?.hasError('minlength')) {
-              <mat-error>Minimum 2 characters</mat-error>
+              <mat-error>{{ languageService.t('registerPage.lastNameRequired') }}</mat-error>
             }
           </mat-form-field>
         </div>
 
         <!-- Email -->
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="john.doe@example.com" required>
+          <mat-label>{{ languageService.t('registerPage.emailLabel') }}</mat-label>
+          <input matInput type="email" formControlName="email" [placeholder]="languageService.t('registerPage.emailPlaceholder')" required>
           <mat-icon matPrefix>email</mat-icon>
           @if (registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched) {
-            <mat-error>Email is required</mat-error>
+            <mat-error>{{ languageService.t('registerPage.emailRequired') }}</mat-error>
           }
           @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {
-            <mat-error>Please enter a valid email</mat-error>
+            <mat-error>{{ languageService.t('registerPage.emailInvalid') }}</mat-error>
           }
         </mat-form-field>
 
         <!-- Password -->
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Create a strong password" required>
+          <mat-label>{{ languageService.t('registerPage.passwordLabel') }}</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [placeholder]="languageService.t('registerPage.passwordPlaceholder')" required>
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="'Hide password'">
             <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
           </button>
           @if (registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched) {
-            <mat-error>Password is required</mat-error>
-          }
-          @if (registerForm.get('password')?.hasError('minlength')) {
-            <mat-error>Password must be at least 8 characters</mat-error>
+            <mat-error>{{ languageService.t('registerPage.passwordRequired') }}</mat-error>
           }
         </mat-form-field>
 
@@ -67,30 +58,28 @@
 
         <!-- Confirm Password -->
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Confirm Password</mat-label>
-          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Confirm your password" required>
+          <mat-label>{{ languageService.t('registerPage.confirmPassword') }}</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" [placeholder]="languageService.t('registerPage.confirmPasswordPlaceholder')" required>
           <mat-icon matPrefix>lock</mat-icon>
           <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPasswordVisibility()" [attr.aria-label]="'Hide password'">
             <mat-icon>{{hideConfirmPassword ? 'visibility' : 'visibility_off'}}</mat-icon>
           </button>
           @if (registerForm.get('confirmPassword')?.hasError('required') && registerForm.get('confirmPassword')?.touched) {
-            <mat-error>Please confirm your password</mat-error>
+            <mat-error>{{ languageService.t('registerPage.confirmPasswordRequired') }}</mat-error>
           }
           @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched) {
-            <mat-error>Passwords do not match</mat-error>
+            <mat-error>{{ languageService.t('registerPage.passwordsDoNotMatch') }}</mat-error>
           }
         </mat-form-field>
 
         <!-- Terms & Conditions -->
         <div class="terms-checkbox">
           <mat-checkbox formControlName="agreeToTerms">
-            I agree to the
-            <a href="#" class="terms-link">Terms of Service</a>
-            and
-            <a href="#" class="terms-link">Privacy Policy</a>
+            {{ languageService.t('registerPage.termsAgree') }}
+            <a href="#" class="terms-link">{{ languageService.t('registerPage.termsLink') }}</a>
           </mat-checkbox>
           @if (registerForm.get('agreeToTerms')?.hasError('required') && registerForm.get('agreeToTerms')?.touched) {
-            <mat-error class="terms-error">You must agree to the terms and conditions</mat-error>
+            <mat-error class="terms-error">{{ languageService.t('registerPage.termsRequired') }}</mat-error>
           }
         </div>
 
@@ -98,9 +87,9 @@
         <button mat-raised-button type="submit" class="submit-button full-width amazon-button" [disabled]="registerForm.invalid || isLoading">
           @if (isLoading) {
             <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-            <span>Creating Account...</span>
+            <span>{{ languageService.t('registerPage.creatingAccount') }}</span>
           } @else {
-            <span>Create Account</span>
+            <span>{{ languageService.t('registerPage.createAccount') }}</span>
           }
         </button>
       </form>
@@ -108,8 +97,8 @@
 
     <mat-card-footer class="card-footer">
       <p class="signin-text">
-        Already have an account?
-        <a routerLink="/auth/login" class="signin-link">Sign in</a>
+        {{ languageService.t('registerPage.haveAccount') }}
+        <a routerLink="/auth/login" class="signin-link">{{ languageService.t('registerPage.signIn') }}</a>
       </p>
     </mat-card-footer>
   </mat-card>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
+import { LanguageService } from '@core/services/language.service';
 import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout';
 
 @Component({
@@ -31,6 +32,8 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
   styleUrl: './forgot-password.scss',
 })
 export class ForgotPassword {
+  public languageService = inject(LanguageService);
+  
   forgotPasswordForm: FormGroup;
   isLoading = false;
   emailSent = false;
