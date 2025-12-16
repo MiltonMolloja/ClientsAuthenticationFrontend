@@ -16,9 +16,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { ThemeService } from '@core/services/theme.service';
 import { LanguageService } from '@core/services/language.service';
 import { LoggerService } from '@core/services/logger.service';
+import { SentryService, SentryErrorHandler } from '@core/services/sentry.service';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { errorInterceptor } from '@core/interceptors/error.interceptor';
 import { GlobalErrorHandler } from '@shared/components/error-boundary/error-boundary';
+import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 
@@ -34,6 +36,16 @@ function initializeApp(
     logger.info('LanguageService initialized:', languageService.language());
   };
 }
+
+// Initialize Sentry at app startup (async for lazy loading)
+function initializeSentry(sentryService: SentryService) {
+  return () => sentryService.init();
+}
+
+// Check if Sentry is enabled in environment
+const sentryConfig = (environment as Record<string, unknown>)['sentry'] as
+  | { enabled: boolean }
+  | undefined;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -60,10 +72,10 @@ export const appConfig: ApplicationConfig = {
     // Material animations
     provideAnimations(),
 
-    // Global error handler
+    // Global error handler - use Sentry in production, GlobalErrorHandler otherwise
     {
       provide: ErrorHandler,
-      useClass: GlobalErrorHandler,
+      useClass: sentryConfig?.enabled ? SentryErrorHandler : GlobalErrorHandler,
     },
 
     // Initialize ThemeService and LanguageService at app startup
@@ -71,6 +83,14 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,
       deps: [ThemeService, LanguageService, LoggerService],
+      multi: true,
+    },
+
+    // Initialize Sentry at app startup
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeSentry,
+      deps: [SentryService],
       multi: true,
     },
   ],

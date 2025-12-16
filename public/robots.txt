@@ -1,0 +1,18 @@
+# robots.txt for Identity/Authentication Frontend
+# https://www.robotstxt.org/
+
+User-agent: *
+
+# Disallow all authentication pages from indexing (security best practice)
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /profile
+Disallow: /two-factor
+Disallow: /sessions
+
+# Allow only the landing/info pages if any
+Allow: /
+
+# No sitemap needed for auth service

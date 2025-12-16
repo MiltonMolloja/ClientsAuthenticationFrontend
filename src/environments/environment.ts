@@ -7,5 +7,11 @@ export const environment = {
   sessionTimeoutWarning: 300000, // 5 minutes warning
   sessionTimeout: 900000, // 15 minutes
   enableDebugMode: true,
-  apiVersion: 'v1'
+  apiVersion: 'v1',
+
+  // Sentry configuration - disabled in development
+  sentry: {
+    dsn: '',
+    enabled: false,
+  },
 };

@@ -1,15 +1,55 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>IdentityFrontend</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Iniciar Sesión - ECommerce</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- SEO Meta Tags - Auth pages should not be indexed -->
+    <meta
+      name="description"
+      content="Iniciá sesión o registrate en ECommerce para acceder a tu cuenta y realizar compras."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Iniciar Sesión - ECommerce" />
+    <meta property="og:description" content="Accedé a tu cuenta de ECommerce de forma segura." />
+    <meta property="og:locale" content="es_AR" />
+
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#3f51b5" />
+    <meta name="msapplication-TileColor" content="#3f51b5" />
+
+    <!-- Security Headers via Meta (complementary to server headers) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.ecommerce.com" />
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- No-JS Fallback -->
+    <noscript>
+      <p>
+        Esta aplicación requiere JavaScript para funcionar correctamente. Por favor, habilitá
+        JavaScript en tu navegador.
+      </p>
+    </noscript>
+    <app-root></app-root>
+  </body>
 </html>
