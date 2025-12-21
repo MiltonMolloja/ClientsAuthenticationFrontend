@@ -33,6 +33,9 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Angular 20 genera en dist/[project-name]/browser
 COPY --from=build /app/dist/identity-frontend/browser /usr/share/nginx/html
 
+# Crear carpeta assets si no existe
+RUN mkdir -p /usr/share/nginx/html/assets
+
 # Copiar script de inicio que reemplaza variables de entorno
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
