@@ -231,14 +231,16 @@ export class Setup2FA implements OnInit, AfterViewInit {
   downloadBackupCodes(): void {
     if (!this.setupData) return;
 
-    const content = `AuthApp Backup Codes\n\n${this.setupData.backupCodes.join('\n')}\n\nKeep these codes in a safe place.`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    const content = `Códigos de Respaldo 2FA\n\n${this.setupData.backupCodes.join('\n')}\n\nGuarda estos códigos en un lugar seguro.`;
+    // Usar Data URI en lugar de Blob URL para compatibilidad con HTTP
+    const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'authapp-backup-codes.txt';
+    a.href = dataUri;
+    a.download = 'codigos-respaldo-2fa.txt';
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    this.notificationService.showSuccess('Códigos descargados!');
   }
 
   completeSetup(): void {

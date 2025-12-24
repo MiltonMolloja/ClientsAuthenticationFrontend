@@ -98,13 +98,14 @@ export class BackupCodesDialogComponent implements OnInit {
 
   handleDownloadCodes(): void {
     const content = `${this.languageService.t('security.backupCodesTitle')}\n\n${this.backupCodes.join('\n')}\n\n${this.languageService.t('security.backupCodesWarning')}`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    // Usar Data URI en lugar de Blob URL para compatibilidad con HTTP
+    const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = '2fa-backup-codes.txt';
+    a.href = dataUri;
+    a.download = 'codigos-respaldo-2fa.txt';
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
     this.notificationService.showSuccess(this.languageService.t('security.codesDownloaded'));
   }
 

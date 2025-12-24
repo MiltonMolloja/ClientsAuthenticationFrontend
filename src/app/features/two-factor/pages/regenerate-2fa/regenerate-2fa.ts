@@ -159,14 +159,15 @@ export class Regenerate2FA implements OnInit {
   }
 
   handleDownloadCodes(): void {
-    const codesText = this.newBackupCodes.join('\n');
-    const blob = new Blob([codesText], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
+    const content = `Códigos de Respaldo 2FA\n\n${this.newBackupCodes.join('\n')}\n\nGuarda estos códigos en un lugar seguro.`;
+    // Usar Data URI en lugar de Blob URL para compatibilidad con HTTP
+    const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
     const link = document.createElement('a');
-    link.href = url;
-    link.download = `backup-codes-${new Date().getTime()}.txt`;
+    link.href = dataUri;
+    link.download = `codigos-respaldo-2fa-${new Date().getTime()}.txt`;
+    document.body.appendChild(link);
     link.click();
-    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
     this.actionsTaken.downloaded = true;
     this.notificationService.showSuccess('Backup codes downloaded!');
   }
