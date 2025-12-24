@@ -29,7 +29,7 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -48,14 +48,14 @@ export class Login implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      rememberMe: [false]
+      rememberMe: [false],
     });
 
     // Check if redirected from password change
@@ -86,7 +86,9 @@ export class Login implements OnInit {
         'http://localhost:4200',
         'http://localhost:4400',
         'https://localhost:4200',
-        'https://localhost:4400'
+        'https://localhost:4400',
+        'http://72.61.128.126:4200',
+        'http://72.61.128.126:4400',
       ];
       try {
         const urlObj = new URL(url);
@@ -114,7 +116,7 @@ export class Login implements OnInit {
       this.isLoading = true;
       const request: LoginRequest = {
         email: this.loginForm.value.email,
-        password: this.loginForm.value.password
+        password: this.loginForm.value.password,
       };
 
       this.authService.login(request).subscribe({
@@ -122,7 +124,7 @@ export class Login implements OnInit {
           if (response.requires2FA) {
             // Redirect to 2FA page with userId
             this.router.navigate(['/auth/2fa'], {
-              state: { userId: response.userId }
+              state: { userId: response.userId },
             });
           } else if (response.succeeded) {
             this.notificationService.showSuccess('Login successful!');
@@ -133,12 +135,17 @@ export class Login implements OnInit {
               let expiresAtStr: string | undefined;
               if (response.expiresAt) {
                 // Check if it's already a string or needs conversion
-                expiresAtStr = typeof response.expiresAt === 'string'
-                  ? response.expiresAt
-                  : response.expiresAt.toISOString();
+                expiresAtStr =
+                  typeof response.expiresAt === 'string'
+                    ? response.expiresAt
+                    : response.expiresAt.toISOString();
               }
               // Note: isLoading remains true because we're redirecting away from this page
-              this.redirectToExternalApp(response.accessToken!, response.refreshToken!, expiresAtStr);
+              this.redirectToExternalApp(
+                response.accessToken!,
+                response.refreshToken!,
+                expiresAtStr,
+              );
             } else {
               // Normal internal navigation
               this.isLoading = false;
@@ -152,7 +159,7 @@ export class Login implements OnInit {
         error: (error) => {
           this.isLoading = false;
           // Error handling is done by interceptor
-        }
+        },
       });
     }
   }
@@ -165,7 +172,11 @@ export class Login implements OnInit {
     return url.includes('://');
   }
 
-  private redirectToExternalApp(accessToken: string, refreshToken: string, expiresAt?: string): void {
+  private redirectToExternalApp(
+    accessToken: string,
+    refreshToken: string,
+    expiresAt?: string,
+  ): void {
     // Parse the return URL to add tokens as query params
     const urlObj = new URL(this.returnUrl);
 
