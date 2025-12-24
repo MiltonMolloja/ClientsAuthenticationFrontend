@@ -1,7 +1,35 @@
+// Declare window.__env for TypeScript
+declare global {
+  interface Window {
+    __env?: {
+      apiUrl?: string;
+      identityServerUrl?: string;
+      ecommerceUrl?: string;
+      sentryDsn?: string;
+      production?: string | boolean;
+    };
+  }
+}
+
+// Helper function to get runtime config with fallback
+const getEnvValue = (key: string, fallback: string): string => {
+  if (typeof window !== 'undefined' && window.__env) {
+    return (window.__env as Record<string, string>)[key] || fallback;
+  }
+  return fallback;
+};
+
 export const environment = {
   production: true,
-  apiUrl: 'https://api.yourdomain.com', // TODO: Replace with actual production API URL
-  identityServerUrl: 'https://identity.yourdomain.com',
+  get apiUrl() {
+    return getEnvValue('apiUrl', 'http://localhost:10000');
+  },
+  get identityServerUrl() {
+    return getEnvValue('identityServerUrl', 'http://localhost:4400');
+  },
+  get ecommerceUrl() {
+    return getEnvValue('ecommerceUrl', 'http://localhost:4200');
+  },
   useExternalIdentityServer: true,
   tokenRefreshInterval: 840000, // 14 minutes (token expires in 15)
   sessionTimeoutWarning: 300000, // 5 minutes warning
@@ -10,8 +38,10 @@ export const environment = {
   apiVersion: 'v1',
 
   // Sentry configuration for production
-  sentry: {
-    dsn: 'https://your-sentry-dsn@sentry.io/identity-project-id', // TODO: Replace with actual Sentry DSN
-    enabled: true,
+  get sentry() {
+    return {
+      dsn: getEnvValue('sentryDsn', ''),
+      enabled: !!getEnvValue('sentryDsn', ''),
+    };
   },
 };
