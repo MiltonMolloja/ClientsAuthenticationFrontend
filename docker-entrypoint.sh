@@ -8,17 +8,26 @@ set -e
 cat > /usr/share/nginx/html/assets/env.js << EOF
 (function(window) {
   window.__env = window.__env || {};
-  window.__env.apiUrl = '${API_URL:-http://localhost:45001}';
-  window.__env.identityServerUrl = '${IDENTITY_SERVER_URL:-http://localhost:45001}';
+  window.__env.apiUrl = '${API_URL:-http://localhost:10000}';
+  window.__env.identityServerUrl = '${IDENTITY_SERVER_URL:-http://localhost:10000}';
   window.__env.ecommerceUrl = '${ECOMMERCE_URL:-http://localhost:4200}';
   window.__env.sentryDsn = '${SENTRY_DSN:-}';
   window.__env.production = ${PRODUCTION:-true};
 })(this);
 EOF
 
+# Inyectar script en index.html (ANTES de los otros scripts)
+# Usar ruta absoluta para evitar problemas con rutas relativas
+if ! grep -q "/assets/env.js" /usr/share/nginx/html/index.html; then
+  sed -i 's|<head>|<head>\n  <script src="/assets/env.js"></script>|' /usr/share/nginx/html/index.html
+  echo "✅ env.js script injected into index.html"
+else
+  echo "ℹ️ env.js script already present in index.html"
+fi
+
 echo "Environment configuration injected:"
-echo "  API_URL: ${API_URL:-http://localhost:45001}"
-echo "  IDENTITY_SERVER_URL: ${IDENTITY_SERVER_URL:-http://localhost:45001}"
+echo "  API_URL: ${API_URL:-http://localhost:10000}"
+echo "  IDENTITY_SERVER_URL: ${IDENTITY_SERVER_URL:-http://localhost:10000}"
 echo "  ECOMMERCE_URL: ${ECOMMERCE_URL:-http://localhost:4200}"
 
 # Ejecutar comando pasado (nginx)
