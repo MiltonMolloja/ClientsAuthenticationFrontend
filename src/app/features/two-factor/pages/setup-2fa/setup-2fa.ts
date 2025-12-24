@@ -181,16 +181,51 @@ export class Setup2FA implements OnInit, AfterViewInit {
   }
 
   copyToClipboard(text: string, type: 'secret' | 'codes'): void {
-    navigator.clipboard.writeText(text).then(() => {
-      if (type === 'secret') {
-        this.copiedSecret = true;
-        setTimeout(() => (this.copiedSecret = false), 2000);
+    this.copyTextToClipboard(text).then((success) => {
+      if (success) {
+        if (type === 'secret') {
+          this.copiedSecret = true;
+          setTimeout(() => (this.copiedSecret = false), 2000);
+        } else {
+          this.copiedCodes = true;
+          setTimeout(() => (this.copiedCodes = false), 2000);
+        }
+        this.notificationService.showSuccess('Copiado al portapapeles!');
       } else {
-        this.copiedCodes = true;
-        setTimeout(() => (this.copiedCodes = false), 2000);
+        this.notificationService.showError('No se pudo copiar al portapapeles');
       }
-      this.notificationService.showSuccess('Copied to clipboard!');
     });
+  }
+
+  private copyTextToClipboard(text: string): Promise<boolean> {
+    // Usar Clipboard API si está disponible (requiere HTTPS)
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      return navigator.clipboard
+        .writeText(text)
+        .then(() => true)
+        .catch(() => this.fallbackCopyText(text));
+    }
+    // Fallback para HTTP o navegadores antiguos
+    return Promise.resolve(this.fallbackCopyText(text));
+  }
+
+  private fallbackCopyText(text: string): boolean {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.top = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return successful;
+    } catch (err) {
+      document.body.removeChild(textArea);
+      return false;
+    }
   }
 
   downloadBackupCodes(): void {

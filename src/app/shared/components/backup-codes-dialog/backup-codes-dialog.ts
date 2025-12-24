@@ -17,7 +17,7 @@ import { RegenerateCodesDialogComponent } from '@shared/components/regenerate-co
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './backup-codes-dialog.html',
   styleUrl: './backup-codes-dialog.scss',
@@ -33,7 +33,7 @@ export class BackupCodesDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<BackupCodesDialogComponent>,
     private authService: AuthService,
     private notificationService: NotificationService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
@@ -51,25 +51,49 @@ export class BackupCodesDialogComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        this.notificationService.showError(
-          error?.error?.message || 'Failed to load backup codes'
-        );
-      }
+        this.notificationService.showError(error?.error?.message || 'Failed to load backup codes');
+      },
     });
   }
 
   handleCopyAllCodes(): void {
     const codesText = this.backupCodes.join('\n');
-    navigator.clipboard.writeText(codesText).then(
-      () => {
-        this.notificationService.showSuccess(
-          this.languageService.t('security.codesCopied')
-        );
-      },
-      (err) => {
-        this.notificationService.showError('Failed to copy codes');
+    this.copyTextToClipboard(codesText).then((success) => {
+      if (success) {
+        this.notificationService.showSuccess(this.languageService.t('security.codesCopied'));
+      } else {
+        this.notificationService.showError('No se pudo copiar los códigos');
       }
-    );
+    });
+  }
+
+  private copyTextToClipboard(text: string): Promise<boolean> {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      return navigator.clipboard
+        .writeText(text)
+        .then(() => true)
+        .catch(() => this.fallbackCopyText(text));
+    }
+    return Promise.resolve(this.fallbackCopyText(text));
+  }
+
+  private fallbackCopyText(text: string): boolean {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.top = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return successful;
+    } catch (err) {
+      document.body.removeChild(textArea);
+      return false;
+    }
   }
 
   handleDownloadCodes(): void {
@@ -81,9 +105,7 @@ export class BackupCodesDialogComponent implements OnInit {
     a.download = '2fa-backup-codes.txt';
     a.click();
     URL.revokeObjectURL(url);
-    this.notificationService.showSuccess(
-      this.languageService.t('security.codesDownloaded')
-    );
+    this.notificationService.showSuccess(this.languageService.t('security.codesDownloaded'));
   }
 
   handleRegenerateCodes(): void {
@@ -91,10 +113,10 @@ export class BackupCodesDialogComponent implements OnInit {
       width: '500px',
       maxWidth: '90vw',
       disableClose: false,
-      autoFocus: true
+      autoFocus: true,
     });
 
-    dialogRef.afterClosed().subscribe(newCodes => {
+    dialogRef.afterClosed().subscribe((newCodes) => {
       // If newCodes is returned, update the current codes
       if (newCodes && Array.isArray(newCodes)) {
         this.backupCodes = newCodes;

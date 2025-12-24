@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,7 +38,7 @@ type Step = 'confirm' | 'success';
     MatCheckboxModule,
     MatProgressSpinnerModule,
     DashboardLayoutComponent,
-    CodeInput
+    CodeInput,
   ],
   templateUrl: './regenerate-2fa.html',
   styleUrl: './regenerate-2fa.scss',
@@ -54,7 +60,7 @@ export class Regenerate2FA implements OnInit {
   actionsTaken = {
     copied: false,
     downloaded: false,
-    printed: false
+    printed: false,
   };
 
   // Saved confirmation
@@ -65,13 +71,13 @@ export class Regenerate2FA implements OnInit {
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
     this.regenerateForm = this.fb.group({
       password: ['', [Validators.required]],
-      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
     });
   }
 
@@ -92,7 +98,7 @@ export class Regenerate2FA implements OnInit {
       const request = {
         userId: userId,
         password: this.regenerateForm.value.password,
-        code: this.regenerateForm.value.code
+        code: this.regenerateForm.value.code,
       };
 
       this.authService.regenerateBackupCodes(request).subscribe({
@@ -106,19 +112,50 @@ export class Regenerate2FA implements OnInit {
           this.isRegenerating = false;
           const errorMessage = err?.error?.message || 'Failed to regenerate backup codes';
           this.notificationService.showError(errorMessage);
-        }
+        },
       });
     }
   }
 
   handleCopyCodes(): void {
     const codesText = this.newBackupCodes.join('\n');
-    navigator.clipboard.writeText(codesText).then(() => {
-      this.actionsTaken.copied = true;
-      this.notificationService.showSuccess('Backup codes copied to clipboard!');
-    }).catch(() => {
-      this.notificationService.showError('Failed to copy codes');
+    this.copyTextToClipboard(codesText).then((success) => {
+      if (success) {
+        this.actionsTaken.copied = true;
+        this.notificationService.showSuccess('Códigos de respaldo copiados!');
+      } else {
+        this.notificationService.showError('No se pudo copiar los códigos');
+      }
     });
+  }
+
+  private copyTextToClipboard(text: string): Promise<boolean> {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      return navigator.clipboard
+        .writeText(text)
+        .then(() => true)
+        .catch(() => this.fallbackCopyText(text));
+    }
+    return Promise.resolve(this.fallbackCopyText(text));
+  }
+
+  private fallbackCopyText(text: string): boolean {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.top = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return successful;
+    } catch (err) {
+      document.body.removeChild(textArea);
+      return false;
+    }
   }
 
   handleDownloadCodes(): void {
@@ -143,7 +180,7 @@ export class Regenerate2FA implements OnInit {
       printWindow.document.write('<h1>Backup Codes</h1>');
       printWindow.document.write('<p>Keep these codes in a safe place:</p>');
       printWindow.document.write('<ul>');
-      this.newBackupCodes.forEach(code => {
+      this.newBackupCodes.forEach((code) => {
         printWindow.document.write(`<li>${code}</li>`);
       });
       printWindow.document.write('</ul>');
@@ -166,7 +203,9 @@ export class Regenerate2FA implements OnInit {
       if (this.savedCodes) {
         this.router.navigate(['/profile/security']);
       } else {
-        this.notificationService.showWarning('Please confirm that you have saved your backup codes before leaving.');
+        this.notificationService.showWarning(
+          'Please confirm that you have saved your backup codes before leaving.',
+        );
       }
     }
   }
