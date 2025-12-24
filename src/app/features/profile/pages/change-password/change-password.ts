@@ -56,7 +56,7 @@ export class ChangePassword implements OnInit {
         confirmPassword: ['', Validators.required],
       },
       {
-        validators: this.passwordMatchValidator,
+        validators: [this.passwordMatchValidator, this.passwordDifferentValidator],
       },
     );
   }
@@ -68,6 +68,23 @@ export class ChangePassword implements OnInit {
     if (newPassword && confirmPassword && newPassword.value !== confirmPassword.value) {
       confirmPassword.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
+    }
+
+    return null;
+  }
+
+  private passwordDifferentValidator(form: FormGroup): { [key: string]: boolean } | null {
+    const currentPassword = form.get('currentPassword');
+    const newPassword = form.get('newPassword');
+
+    if (
+      currentPassword &&
+      newPassword &&
+      currentPassword.value &&
+      newPassword.value === currentPassword.value
+    ) {
+      newPassword.setErrors({ passwordSame: true });
+      return { passwordSame: true };
     }
 
     return null;
