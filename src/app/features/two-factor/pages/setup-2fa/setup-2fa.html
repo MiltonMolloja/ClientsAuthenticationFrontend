@@ -1,197 +1,193 @@
 <app-dashboard-layout>
-<div class="setup-2fa-container">
-  <div class="page-header">
-    <h1>{{ languageService.t('setup2FA.title') }}</h1>
-    <p>{{ languageService.t('setup2FA.subtitle') }}</p>
-  </div>
+  <div class="setup-2fa-container">
+    <div class="page-header">
+      <h1>{{ languageService.t('setup2FA.title') }}</h1>
+      <p>{{ languageService.t('setup2FA.subtitle') }}</p>
+    </div>
 
-  <!-- Progress Indicator -->
-  <div class="progress-indicator">
-    @for (stepNum of [1, 2, 3]; track stepNum) {
-      <div class="progress-step">
-        <div
-          class="step-circle"
-          [class.active]="isStepActive(stepNum)"
-          [class.completed]="isStepCompleted(stepNum)">
-          @if (isStepCompleted(stepNum)) {
-            <mat-icon>check_circle</mat-icon>
-          } @else {
-            {{ stepNum }}
-          }
-        </div>
-        @if (stepNum < 3) {
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+      @for (stepNum of [1, 2, 3]; track stepNum) {
+        <div class="progress-step">
           <div
-            class="step-line"
-            [class.completed]="isStepCompleted(stepNum + 1)">
+            class="step-circle"
+            [class.active]="isStepActive(stepNum)"
+            [class.completed]="isStepCompleted(stepNum)"
+          >
+            @if (isStepCompleted(stepNum)) {
+              <mat-icon>check_circle</mat-icon>
+            } @else {
+              {{ stepNum }}
+            }
           </div>
-        }
-      </div>
-    }
-  </div>
-
-  <!-- Step 1: Scan QR Code -->
-  @if (step === 1 && setupData) {
-    <mat-card class="setup-card">
-      <mat-card-header>
-        <mat-card-title class="card-title-with-icon">
-          <mat-icon>shield</mat-icon>
-          {{ languageService.t('setup2FA.step1Title') }}
-        </mat-card-title>
-        <mat-card-subtitle>
-          {{ languageService.t('setup2FA.step1Description') }}
-        </mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="qr-code-container">
-          <canvas #qrCanvas class="qr-code-canvas"></canvas>
-          <p class="qr-instruction">
-            {{ languageService.t('setup2FA.scanInstructions') }}
-          </p>
-        </div>
-
-        <div class="manual-entry-card">
-          <p class="manual-entry-title">{{ languageService.t('setup2FA.cannotScan') }} {{ languageService.t('setup2FA.manualEntry') }}</p>
-          <div class="manual-entry-input">
-            <input
-              type="text"
-              [value]="setupData.secret"
-              readonly
-              class="secret-input">
-            <button
-              mat-icon-button
-              (click)="copyToClipboard(setupData.secret, 'secret')">
-              @if (copiedSecret) {
-                <mat-icon class="success-icon">check_circle</mat-icon>
-              } @else {
-                <mat-icon>content_copy</mat-icon>
-              }
-            </button>
-          </div>
-        </div>
-
-        <button
-          mat-raised-button
-          class="full-width amazon-button"
-          (click)="nextStep()">
-          {{ languageService.t('setup2FA.verify') }}
-        </button>
-      </mat-card-content>
-    </mat-card>
-  }
-
-  <!-- Step 2: Verify Code -->
-  @if (step === 2) {
-    <mat-card class="setup-card">
-      <mat-card-header>
-        <mat-card-title class="card-title-with-icon">
-          <mat-icon>shield</mat-icon>
-          {{ languageService.t('setup2FA.step2Title') }}
-        </mat-card-title>
-        <mat-card-subtitle>
-          {{ languageService.t('setup2FA.step2Description') }}
-        </mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="code-input-wrapper">
-          <app-code-input
-            [length]="6"
-            (codeComplete)="onCodeComplete($event)"
-            [disabled]="isLoading">
-          </app-code-input>
-        </div>
-
-        @if (isLoading) {
-          <div class="verifying-container">
-            <mat-spinner diameter="24"></mat-spinner>
-            <p class="verifying-text">{{ languageService.t('setup2FA.verifying') }}</p>
-          </div>
-        }
-
-        <div class="form-actions">
-          <button
-            mat-stroked-button
-            type="button"
-            (click)="previousStep()"
-            class="back-button"
-            [disabled]="isLoading">
-            {{ languageService.t('common.back') }}
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  }
-
-  <!-- Step 3: Save Backup Codes -->
-  @if (step === 3 && setupData) {
-    <mat-card class="setup-card">
-      <mat-card-header>
-        <mat-card-title class="card-title-with-icon success-title">
-          <mat-icon class="success-icon">check_circle</mat-icon>
-          {{ languageService.t('setup2FA.step3Title') }}
-        </mat-card-title>
-        <mat-card-subtitle>
-          {{ languageService.t('setup2FA.step3Description') }}
-        </mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <div class="warning-card">
-          <p class="warning-text">
-            <strong>{{ languageService.t('activeSessions.securityTipTitle') }}</strong> {{ languageService.t('setup2FA.warningMessage') }}
-          </p>
-        </div>
-
-        <div class="backup-codes-grid">
-          @for (code of setupData.backupCodes; track code) {
-            <div class="backup-code">{{ code }}</div>
+          @if (stepNum < 3) {
+            <div class="step-line" [class.completed]="isStepCompleted(stepNum + 1)"></div>
           }
         </div>
+      }
+    </div>
 
-        <div class="backup-actions">
-          <button
-            mat-stroked-button
-            class="backup-action-button"
-            (click)="copyToClipboard(setupData.backupCodes.join('\n'), 'codes')">
-            <mat-icon>content_copy</mat-icon>
-            {{ copiedCodes ? languageService.t('setup2FA.copied') : languageService.t('setup2FA.copy') }}
+    <!-- Step 1: Scan QR Code -->
+    @if (step === 1 && setupData) {
+      <mat-card class="setup-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>shield</mat-icon>
+            {{ languageService.t('setup2FA.step1Title') }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ languageService.t('setup2FA.step1Description') }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="qr-code-container">
+            <canvas #qrCanvas class="qr-code-canvas"></canvas>
+            <p class="qr-instruction">
+              {{ languageService.t('setup2FA.scanInstructions') }}
+            </p>
+          </div>
+
+          <div class="manual-entry-card">
+            <p class="manual-entry-title">
+              {{ languageService.t('setup2FA.cannotScan') }}
+              {{ languageService.t('setup2FA.manualEntry') }}
+            </p>
+            <div class="manual-entry-input">
+              <input type="text" [value]="setupData.secret" readonly class="secret-input" />
+              <button mat-icon-button (click)="copyToClipboard(setupData.secret, 'secret')">
+                @if (copiedSecret) {
+                  <mat-icon class="success-icon">check_circle</mat-icon>
+                } @else {
+                  <mat-icon>content_copy</mat-icon>
+                }
+              </button>
+            </div>
+          </div>
+
+          <button mat-raised-button class="full-width amazon-button" (click)="nextStep()">
+            {{ languageService.t('setup2FA.verify') }}
           </button>
-          <button
-            mat-stroked-button
-            class="backup-action-button"
-            (click)="downloadBackupCodes()">
-            <mat-icon>download</mat-icon>
-            {{ languageService.t('setup2FA.downloadCodes') }}
-          </button>
-        </div>
+        </mat-card-content>
+      </mat-card>
+    }
 
-        <div class="confirmation-section">
-          <mat-checkbox
-            [(ngModel)]="backupCodesSaved"
-            class="confirmation-checkbox">
-            <span class="checkbox-label">
-              {{ languageService.t('setup2FA.confirmBackupSaved') }}
-            </span>
-          </mat-checkbox>
+    <!-- Step 2: Verify Code -->
+    @if (step === 2) {
+      <mat-card class="setup-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon">
+            <mat-icon>shield</mat-icon>
+            {{ languageService.t('setup2FA.step2Title') }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ languageService.t('setup2FA.step2Description') }}
+          </mat-card-subtitle>
+        </mat-card-header>
 
-          @if (!backupCodesSaved) {
-            <div class="confirmation-hint">
-              <mat-icon class="hint-icon">info</mat-icon>
-              <span>{{ languageService.t('setup2FA.confirmHint') }}</span>
+        <mat-card-content>
+          <div class="code-input-wrapper">
+            <app-code-input
+              [length]="6"
+              (codeComplete)="onCodeComplete($event)"
+              [disabled]="isLoading"
+            >
+            </app-code-input>
+          </div>
+
+          @if (isLoading) {
+            <div class="verifying-container">
+              <mat-spinner diameter="24"></mat-spinner>
+              <p class="verifying-text">{{ languageService.t('setup2FA.verifying') }}</p>
             </div>
           }
-        </div>
 
-        <button
-          mat-raised-button
-          class="full-width amazon-button"
-          (click)="completeSetup()"
-          [disabled]="!backupCodesSaved">
-          {{ languageService.t('setup2FA.finish') }}
-        </button>
-      </mat-card-content>
-    </mat-card>
-  }
-</div>
+          <div class="form-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="previousStep()"
+              class="back-button"
+              [disabled]="isLoading"
+            >
+              {{ languageService.t('common.back') }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- Step 3: Save Backup Codes -->
+    @if (step === 3 && setupData) {
+      <mat-card class="setup-card">
+        <mat-card-header>
+          <mat-card-title class="card-title-with-icon success-title">
+            <mat-icon class="success-icon">check_circle</mat-icon>
+            {{ languageService.t('setup2FA.step3Title') }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ languageService.t('setup2FA.step3Description') }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="warning-card">
+            <p class="warning-text">
+              <strong>{{ languageService.t('setup2FA.securityTipTitle') }}</strong>
+              {{ languageService.t('setup2FA.warningMessage') }}
+            </p>
+          </div>
+
+          <div class="backup-codes-grid">
+            @for (code of setupData.backupCodes; track code) {
+              <div class="backup-code">{{ code }}</div>
+            }
+          </div>
+
+          <div class="backup-actions">
+            <button
+              mat-stroked-button
+              class="backup-action-button"
+              (click)="copyToClipboard(setupData.backupCodes.join('\n'), 'codes')"
+            >
+              <mat-icon>content_copy</mat-icon>
+              {{
+                copiedCodes
+                  ? languageService.t('setup2FA.copied')
+                  : languageService.t('setup2FA.copy')
+              }}
+            </button>
+            <button mat-stroked-button class="backup-action-button" (click)="downloadBackupCodes()">
+              <mat-icon>download</mat-icon>
+              {{ languageService.t('setup2FA.downloadCodes') }}
+            </button>
+          </div>
+
+          <div class="confirmation-section">
+            <mat-checkbox [(ngModel)]="backupCodesSaved" class="confirmation-checkbox">
+              <span class="checkbox-label">
+                {{ languageService.t('setup2FA.confirmBackupSaved') }}
+              </span>
+            </mat-checkbox>
+
+            @if (!backupCodesSaved) {
+              <div class="confirmation-hint">
+                <mat-icon class="hint-icon">info</mat-icon>
+                <span>{{ languageService.t('setup2FA.confirmHint') }}</span>
+              </div>
+            }
+          </div>
+
+          <button
+            mat-raised-button
+            class="full-width amazon-button"
+            (click)="completeSetup()"
+            [disabled]="!backupCodesSaved"
+          >
+            {{ languageService.t('setup2FA.finish') }}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
 </app-dashboard-layout>

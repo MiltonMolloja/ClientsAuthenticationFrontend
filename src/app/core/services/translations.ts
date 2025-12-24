@@ -107,9 +107,12 @@ export const translations: Record<Language, Translations> = {
       backupCodesDescription: 'Úsalos si pierdes acceso a tu autenticador',
       viewCodes: 'Ver Códigos',
       backupCodesTitle: 'Códigos de Respaldo 2FA',
-      backupCodesModalDescription: 'Usa estos códigos para acceder a tu cuenta si pierdes tu dispositivo de autenticación. Cada código solo puede usarse una vez.',
-      backupCodesWarning: 'Guarda estos códigos en un lugar seguro. Si los pierdes y no tienes acceso a tu autenticador, no podrás acceder a tu cuenta.',
-      backupCodesTip: 'Guarda estos códigos en un gestor de contraseñas o imprímelos y guárdalos en un lugar seguro. No los compartas con nadie.',
+      backupCodesModalDescription:
+        'Usa estos códigos para acceder a tu cuenta si pierdes tu dispositivo de autenticación. Cada código solo puede usarse una vez.',
+      backupCodesWarning:
+        'Guarda estos códigos en un lugar seguro. Si los pierdes y no tienes acceso a tu autenticador, no podrás acceder a tu cuenta.',
+      backupCodesTip:
+        'Guarda estos códigos en un gestor de contraseñas o imprímelos y guárdalos en un lugar seguro. No los compartas con nadie.',
       loadingCodes: 'Cargando códigos de respaldo...',
       copyAllCodes: 'Copiar Todo',
       downloadCodes: 'Descargar',
@@ -120,8 +123,10 @@ export const translations: Record<Language, Translations> = {
       codesRegenerated: 'Códigos regenerados exitosamente',
       codesRegeneratedSuccess: 'Códigos de respaldo regenerados exitosamente',
       regenerateCodesTitle: 'Regenerar Códigos de Respaldo',
-      regenerateCodesDescription: 'Para regenerar tus códigos de respaldo, necesitamos verificar tu identidad.',
-      regenerateCodesWarning: 'Los códigos anteriores dejarán de funcionar una vez que se generen nuevos códigos.',
+      regenerateCodesDescription:
+        'Para regenerar tus códigos de respaldo, necesitamos verificar tu identidad.',
+      regenerateCodesWarning:
+        'Los códigos anteriores dejarán de funcionar una vez que se generen nuevos códigos.',
       enterPassword: 'Ingresa tu contraseña',
       enter2FACode: 'Código de autenticación 2FA',
       regenerateButton: 'Regenerar Códigos',
@@ -157,7 +162,8 @@ export const translations: Record<Language, Translations> = {
       revokeAll: 'Revocar Todas las Sesiones',
       securityTipTitle: 'Consejo de Seguridad:',
       securityTipText: 'Revisa tus sesiones activas regularmente',
-      securityTipDescription: 'Si ves una sesión que no reconoces, revócala inmediatamente y cambia tu contraseña.',
+      securityTipDescription:
+        'Si ves una sesión que no reconoces, revócala inmediatamente y cambia tu contraseña.',
       current: 'Actual',
       revoke: 'Revocar',
       created: 'Creado:',
@@ -167,7 +173,8 @@ export const translations: Record<Language, Translations> = {
       revokeSuccess: 'Sesión revocada exitosamente',
       revokeAllSuccess: 'Todas las demás sesiones han sido revocadas',
       revokeAllConfirmTitle: '¿Cerrar todas las sesiones?',
-      revokeAllConfirmMessage: 'Esto cerrará todas las demás sesiones. Necesitarás iniciar sesión nuevamente en esos dispositivos.',
+      revokeAllConfirmMessage:
+        'Esto cerrará todas las demás sesiones. Necesitarás iniciar sesión nuevamente en esos dispositivos.',
       revokeAllConfirmButton: 'Cerrar Todas',
     },
 
@@ -206,7 +213,8 @@ export const translations: Record<Language, Translations> = {
       passwordChangedSuccess: '¡Contraseña cambiada exitosamente!',
       passwordChangedMessage: 'Por favor, inicia sesión con tu nueva contraseña para continuar.',
       passwordResetSuccess: '¡Contraseña restablecida exitosamente!',
-      passwordResetMessage: 'Todas las sesiones han sido cerradas. Por favor, inicia sesión con tu nueva contraseña.',
+      passwordResetMessage:
+        'Todas las sesiones han sido cerradas. Por favor, inicia sesión con tu nueva contraseña.',
       loggingOut: 'Cerrando sesión...',
     },
 
@@ -262,7 +270,8 @@ export const translations: Record<Language, Translations> = {
     // Forgot Password Page
     forgotPasswordPage: {
       title: '¿Olvidaste tu Contraseña?',
-      subtitle: 'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
+      subtitle:
+        'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
       emailLabel: 'Correo Electrónico',
       emailPlaceholder: 'john.doe@example.com',
       emailRequired: 'El correo electrónico es requerido',
@@ -273,14 +282,17 @@ export const translations: Record<Language, Translations> = {
       checkEmailTitle: 'Revisa tu Correo',
       checkEmailSubtitle: 'Si existe una cuenta para',
       checkEmailMessage: 'recibirás un enlace para restablecer tu contraseña en breve.',
-      emailNote: 'El correo puede tardar unos minutos en llegar. Por favor revisa tu carpeta de spam si no lo ves.',
+      emailNote:
+        'El correo puede tardar unos minutos en llegar. Por favor revisa tu carpeta de spam si no lo ves.',
     },
 
     // Confirm Email Page
     confirmEmailPage: {
       title: 'Verifica tu Correo Electrónico',
-      subtitle: 'Hemos enviado un correo de verificación a tu bandeja de entrada. Por favor revisa tu correo y haz clic en el enlace de verificación para activar tu cuenta.',
-      infoText: '¿No recibiste el correo? Revisa tu carpeta de spam o solicita un nuevo correo de verificación.',
+      subtitle:
+        'Hemos enviado un correo de verificación a tu bandeja de entrada. Por favor revisa tu correo y haz clic en el enlace de verificación para activar tu cuenta.',
+      infoText:
+        '¿No recibiste el correo? Revisa tu carpeta de spam o solicita un nuevo correo de verificación.',
       resendEmail: 'Reenviar Correo de Verificación',
       resending: 'Reenviando...',
       backToSignIn: 'Volver a Iniciar Sesión',
@@ -312,12 +324,15 @@ export const translations: Record<Language, Translations> = {
       verifyCode: 'Verificar Código',
       verificationCodeLabel: 'Código de Verificación',
       verificationCodePlaceholder: '000000',
-      warningMessage: 'Guarda estos códigos de respaldo ahora. Puedes usarlos para acceder a tu cuenta si pierdes tu dispositivo autenticador.',
+      securityTipTitle: 'Importante:',
+      warningMessage:
+        'Guarda estos códigos de respaldo ahora. Puedes usarlos para acceder a tu cuenta si pierdes tu dispositivo autenticador.',
       copy: 'Copiar Códigos',
       copied: 'Copiado!',
       downloadCodes: 'Descargar Códigos',
       confirmBackupSaved: 'Confirmo que he guardado mis códigos de respaldo en un lugar seguro',
-      confirmHint: 'Por favor, copia o descarga los códigos antes de continuar. Los necesitarás si pierdes acceso a tu aplicación de autenticación.',
+      confirmHint:
+        'Por favor, copia o descarga los códigos antes de continuar. Los necesitarás si pierdes acceso a tu aplicación de autenticación.',
       finish: 'Completar Configuración',
     },
 
@@ -326,8 +341,10 @@ export const translations: Record<Language, Translations> = {
       title: 'Deshabilitar Autenticación de Dos Factores',
       subtitle: 'Remover la capa extra de seguridad de tu cuenta',
       warningTitle: 'Advertencia',
-      warningMessage: 'Al deshabilitar 2FA, tu cuenta será menos segura. Solo tu contraseña protegerá tu cuenta.',
-      verifyIdentity: 'Para deshabilitar la autenticación de dos factores, necesitamos verificar tu identidad',
+      warningMessage:
+        'Al deshabilitar 2FA, tu cuenta será menos segura. Solo tu contraseña protegerá tu cuenta.',
+      verifyIdentity:
+        'Para deshabilitar la autenticación de dos factores, necesitamos verificar tu identidad',
       currentPassword: 'Contraseña Actual',
       passwordPlaceholder: 'Ingresa tu contraseña',
       verificationCode: 'Código de Verificación',
@@ -336,7 +353,8 @@ export const translations: Record<Language, Translations> = {
       disabling: 'Deshabilitando...',
       successMessage: 'La autenticación de dos factores ha sido deshabilitada',
       redirecting: 'Redirigiendo a configuración de seguridad...',
-      recommendation: 'Recomendación: La autenticación de dos factores es una de las mejores formas de proteger tu cuenta. Considera dejarla habilitada para mayor seguridad.',
+      recommendation:
+        'Recomendación: La autenticación de dos factores es una de las mejores formas de proteger tu cuenta. Considera dejarla habilitada para mayor seguridad.',
     },
 
     // Regenerate 2FA Codes
@@ -410,7 +428,8 @@ export const translations: Record<Language, Translations> = {
       success: 'Autenticación exitosa',
       rememberDevice: 'Recordar este dispositivo por 30 días',
       backToLogin: 'Volver al inicio de sesión',
-      securityNotice: 'Tu cuenta está protegida con autenticación de dos factores. Nunca compartas tus códigos con nadie.',
+      securityNotice:
+        'Tu cuenta está protegida con autenticación de dos factores. Nunca compartas tus códigos con nadie.',
       needHelp: '¿Necesitas ayuda?',
       contactSupport: 'Contacta soporte',
       method: {
@@ -422,8 +441,10 @@ export const translations: Record<Language, Translations> = {
         toAuthenticator: 'Volver a usar aplicación autenticadora',
       },
       help: {
-        authenticator: 'Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.) e ingresa el código de 6 dígitos.',
-        backupWarning: 'Los códigos de respaldo son de un solo uso. Una vez utilizado, este código no funcionará nuevamente.',
+        authenticator:
+          'Abre tu aplicación autenticadora (Google Authenticator, Authy, etc.) e ingresa el código de 6 dígitos.',
+        backupWarning:
+          'Los códigos de respaldo son de un solo uso. Una vez utilizado, este código no funcionará nuevamente.',
       },
       warning: {
         attempts: '⚠️ Atención: Solo te quedan {attempts} intento(s) antes del bloqueo',
@@ -442,7 +463,8 @@ export const translations: Record<Language, Translations> = {
     // Forgot Password
     forgotPassword: {
       title: 'Olvidé mi Contraseña',
-      subtitle: 'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
+      subtitle:
+        'Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña',
       emailLabel: 'Correo Electrónico',
       emailPlaceholder: 'tu@email.com',
       sendResetLink: 'Enviar Enlace de Restablecimiento',
@@ -478,7 +500,7 @@ export const translations: Record<Language, Translations> = {
       passwordPlaceholder: 'Enter your password',
     },
 
-// Footer
+    // Footer
     footer: {
       conditions: 'Conditions of Use',
       privacy: 'Privacy Notice',
@@ -556,9 +578,12 @@ export const translations: Record<Language, Translations> = {
       backupCodesDescription: 'Use these if you lose access to your authenticator',
       viewCodes: 'View Codes',
       backupCodesTitle: '2FA Backup Codes',
-      backupCodesModalDescription: 'Use these codes to access your account if you lose your authentication device. Each code can only be used once.',
-      backupCodesWarning: 'Store these codes in a safe place. If you lose them and don\'t have access to your authenticator, you won\'t be able to access your account.',
-      backupCodesTip: 'Store these codes in a password manager or print them and keep them in a safe place. Do not share them with anyone.',
+      backupCodesModalDescription:
+        'Use these codes to access your account if you lose your authentication device. Each code can only be used once.',
+      backupCodesWarning:
+        "Store these codes in a safe place. If you lose them and don't have access to your authenticator, you won't be able to access your account.",
+      backupCodesTip:
+        'Store these codes in a password manager or print them and keep them in a safe place. Do not share them with anyone.',
       loadingCodes: 'Loading backup codes...',
       copyAllCodes: 'Copy All',
       downloadCodes: 'Download',
@@ -569,7 +594,8 @@ export const translations: Record<Language, Translations> = {
       codesRegenerated: 'Codes regenerated successfully',
       codesRegeneratedSuccess: 'Backup codes regenerated successfully',
       regenerateCodesTitle: 'Regenerate Backup Codes',
-      regenerateCodesDescription: 'To regenerate your backup codes, we need to verify your identity.',
+      regenerateCodesDescription:
+        'To regenerate your backup codes, we need to verify your identity.',
       regenerateCodesWarning: 'Previous codes will stop working once new codes are generated.',
       enterPassword: 'Enter your password',
       enter2FACode: '2FA authentication code',
@@ -588,7 +614,7 @@ export const translations: Record<Language, Translations> = {
       recommendations: 'Security Recommendations',
       rec1: 'Enable two-factor authentication for enhanced security',
       rec2: 'Use a strong, unique password and change it regularly',
-      rec3: 'Review your active sessions and revoke any you don\'t recognize',
+      rec3: "Review your active sessions and revoke any you don't recognize",
       rec4: 'Keep your backup codes in a safe place',
     },
 
@@ -606,7 +632,8 @@ export const translations: Record<Language, Translations> = {
       revokeAll: 'Revoke All Sessions',
       securityTipTitle: 'Security Tip:',
       securityTipText: 'Review your active sessions regularly',
-      securityTipDescription: 'If you see a session you don\'t recognize, revoke it immediately and change your password.',
+      securityTipDescription:
+        "If you see a session you don't recognize, revoke it immediately and change your password.",
       current: 'Current',
       revoke: 'Revoke',
       created: 'Created:',
@@ -616,7 +643,8 @@ export const translations: Record<Language, Translations> = {
       revokeSuccess: 'Session revoked successfully',
       revokeAllSuccess: 'All other sessions have been revoked',
       revokeAllConfirmTitle: 'Close all sessions?',
-      revokeAllConfirmMessage: 'This will close all other sessions. You will need to log in again on those devices.',
+      revokeAllConfirmMessage:
+        'This will close all other sessions. You will need to log in again on those devices.',
       revokeAllConfirmButton: 'Close All',
     },
 
@@ -655,7 +683,8 @@ export const translations: Record<Language, Translations> = {
       passwordChangedSuccess: 'Password changed successfully!',
       passwordChangedMessage: 'Please sign in with your new password to continue.',
       passwordResetSuccess: 'Password reset successfully!',
-      passwordResetMessage: 'All sessions have been logged out. Please sign in with your new password.',
+      passwordResetMessage:
+        'All sessions have been logged out. Please sign in with your new password.',
       loggingOut: 'Logging out...',
     },
 
@@ -722,14 +751,17 @@ export const translations: Record<Language, Translations> = {
       checkEmailTitle: 'Check Your Email',
       checkEmailSubtitle: 'If an account exists for',
       checkEmailMessage: 'you will receive a password reset link shortly.',
-      emailNote: 'The email may take a few minutes to arrive. Please check your spam folder if you don\'t see it.',
+      emailNote:
+        "The email may take a few minutes to arrive. Please check your spam folder if you don't see it.",
     },
 
     // Confirm Email Page
     confirmEmailPage: {
       title: 'Verify Your Email',
-      subtitle: "We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.",
-      infoText: "Didn't receive the email? Check your spam folder or request a new verification email.",
+      subtitle:
+        "We've sent a verification email to your inbox. Please check your email and click the verification link to activate your account.",
+      infoText:
+        "Didn't receive the email? Check your spam folder or request a new verification email.",
       resendEmail: 'Resend Verification Email',
       resending: 'Resending...',
       backToSignIn: 'Back to Sign In',
@@ -754,19 +786,22 @@ export const translations: Record<Language, Translations> = {
       step3Title: 'Step 3: Save Backup Codes',
       step3Description: 'Store these codes in a safe place',
       scanInstructions: 'Scan this code with Google Authenticator, Authy, or any TOTP app',
-      cannotScan: 'Can\'t scan the QR code?',
+      cannotScan: "Can't scan the QR code?",
       manualEntry: 'Enter this key manually:',
       verify: 'Next: Verify Code',
       verifying: 'Verifying code...',
       verifyCode: 'Verify Code',
       verificationCodeLabel: 'Verification Code',
       verificationCodePlaceholder: '000000',
-      warningMessage: 'Save these backup codes now. You can use them to access your account if you lose your authenticator device.',
+      securityTipTitle: 'Important:',
+      warningMessage:
+        'Save these backup codes now. You can use them to access your account if you lose your authenticator device.',
       copy: 'Copy Codes',
       copied: 'Copied!',
       downloadCodes: 'Download Codes',
       confirmBackupSaved: 'I confirm that I have saved my backup codes in a secure location',
-      confirmHint: 'Please copy or download the codes before continuing. You will need them if you lose access to your authenticator app.',
+      confirmHint:
+        'Please copy or download the codes before continuing. You will need them if you lose access to your authenticator app.',
       finish: 'Complete Setup',
     },
 
@@ -775,7 +810,8 @@ export const translations: Record<Language, Translations> = {
       title: 'Disable Two-Factor Authentication',
       subtitle: 'Remove the extra layer of security from your account',
       warningTitle: 'Warning',
-      warningMessage: 'By disabling 2FA, your account will be less secure. Only your password will protect your account.',
+      warningMessage:
+        'By disabling 2FA, your account will be less secure. Only your password will protect your account.',
       verifyIdentity: 'To disable two-factor authentication, we need to verify your identity',
       currentPassword: 'Current Password',
       passwordPlaceholder: 'Enter your password',
@@ -785,7 +821,8 @@ export const translations: Record<Language, Translations> = {
       disabling: 'Disabling...',
       successMessage: 'Two-factor authentication has been disabled',
       redirecting: 'Redirecting to security settings...',
-      recommendation: 'Recommendation: Two-factor authentication is one of the best ways to protect your account. Consider keeping it enabled for enhanced security.',
+      recommendation:
+        'Recommendation: Two-factor authentication is one of the best ways to protect your account. Consider keeping it enabled for enhanced security.',
     },
 
     // Regenerate 2FA Codes
@@ -859,7 +896,8 @@ export const translations: Record<Language, Translations> = {
       success: 'Authentication successful',
       rememberDevice: 'Remember this device for 30 days',
       backToLogin: 'Back to sign in',
-      securityNotice: 'Your account is protected with two-factor authentication. Never share your codes with anyone.',
+      securityNotice:
+        'Your account is protected with two-factor authentication. Never share your codes with anyone.',
       needHelp: 'Need help?',
       contactSupport: 'Contact support',
       method: {
@@ -871,8 +909,10 @@ export const translations: Record<Language, Translations> = {
         toAuthenticator: 'Back to authenticator app',
       },
       help: {
-        authenticator: 'Open your authenticator app (Google Authenticator, Authy, etc.) and enter the 6-digit code.',
-        backupWarning: 'Backup codes are single-use only. Once used, this code will no longer work.',
+        authenticator:
+          'Open your authenticator app (Google Authenticator, Authy, etc.) and enter the 6-digit code.',
+        backupWarning:
+          'Backup codes are single-use only. Once used, this code will no longer work.',
       },
       warning: {
         attempts: '⚠️ Warning: Only {attempts} attempt(s) remaining before lockout',
@@ -891,16 +931,16 @@ export const translations: Record<Language, Translations> = {
     // Forgot Password
     forgotPassword: {
       title: 'Forgot Password',
-      subtitle: 'Enter your email and we\'ll send you a link to reset your password',
+      subtitle: "Enter your email and we'll send you a link to reset your password",
       emailLabel: 'Email Address',
       emailPlaceholder: 'your@email.com',
       sendResetLink: 'Send Reset Link',
       sending: 'Sending...',
       backToLogin: 'Back to sign in',
       checkEmailTitle: 'Check your email',
-      checkEmailMessage: 'We\'ve sent a reset link to',
+      checkEmailMessage: "We've sent a reset link to",
       checkEmailMessage2: 'if an account exists with that email',
-      emailNote: 'If you don\'t receive the email within a few minutes, check your spam folder',
+      emailNote: "If you don't receive the email within a few minutes, check your spam folder",
     },
 
     // Register
