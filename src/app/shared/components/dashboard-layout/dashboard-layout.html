@@ -3,14 +3,19 @@
   <header class="dashboard-header">
     <div class="header-container">
       <!-- Logo -->
-      <a href="https://localhost:4200" class="logo">
+      <a [href]="ecommerceUrl" class="logo">
         <mat-icon class="logo-icon">shopping_bag</mat-icon>
         <span class="logo-text">ECommerce</span>
       </a>
 
       <!-- Navigation -->
       <nav class="nav-links">
-        <a routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+        <a
+          routerLink="/profile"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+        >
           <mat-icon>person</mat-icon>
           <span>{{ languageService.t('profile.title') }}</span>
         </a>
@@ -33,7 +38,9 @@
         <app-language-toggle></app-language-toggle>
 
         <div class="user-info">
-          <span class="user-greeting">{{ languageService.t('dashboard.hello') }}, {{ userFirstName() }}</span>
+          <span class="user-greeting"
+            >{{ languageService.t('dashboard.hello') }}, {{ userFirstName() }}</span
+          >
           <span class="user-email">{{ userEmail() }}</span>
         </div>
 
@@ -58,9 +65,7 @@
         <a href="#" class="footer-link">{{ languageService.t('footer.privacy') }}</a>
         <a href="#" class="footer-link">{{ languageService.t('footer.help') }}</a>
       </div>
-      <p class="footer-copyright">
-        © {{ currentYear }} ECommerce, Inc
-      </p>
+      <p class="footer-copyright">© {{ currentYear }} ECommerce, Inc</p>
     </div>
   </footer>
 </div>

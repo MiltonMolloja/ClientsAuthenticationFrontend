@@ -15,6 +15,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { LanguageService } from '@core/services/language.service';
 import { LoginRequest } from '@core/models/auth.model';
 import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -81,15 +82,8 @@ export class Login implements OnInit {
     // If URL is absolute (external redirect from ECommerce app)
     // We need to allow it for cross-app authentication
     if (url.includes('://')) {
-      // Validate it's from allowed origins (security check)
-      const allowedOrigins = [
-        'http://localhost:4200',
-        'http://localhost:4400',
-        'https://localhost:4200',
-        'https://localhost:4400',
-        'http://72.61.128.126:4200',
-        'http://72.61.128.126:4400',
-      ];
+      // Build allowed origins dynamically from environment
+      const allowedOrigins = this.getAllowedOrigins();
       try {
         const urlObj = new URL(url);
         const origin = `${urlObj.protocol}//${urlObj.host}`;
@@ -170,6 +164,46 @@ export class Login implements OnInit {
 
   private isExternalUrl(url: string): boolean {
     return url.includes('://');
+  }
+
+  private getAllowedOrigins(): string[] {
+    const origins: string[] = [
+      // Development origins
+      'http://localhost:4200',
+      'http://localhost:4400',
+      'https://localhost:4200',
+      'https://localhost:4400',
+    ];
+
+    // Add production origins from environment
+    const ecommerceUrl = environment.ecommerceUrl;
+    const identityUrl = environment.identityServerUrl;
+
+    if (ecommerceUrl) {
+      try {
+        const url = new URL(ecommerceUrl);
+        const origin = `${url.protocol}//${url.host}`;
+        if (!origins.includes(origin)) {
+          origins.push(origin);
+        }
+      } catch (e) {
+        // Invalid URL
+      }
+    }
+
+    if (identityUrl) {
+      try {
+        const url = new URL(identityUrl);
+        const origin = `${url.protocol}//${url.host}`;
+        if (!origins.includes(origin)) {
+          origins.push(origin);
+        }
+      } catch (e) {
+        // Invalid URL
+      }
+    }
+
+    return origins;
   }
 
   private redirectToExternalApp(

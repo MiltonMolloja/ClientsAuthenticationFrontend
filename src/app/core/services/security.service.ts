@@ -126,11 +126,7 @@ export class SecurityService {
       }
 
       // Only allow redirects to known ecommerce domains
-      const allowedDomains = [
-        'ecommerce.com',
-        'www.ecommerce.com',
-        'localhost:4200', // Development
-      ];
+      const allowedDomains = this.getAllowedDomains();
 
       return allowedDomains.some(
         (domain) => parsedUrl.host === domain || parsedUrl.host.endsWith(`.${domain}`),
@@ -138,6 +134,34 @@ export class SecurityService {
     } catch {
       return false;
     }
+  }
+
+  /**
+   * Get allowed domains for redirect validation
+   * @returns Array of allowed domain strings
+   */
+  private getAllowedDomains(): string[] {
+    const domains = [
+      'ecommerce.com',
+      'www.ecommerce.com',
+      'localhost:4200', // Development
+      'localhost:4400', // Development auth
+    ];
+
+    // Add production domains from environment
+    const ecommerceUrl = environment.ecommerceUrl;
+    if (ecommerceUrl) {
+      try {
+        const url = new URL(ecommerceUrl);
+        if (!domains.includes(url.host)) {
+          domains.push(url.host);
+        }
+      } catch (e) {
+        // Invalid URL
+      }
+    }
+
+    return domains;
   }
 
   /**

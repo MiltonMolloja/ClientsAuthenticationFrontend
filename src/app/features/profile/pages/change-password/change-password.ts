@@ -15,6 +15,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { LanguageService } from '@core/services/language.service';
 import { ChangePasswordRequest } from '@core/models/auth.model';
 import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/dashboard-layout';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-change-password',
@@ -27,7 +28,7 @@ import { DashboardLayoutComponent } from '@shared/components/dashboard-layout/da
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    DashboardLayoutComponent
+    DashboardLayoutComponent,
   ],
   templateUrl: './change-password.html',
   styleUrl: './change-password.scss',
@@ -44,17 +45,20 @@ export class ChangePassword implements OnInit {
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
-    this.changePasswordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validators: this.passwordMatchValidator
-    });
+    this.changePasswordForm = this.fb.group(
+      {
+        currentPassword: ['', Validators.required],
+        newPassword: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', Validators.required],
+      },
+      {
+        validators: this.passwordMatchValidator,
+      },
+    );
   }
 
   private passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
@@ -82,7 +86,7 @@ export class ChangePassword implements OnInit {
       hasUppercase: /[A-Z]/.test(password),
       hasLowercase: /[a-z]/.test(password),
       hasNumber: /\d/.test(password),
-      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
     };
 
     strength = Object.values(criteria).filter(Boolean).length * 20;
@@ -104,7 +108,7 @@ export class ChangePassword implements OnInit {
       const request: ChangePasswordRequest = {
         currentPassword: this.changePasswordForm.value.currentPassword,
         newPassword: this.changePasswordForm.value.newPassword,
-        confirmPassword: this.changePasswordForm.value.confirmPassword
+        confirmPassword: this.changePasswordForm.value.confirmPassword,
       };
 
       this.authService.changePassword(request).subscribe({
@@ -112,9 +116,10 @@ export class ChangePassword implements OnInit {
           console.log('🔐 [CHANGE PASSWORD] Response received:', response);
 
           // Backend returns { success: "message" } or { succeeded: true }
-          const isSuccess = response.succeeded === true ||
-                          response.success ||
-                          (response && !response.succeeded && !response.error);
+          const isSuccess =
+            response.succeeded === true ||
+            response.success ||
+            (response && !response.succeeded && !response.error);
 
           if (isSuccess) {
             console.log('✅ [CHANGE PASSWORD] Password changed successfully');
@@ -126,7 +131,8 @@ export class ChangePassword implements OnInit {
             console.log('🔄 [CHANGE PASSWORD] Starting revoke all sessions...');
 
             // Revoke all other sessions for security, then logout
-            this.authService.revokeAllSessions()
+            this.authService
+              .revokeAllSessions()
               .pipe(
                 finalize(() => {
                   console.log('🧹 [CHANGE PASSWORD] Finalize block executing...');
@@ -137,11 +143,14 @@ export class ChangePassword implements OnInit {
 
                   // Use window.location.href to avoid authGuard interference
                   // This forces a full page reload and navigation
-                  const loginUrl = '/auth/login?passwordChanged=true&returnUrl=http%3A%2F%2Flocalhost%3A4200%2Fauth%2Fcallback%3Fnext%3D%252F';
+                  const ecommerceCallback = encodeURIComponent(
+                    `${environment.ecommerceUrl}/auth/callback?next=%2F`,
+                  );
+                  const loginUrl = `/auth/login?passwordChanged=true&returnUrl=${ecommerceCallback}`;
                   console.log('🚀 [CHANGE PASSWORD] Redirecting to:', loginUrl);
                   window.location.href = loginUrl;
                   console.log('✅ [CHANGE PASSWORD] Redirect command executed');
-                })
+                }),
               )
               .subscribe({
                 next: () => {
@@ -150,7 +159,7 @@ export class ChangePassword implements OnInit {
                 error: (err) => {
                   console.error('❌ [CHANGE PASSWORD] Error revoking sessions:', err);
                   // finalize() will still run even on error
-                }
+                },
               });
           } else {
             console.error('❌ [CHANGE PASSWORD] Password change failed:', response);
@@ -162,7 +171,7 @@ export class ChangePassword implements OnInit {
         error: (err) => {
           console.error('❌ [CHANGE PASSWORD] Error changing password:', err);
           this.isLoading = false;
-        }
+        },
       });
     }
   }

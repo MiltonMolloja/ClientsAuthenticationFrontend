@@ -9,6 +9,7 @@ import { AuthService } from '@core/services/auth.service';
 import { LanguageService } from '@core/services/language.service';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
 import { LanguageToggle } from '../language-toggle/language-toggle';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -22,10 +23,10 @@ import { LanguageToggle } from '../language-toggle/language-toggle';
     MatIconModule,
     MatMenuModule,
     ThemeToggle,
-    LanguageToggle
+    LanguageToggle,
   ],
   templateUrl: './dashboard-layout.html',
-  styleUrl: './dashboard-layout.scss'
+  styleUrl: './dashboard-layout.scss',
 })
 export class DashboardLayoutComponent implements OnInit {
   private authService = inject(AuthService);
@@ -35,6 +36,7 @@ export class DashboardLayoutComponent implements OnInit {
   currentYear = new Date().getFullYear();
   userFirstName = signal<string>('John');
   userEmail = signal<string>('john.doe@example.com');
+  ecommerceUrl = environment.ecommerceUrl;
 
   ngOnInit(): void {
     // Get user info from auth service
@@ -49,7 +51,7 @@ export class DashboardLayoutComponent implements OnInit {
     this.authService.logout().subscribe({
       next: () => {
         this.router.navigate(['/auth/login']);
-      }
+      },
     });
   }
 }

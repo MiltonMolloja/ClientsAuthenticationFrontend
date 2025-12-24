@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,6 +20,7 @@ import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { LanguageService } from '@core/services/language.service';
 import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-reset-password',
@@ -26,7 +34,7 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss',
@@ -37,8 +45,8 @@ export class ResetPassword implements OnInit {
   showConfirmPassword = false;
   isLoading = false;
   error = '';
-  token = '';  // Token stored in memory, NOT in localStorage
-  email = '';  // Email stored in memory, NOT in localStorage
+  token = ''; // Token stored in memory, NOT in localStorage
+  email = ''; // Email stored in memory, NOT in localStorage
 
   constructor(
     private fb: FormBuilder,
@@ -46,20 +54,23 @@ export class ResetPassword implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
     // Initialize the form with password matching validation
-    this.resetPasswordForm = this.fb.group({
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
-    }, {
-      validators: this.passwordMatchValidator
-    });
+    this.resetPasswordForm = this.fb.group(
+      {
+        newPassword: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: this.passwordMatchValidator,
+      },
+    );
 
     // Extract token and email from URL query parameters
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.token = params['token'] || '';
       this.email = params['email'] || '';
 
@@ -104,14 +115,14 @@ export class ResetPassword implements OnInit {
         email: this.email,
         token: this.token,
         newPassword: this.resetPasswordForm.value.newPassword,
-        confirmPassword: this.resetPasswordForm.value.confirmPassword
+        confirmPassword: this.resetPasswordForm.value.confirmPassword,
       };
 
       console.log('🚀 Sending reset password request:', {
         email: this.email,
         tokenLength: this.token.length,
         hasNewPassword: !!this.resetPasswordForm.value.newPassword,
-        request: request
+        request: request,
       });
 
       this.authService.resetPassword(request).subscribe({
@@ -121,11 +132,16 @@ export class ResetPassword implements OnInit {
 
           // Check if response is successful (200 status = success)
           // Backend might return empty response or different structure
-          if (response === null || response === undefined || response.succeeded === true || response.succeeded === undefined) {
+          if (
+            response === null ||
+            response === undefined ||
+            response.succeeded === true ||
+            response.succeeded === undefined
+          ) {
             console.log('🎉 Password reset successful, redirecting to login...');
             // Redirect immediately to login with passwordReset flag
             this.router.navigate(['/auth/login'], {
-              queryParams: { passwordReset: 'true' }
+              queryParams: { passwordReset: 'true' },
             });
           } else {
             console.error('❌ Reset password failed:', response);
@@ -136,14 +152,14 @@ export class ResetPassword implements OnInit {
           console.error('❌ Reset password error:', error);
           this.isLoading = false;
           this.error = error.error?.message || this.languageService.t('common.error');
-        }
+        },
       });
     }
   }
 
   onCancel(): void {
     // Redirect to home page (ECommerce app)
-    window.location.href = 'http://localhost:4200/';
+    window.location.href = environment.ecommerceUrl;
   }
 
   toggleNewPasswordVisibility(): void {
