@@ -231,16 +231,55 @@ export class Setup2FA implements OnInit, AfterViewInit {
   downloadBackupCodes(): void {
     if (!this.setupData) return;
 
-    const content = `Códigos de Respaldo 2FA\n\n${this.setupData.backupCodes.join('\n')}\n\nGuarda estos códigos en un lugar seguro.`;
-    // Usar Data URI en lugar de Blob URL para compatibilidad con HTTP
-    const dataUri = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
-    const a = document.createElement('a');
-    a.href = dataUri;
-    a.download = 'codigos-respaldo-2fa.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    this.notificationService.showSuccess('Códigos descargados!');
+    const codes = this.setupData.backupCodes.join('\n');
+    const content = `Códigos de Respaldo 2FA\n${'='.repeat(30)}\n\n${codes}\n\n${'='.repeat(30)}\nGuarda estos códigos en un lugar seguro.\nFecha: ${new Date().toLocaleString()}`;
+
+    // Abrir ventana para imprimir/guardar (funciona en HTTP)
+    const printWindow = window.open('', '_blank', 'width=400,height=500');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Códigos de Respaldo 2FA</title>
+            <style>
+              body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+              .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+              h1 { font-size: 18px; color: #333; margin-bottom: 20px; }
+              .codes { background: #f9f9f9; padding: 15px; border-radius: 4px; margin: 15px 0; }
+              .code { font-size: 16px; padding: 5px 0; letter-spacing: 2px; }
+              .warning { color: #856404; background: #fff3cd; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 12px; }
+              .actions { margin-top: 20px; text-align: center; }
+              button { padding: 10px 20px; margin: 5px; cursor: pointer; border: none; border-radius: 4px; }
+              .print-btn { background: #007bff; color: white; }
+              .close-btn { background: #6c757d; color: white; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>🔐 Códigos de Respaldo 2FA</h1>
+              <div class="codes">
+                ${this.setupData.backupCodes.map((code) => `<div class="code">${code}</div>`).join('')}
+              </div>
+              <div class="warning">
+                ⚠️ Guarda estos códigos en un lugar seguro. Los necesitarás si pierdes acceso a tu aplicación de autenticación.
+              </div>
+              <div class="actions">
+                <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+                <button class="close-btn" onclick="window.close()">Cerrar</button>
+              </div>
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      this.notificationService.showSuccess('Ventana abierta - Usa Imprimir > Guardar como PDF');
+    } else {
+      // Fallback: copiar al portapapeles
+      this.copyToClipboard(codes, 'codes');
+      this.notificationService.showInfo(
+        'Popup bloqueado. Los códigos fueron copiados al portapapeles.',
+      );
+    }
   }
 
   completeSetup(): void {
