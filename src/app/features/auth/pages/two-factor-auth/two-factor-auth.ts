@@ -31,7 +31,7 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
     MatInputModule,
     MatFormFieldModule,
     CodeInput,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   templateUrl: './two-factor-auth.html',
   styleUrl: './two-factor-auth.scss',
@@ -50,17 +50,20 @@ export class TwoFactorAuth implements OnInit {
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
-    public languageService: LanguageService
-  ) {
-    // Get userId from navigation state
-    const navigation = this.router.getCurrentNavigation();
-    this.userId = navigation?.extras?.state?.['userId'] || '';
-  }
+    public languageService: LanguageService,
+  ) {}
 
   ngOnInit(): void {
+    // Get userId from history state (more reliable than getCurrentNavigation)
+    const state = history.state;
+    this.userId = state?.userId || '';
+
     // If no userId, redirect back to login
     if (!this.userId) {
-      this.notificationService.showError('Invalid session. Please login again.');
+      this.notificationService.showError(
+        this.languageService.t('twoFactorAuth.error.invalidSession') ||
+          'Sesión inválida. Por favor inicia sesión nuevamente.',
+      );
       this.router.navigate(['/auth/login']);
     }
   }
@@ -75,17 +78,22 @@ export class TwoFactorAuth implements OnInit {
     const codeToVerify = submittedCode || (this.useBackupCode ? this.backupCode : this.code);
 
     if (!codeToVerify) {
-      this.error = this.languageService.t('twoFactorAuth.error.required') || 'Por favor ingresa el código';
+      this.error =
+        this.languageService.t('twoFactorAuth.error.required') || 'Por favor ingresa el código';
       return;
     }
 
     if (!this.useBackupCode && codeToVerify.length !== 6) {
-      this.error = this.languageService.t('twoFactorAuth.error.invalid6digits') || 'El código debe tener 6 dígitos';
+      this.error =
+        this.languageService.t('twoFactorAuth.error.invalid6digits') ||
+        'El código debe tener 6 dígitos';
       return;
     }
 
     if (this.useBackupCode && codeToVerify.length < 8) {
-      this.error = this.languageService.t('twoFactorAuth.error.invalidBackup') || 'El código de respaldo no es válido';
+      this.error =
+        this.languageService.t('twoFactorAuth.error.invalidBackup') ||
+        'El código de respaldo no es válido';
       return;
     }
 
@@ -99,14 +107,14 @@ export class TwoFactorAuth implements OnInit {
     const request: TwoFactorAuthRequest = {
       userId: this.userId,
       code: code,
-      rememberDevice: this.rememberDevice
+      rememberDevice: this.rememberDevice,
     };
 
     this.authService.authenticate2FA(request).subscribe({
       next: (response) => {
         if (response.succeeded) {
           this.notificationService.showSuccess(
-            this.languageService.t('twoFactorAuth.success') || 'Autenticación exitosa'
+            this.languageService.t('twoFactorAuth.success') || 'Autenticación exitosa',
           );
           this.router.navigate(['/profile']);
         } else {
@@ -114,17 +122,20 @@ export class TwoFactorAuth implements OnInit {
           this.attemptsLeft = newAttempts;
 
           if (newAttempts > 0) {
-            this.error = this.languageService.t('twoFactorAuth.error.incorrectCode')
-              ?.replace('{attempts}', newAttempts.toString())
-              || `Código incorrecto. Te quedan ${newAttempts} intento(s)`;
+            this.error =
+              this.languageService
+                .t('twoFactorAuth.error.incorrectCode')
+                ?.replace('{attempts}', newAttempts.toString()) ||
+              `Código incorrecto. Te quedan ${newAttempts} intento(s)`;
             this.notificationService.showError(
-              this.languageService.t('twoFactorAuth.error.incorrect') || 'Código incorrecto'
+              this.languageService.t('twoFactorAuth.error.incorrect') || 'Código incorrecto',
             );
           } else {
-            this.error = this.languageService.t('twoFactorAuth.error.locked')
-              || 'Demasiados intentos fallidos. Tu sesión ha sido bloqueada.';
+            this.error =
+              this.languageService.t('twoFactorAuth.error.locked') ||
+              'Demasiados intentos fallidos. Tu sesión ha sido bloqueada.';
             this.notificationService.showError(
-              this.languageService.t('twoFactorAuth.error.accountLocked') || 'Cuenta bloqueada'
+              this.languageService.t('twoFactorAuth.error.accountLocked') || 'Cuenta bloqueada',
             );
             setTimeout(() => this.router.navigate(['/auth/login']), 2000);
           }
@@ -139,19 +150,22 @@ export class TwoFactorAuth implements OnInit {
         this.attemptsLeft = newAttempts;
 
         if (newAttempts > 0) {
-          this.error = this.languageService.t('twoFactorAuth.error.incorrectCode')
-            ?.replace('{attempts}', newAttempts.toString())
-            || `Código incorrecto. Te quedan ${newAttempts} intento(s)`;
+          this.error =
+            this.languageService
+              .t('twoFactorAuth.error.incorrectCode')
+              ?.replace('{attempts}', newAttempts.toString()) ||
+            `Código incorrecto. Te quedan ${newAttempts} intento(s)`;
         } else {
-          this.error = this.languageService.t('twoFactorAuth.error.locked')
-            || 'Demasiados intentos fallidos. Tu sesión ha sido bloqueada.';
+          this.error =
+            this.languageService.t('twoFactorAuth.error.locked') ||
+            'Demasiados intentos fallidos. Tu sesión ha sido bloqueada.';
           setTimeout(() => this.router.navigate(['/auth/login']), 2000);
         }
 
         this.isLoading = false;
         this.code = '';
         this.backupCode = '';
-      }
+      },
     });
   }
 
