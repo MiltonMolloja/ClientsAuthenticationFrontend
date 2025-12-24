@@ -27,7 +27,8 @@ import {
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = environment.apiUrl;
+  // Use identityServerUrl for all Identity API calls (authentication, sessions, etc.)
+  private readonly API_URL = environment.identityServerUrl || environment.apiUrl;
   private currentUserSignal = signal<User | null>(null);
   private isAuthenticatedSignal = signal<boolean>(false);
   private readonly logoutEventKey = 'auth_logout_event';

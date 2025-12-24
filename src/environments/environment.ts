@@ -34,7 +34,8 @@ export const environment = {
     return getEnvValue('apiUrl', 'http://localhost:10000');
   },
   get identityServerUrl() {
-    return getEnvValue('identityServerUrl', 'http://localhost:4400');
+    // Identity API server URL (authentication endpoints)
+    return getEnvValue('identityServerUrl', 'http://localhost:10000');
   },
   get ecommerceUrl() {
     return getEnvValue('ecommerceUrl', 'http://localhost:4200');
