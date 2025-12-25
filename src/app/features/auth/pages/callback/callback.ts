@@ -34,8 +34,9 @@ export class Callback implements OnInit {
     const params = this.route.snapshot.queryParams;
     const next = params['next'] || '/';
     const token = params['token'];
-    const accessToken = params['access_token'];
-    const refreshToken = params['refresh_token'];
+    // Support both camelCase (accessToken) and snake_case (access_token)
+    const accessToken = params['accessToken'] || params['access_token'];
+    const refreshToken = params['refreshToken'] || params['refresh_token'];
 
     // If we have tokens in query params (from Identity Server)
     if (accessToken) {
@@ -49,8 +50,10 @@ export class Callback implements OnInit {
         this.authService.setAuthenticatedUser(decoded);
         this.notificationService.showSuccess('Login successful!');
 
-        // Redirect to next URL
-        this.router.navigateByUrl(next);
+        // Redirect to ecommerce site with tokens
+        const ecommerceUrl = this.getEcommerceUrl();
+        const redirectUrl = `${ecommerceUrl}/auth/callback?next=${encodeURIComponent(next)}&access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken || '')}`;
+        window.location.href = redirectUrl;
       } else {
         this.showError('Invalid token received');
       }
@@ -62,7 +65,10 @@ export class Callback implements OnInit {
       if (decoded) {
         this.authService.setAuthenticatedUser(decoded);
         this.notificationService.showSuccess('Login successful!');
-        this.router.navigateByUrl(next);
+
+        // Redirect to ecommerce site
+        const ecommerceUrl = this.getEcommerceUrl();
+        window.location.href = `${ecommerceUrl}/auth/callback?next=${encodeURIComponent(next)}&access_token=${encodeURIComponent(token)}`;
       } else {
         this.showError('Invalid token received');
       }
@@ -71,6 +77,12 @@ export class Callback implements OnInit {
     else {
       this.showError('No authentication token received');
     }
+  }
+
+  private getEcommerceUrl(): string {
+    // Get from environment or window.__env
+    const windowEnv = (window as unknown as { __env?: { ecommerceUrl?: string } }).__env;
+    return windowEnv?.ecommerceUrl || 'https://miecommerce.duckdns.org';
   }
 
   private showError(message: string): void {
