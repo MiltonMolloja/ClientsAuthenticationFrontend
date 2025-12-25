@@ -28,7 +28,7 @@ export const environment = {
     return getEnvValue('identityServerUrl', 'http://localhost:4400');
   },
   get ecommerceUrl() {
-    return getEnvValue('ecommerceUrl', 'http://localhost:4200');
+    return getEnvValue('ecommerceUrl', 'https://localhost:4200');
   },
   useExternalIdentityServer: true,
   tokenRefreshInterval: 840000, // 14 minutes (token expires in 15)
