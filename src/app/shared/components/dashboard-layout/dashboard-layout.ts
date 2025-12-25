@@ -50,7 +50,7 @@ export class DashboardLayoutComponent implements OnInit {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/login']);
       },
     });
   }

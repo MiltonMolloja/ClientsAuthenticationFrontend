@@ -64,7 +64,7 @@ export class TwoFactorAuth implements OnInit {
         this.languageService.t('twoFactorAuth.error.invalidSession') ||
           'Sesión inválida. Por favor inicia sesión nuevamente.',
       );
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
     }
   }
 
@@ -137,7 +137,7 @@ export class TwoFactorAuth implements OnInit {
             this.notificationService.showError(
               this.languageService.t('twoFactorAuth.error.accountLocked') || 'Cuenta bloqueada',
             );
-            setTimeout(() => this.router.navigate(['/auth/login']), 2000);
+            setTimeout(() => this.router.navigate(['/login']), 2000);
           }
 
           this.isLoading = false;
@@ -159,7 +159,7 @@ export class TwoFactorAuth implements OnInit {
           this.error =
             this.languageService.t('twoFactorAuth.error.locked') ||
             'Demasiados intentos fallidos. Tu sesión ha sido bloqueada.';
-          setTimeout(() => this.router.navigate(['/auth/login']), 2000);
+          setTimeout(() => this.router.navigate(['/login']), 2000);
         }
 
         this.isLoading = false;

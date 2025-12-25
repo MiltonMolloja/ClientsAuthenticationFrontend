@@ -6,45 +6,46 @@ export const routes: Routes = [
   // Root - Redirect to login
   {
     path: '',
-    redirectTo: '/auth/login',
-    pathMatch: 'full'
+    redirectTo: 'login',
+    pathMatch: 'full',
   },
 
   // Auth feature - No authentication required (redirect if already authenticated)
-  // Excepción: logout no tiene guard para permitir cerrar sesión desde cualquier estado
+  // Routes are now at root level since baseHref is /auth/
   {
-    path: 'auth',
-    loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
-    data: { animation: 'AuthPage' }
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+    data: { animation: 'AuthPage' },
   },
 
   // Profile feature - Authentication required
   {
     path: 'profile',
-    loadChildren: () => import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
+    loadChildren: () => import('./features/profile/profile.routes').then((m) => m.PROFILE_ROUTES),
     canActivate: [authGuard],
-    data: { animation: 'ProfilePage' }
+    data: { animation: 'ProfilePage' },
   },
 
   // Two-Factor Authentication feature - Authentication required
   {
     path: '2fa',
-    loadChildren: () => import('./features/two-factor/two-factor.routes').then(m => m.TWO_FACTOR_ROUTES),
+    loadChildren: () =>
+      import('./features/two-factor/two-factor.routes').then((m) => m.TWO_FACTOR_ROUTES),
     canActivate: [authGuard],
-    data: { animation: 'TwoFactorPage' }
+    data: { animation: 'TwoFactorPage' },
   },
 
   // Admin feature - Authentication required
   {
     path: 'admin',
-    loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+    loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
     canActivate: [authGuard],
-    data: { animation: 'AdminPage', requiredRole: 'admin' }
+    data: { animation: 'AdminPage', requiredRole: 'admin' },
   },
 
   // Wildcard route - redirect to login
   {
     path: '**',
-    redirectTo: '/auth/login'
-  }
+    redirectTo: 'login',
+  },
 ];

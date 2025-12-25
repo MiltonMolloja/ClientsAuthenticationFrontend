@@ -117,7 +117,7 @@ export class Login implements OnInit {
         next: (response) => {
           if (response.requires2FA) {
             // Redirect to 2FA page with userId
-            this.router.navigate(['/auth/2fa'], {
+            this.router.navigate(['/2fa'], {
               state: { userId: response.userId },
             });
           } else if (response.succeeded) {

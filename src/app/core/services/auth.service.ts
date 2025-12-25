@@ -81,7 +81,7 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/v1/identity/revoke-token`, { refreshToken }).pipe(
       finalize(() => {
         this.clearAuthData();
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/login']);
       }),
     );
   }
@@ -100,7 +100,7 @@ export class AuthService {
         }),
         catchError((err) => {
           this.clearAuthData();
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/login']);
           return throwError(() => err);
         }),
       );

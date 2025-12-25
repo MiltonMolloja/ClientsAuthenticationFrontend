@@ -44,7 +44,7 @@ export class EditProfileComponent implements OnInit {
 
   private originalValues = {
     firstName: '',
-    lastName: ''
+    lastName: '',
   };
 
   ngOnInit(): void {
@@ -56,14 +56,14 @@ export class EditProfileComponent implements OnInit {
     const currentUser = this.authService.currentUser;
 
     if (!currentUser) {
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
       return;
     }
 
     // Store original values
     this.originalValues = {
       firstName: currentUser.firstName || '',
-      lastName: currentUser.lastName || ''
+      lastName: currentUser.lastName || '',
     };
 
     this.profileForm = this.fb.group({
@@ -104,24 +104,22 @@ export class EditProfileComponent implements OnInit {
         // Update original values
         this.originalValues = {
           firstName,
-          lastName
+          lastName,
         };
 
-        this.snackBar.open(
-          this.languageService.t('editProfile.successMessage'),
-          '',
-          { duration: 3000, panelClass: ['success-snackbar'] }
-        );
+        this.snackBar.open(this.languageService.t('editProfile.successMessage'), '', {
+          duration: 3000,
+          panelClass: ['success-snackbar'],
+        });
         this.router.navigate(['/profile']);
       },
       error: (error) => {
         this.isLoading.set(false);
-        this.snackBar.open(
-          this.languageService.t('editProfile.errorMessage'),
-          '',
-          { duration: 3000, panelClass: ['error-snackbar'] }
-        );
-      }
+        this.snackBar.open(this.languageService.t('editProfile.errorMessage'), '', {
+          duration: 3000,
+          panelClass: ['error-snackbar'],
+        });
+      },
     });
   }
 

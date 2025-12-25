@@ -56,7 +56,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
               }),
               catchError(() => {
                 authService.logout().subscribe();
-                router.navigate(['/auth/login']);
+                router.navigate(['/login']);
                 return throwError(() => new Error('Session expired'));
               }),
             );

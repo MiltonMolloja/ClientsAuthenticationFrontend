@@ -1,6 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,14 +38,14 @@ import { AuthLayoutComponent } from '@shared/components/auth-layout/auth-layout'
     MatCheckboxModule,
     MatProgressSpinnerModule,
     PasswordStrength,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
 export class Register implements OnInit {
   public languageService = inject(LanguageService);
-  
+
   registerForm!: FormGroup;
   hidePassword = true;
   hideConfirmPassword = true;
@@ -48,20 +55,23 @@ export class Register implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required],
-      agreeToTerms: [false, Validators.requiredTrue]
-    }, {
-      validators: this.passwordMatchValidator
-    });
+    this.registerForm = this.fb.group(
+      {
+        firstName: ['', [Validators.required, Validators.minLength(2)]],
+        lastName: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', Validators.required],
+        agreeToTerms: [false, Validators.requiredTrue],
+      },
+      {
+        validators: this.passwordMatchValidator,
+      },
+    );
   }
 
   // Custom validator for password match
@@ -84,14 +94,16 @@ export class Register implements OnInit {
         lastName: this.registerForm.value.lastName,
         email: this.registerForm.value.email,
         password: this.registerForm.value.password,
-        confirmPassword: this.registerForm.value.confirmPassword
+        confirmPassword: this.registerForm.value.confirmPassword,
       };
 
       this.authService.register(request).subscribe({
         next: () => {
-          this.notificationService.showSuccess('Registration successful! Please check your email to confirm your account.');
-          this.router.navigate(['/auth/confirm-email'], {
-            state: { email: request.email }
+          this.notificationService.showSuccess(
+            'Registration successful! Please check your email to confirm your account.',
+          );
+          this.router.navigate(['/confirm-email'], {
+            state: { email: request.email },
           });
         },
         error: () => {
@@ -100,7 +112,7 @@ export class Register implements OnInit {
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
     }
   }

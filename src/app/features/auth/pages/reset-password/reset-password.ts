@@ -140,7 +140,7 @@ export class ResetPassword implements OnInit {
           ) {
             console.log('🎉 Password reset successful, redirecting to login...');
             // Redirect immediately to login with passwordReset flag
-            this.router.navigate(['/auth/login'], {
+            this.router.navigate(['/login'], {
               queryParams: { passwordReset: 'true' },
             });
           } else {

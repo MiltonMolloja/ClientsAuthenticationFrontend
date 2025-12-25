@@ -9,11 +9,7 @@ import { NotificationService } from '@core/services/notification.service';
 
 @Component({
   selector: 'app-callback',
-  imports: [
-    CommonModule,
-    MatProgressSpinnerModule,
-    MatCardModule
-  ],
+  imports: [CommonModule, MatProgressSpinnerModule, MatCardModule],
   templateUrl: './callback.html',
   styleUrl: './callback.scss',
 })
@@ -26,7 +22,7 @@ export class Callback implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +80,7 @@ export class Callback implements OnInit {
 
     // Redirect to login after 3 seconds
     setTimeout(() => {
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
     }, 3000);
   }
 }
