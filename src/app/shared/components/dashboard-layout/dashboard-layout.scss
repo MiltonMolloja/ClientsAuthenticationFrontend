@@ -245,3 +245,134 @@
     flex: 0;
   }
 }
+
+// ============================================
+// SIDENAV CONTAINER & MOBILE DRAWER
+// ============================================
+
+.sidenav-container {
+  height: 100vh;
+  width: 100%;
+  background-color: var(--current-bg, #f3f3f3);
+}
+
+:host ::ng-deep {
+  .mat-drawer-content,
+  .mat-sidenav-content {
+    background-color: var(--current-bg, #f3f3f3) !important;
+  }
+}
+
+.mobile-drawer {
+  width: 280px;
+  max-width: 85vw;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--header-bg-secondary);
+  color: white;
+}
+
+.drawer-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.drawer-user-icon {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: white;
+}
+
+.drawer-user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-user-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.drawer-user-email {
+  font-size: 0.75rem;
+  color: #d1d5db;
+}
+
+.drawer-close-btn {
+  color: white;
+}
+
+.drawer-content {
+  padding: 0.5rem 0;
+  overflow-y: auto;
+  height: calc(100vh - 88px);
+  background-color: var(--current-bg, #f3f3f3);
+
+  mat-nav-list {
+    padding: 0;
+
+    button[mat-list-item] {
+      height: 48px;
+
+      mat-icon {
+        color: var(--text-secondary);
+      }
+
+      &.active {
+        background-color: rgba(255, 153, 0, 0.15);
+        color: #ff9900;
+
+        mat-icon {
+          color: #ff9900;
+        }
+      }
+    }
+  }
+}
+
+.drawer-section-title {
+  padding: 1rem 1rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+// Check icon para tema e idioma seleccionado
+.check-icon {
+  color: #ff9900 !important;
+}
+
+// Bandera de idioma
+.language-flag {
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-right: 16px;
+}
+
+// Botón hamburguesa
+.menu-button {
+  color: white !important;
+  margin-right: 0.5rem;
+  display: none;
+
+  @media (max-width: 959px) {
+    display: inline-flex !important;
+  }
+}
+
+// Ocultar elementos en móvil/tablet
+.hide-mobile {
+  @media (max-width: 959px) {
+    display: none !important;
+  }
+}
