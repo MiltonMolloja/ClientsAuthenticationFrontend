@@ -39,6 +39,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/auth/",
               "budgets": [
                 {
                   "type": "initial",
