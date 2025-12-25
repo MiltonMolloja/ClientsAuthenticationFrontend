@@ -480,6 +480,19 @@ export const translations: Record<Language, Translations> = {
     register: {
       passwordsDoNotMatch: 'Las contraseñas no coinciden',
     },
+
+    // Password Strength
+    passwordStrength: {
+      label: 'Fortaleza de la contraseña',
+      weak: 'Débil',
+      medium: 'Media',
+      strong: 'Fuerte',
+      minLength: 'Al menos 8 caracteres',
+      uppercase: 'Una letra mayúscula',
+      lowercase: 'Una letra minúscula',
+      number: 'Un número',
+      specialChar: 'Un carácter especial',
+    },
   },
 
   en: {
@@ -946,6 +959,19 @@ export const translations: Record<Language, Translations> = {
     // Register
     register: {
       passwordsDoNotMatch: 'Passwords do not match',
+    },
+
+    // Password Strength
+    passwordStrength: {
+      label: 'Password strength',
+      weak: 'Weak',
+      medium: 'Medium',
+      strong: 'Strong',
+      minLength: 'At least 8 characters',
+      uppercase: 'One uppercase letter',
+      lowercase: 'One lowercase letter',
+      number: 'One number',
+      specialChar: 'One special character',
     },
   },
 };
