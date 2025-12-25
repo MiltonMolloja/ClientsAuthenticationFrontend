@@ -50,9 +50,9 @@ export class Callback implements OnInit {
         this.authService.setAuthenticatedUser(decoded);
         this.notificationService.showSuccess('Login successful!');
 
-        // Redirect to ecommerce site with tokens
+        // Redirect to ecommerce site with tokens (use /login-callback to avoid Traefik routing to auth)
         const ecommerceUrl = this.getEcommerceUrl();
-        const redirectUrl = `${ecommerceUrl}/auth/callback?next=${encodeURIComponent(next)}&access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken || '')}`;
+        const redirectUrl = `${ecommerceUrl}/login-callback?next=${encodeURIComponent(next)}&access_token=${encodeURIComponent(accessToken)}&refresh_token=${encodeURIComponent(refreshToken || '')}`;
         window.location.href = redirectUrl;
       } else {
         this.showError('Invalid token received');
@@ -66,9 +66,9 @@ export class Callback implements OnInit {
         this.authService.setAuthenticatedUser(decoded);
         this.notificationService.showSuccess('Login successful!');
 
-        // Redirect to ecommerce site
+        // Redirect to ecommerce site (use /login-callback to avoid Traefik routing to auth)
         const ecommerceUrl = this.getEcommerceUrl();
-        window.location.href = `${ecommerceUrl}/auth/callback?next=${encodeURIComponent(next)}&access_token=${encodeURIComponent(token)}`;
+        window.location.href = `${ecommerceUrl}/login-callback?next=${encodeURIComponent(next)}&access_token=${encodeURIComponent(token)}`;
       } else {
         this.showError('Invalid token received');
       }
