@@ -17,10 +17,13 @@ cat > /usr/share/nginx/html/assets/env.js << EOF
 EOF
 
 # Inyectar script en index.html (ANTES de los otros scripts)
-# Usar ruta absoluta para evitar problemas con rutas relativas
-if ! grep -q "/assets/env.js" /usr/share/nginx/html/index.html; then
-  sed -i 's|<head>|<head>\n  <script src="/assets/env.js"></script>|' /usr/share/nginx/html/index.html
-  echo "✅ env.js script injected into index.html"
+# Detectar baseHref desde index.html para usar ruta correcta
+BASE_HREF=$(grep -o 'base href="[^"]*"' /usr/share/nginx/html/index.html | sed 's/base href="//;s/"$//' || echo "/")
+ENV_SCRIPT_PATH="${BASE_HREF}assets/env.js"
+
+if ! grep -q "env.js" /usr/share/nginx/html/index.html; then
+  sed -i "s|<head>|<head>\n  <script src=\"${ENV_SCRIPT_PATH}\"></script>|" /usr/share/nginx/html/index.html
+  echo "✅ env.js script injected into index.html with path: ${ENV_SCRIPT_PATH}"
 else
   echo "ℹ️ env.js script already present in index.html"
 fi
