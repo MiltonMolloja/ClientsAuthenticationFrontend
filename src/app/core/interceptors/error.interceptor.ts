@@ -1,16 +1,22 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { catchError, switchMap, retry } from 'rxjs/operators';
-import { throwError, of, timer } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
+import { throwError, timer } from 'rxjs';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { LoggerService } from '@core/services/logger.service';
 
+/**
+ * Interceptor de manejo de errores HTTP
+ *
+ * Características:
+ * - Retry automático para errores de red (status 0) y errores 5xx
+ * - Exponential backoff para reintentos
+ * - Logging estructurado de errores
+ * - Notificaciones al usuario para errores
+ * - NO maneja 401 (eso lo hace auth.interceptor)
+ */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
   const notificationService = inject(NotificationService);
-  const router = inject(Router);
   const logger = inject(LoggerService);
 
   // Retry logic for network errors (not for 4xx/5xx errors)
@@ -43,27 +49,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Server-side error
         switch (error.status) {
           case 401:
-            // Unauthorized - try to refresh token only if not already trying to refresh
-            if (
-              req.url.includes('/refresh-token') ||
-              req.url.includes('/authentication') ||
-              req.url.includes('/revoke-token')
-            ) {
-              // Don't try to refresh if we're already refreshing, logging in, or logging out
-              errorMessage = 'Unauthorized';
-              break;
-            }
-            return authService.refreshToken().pipe(
-              switchMap(() => {
-                // Retry original request
-                return next(req);
-              }),
-              catchError(() => {
-                authService.logout().subscribe();
-                router.navigate(['/login']);
-                return throwError(() => new Error('Session expired'));
-              }),
-            );
+            // 401 is handled by auth.interceptor, don't show notification here
+            errorMessage = 'Unauthorized';
+            break;
           case 403:
             errorMessage = 'Access forbidden';
             break;
@@ -82,7 +70,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       logger.error('HTTP Error', error, { url: req.url, status: error.status });
-      notificationService.showError(errorMessage);
+
+      // Don't show notification for 401 (handled by auth.interceptor)
+      if (error.status !== 401) {
+        notificationService.showError(errorMessage);
+      }
+
       return throwError(() => error);
     }),
   );

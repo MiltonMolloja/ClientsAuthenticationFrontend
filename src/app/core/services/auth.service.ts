@@ -106,22 +106,26 @@ export class AuthService {
     );
   }
 
+  /**
+   * Refresh token - Renovar access token usando refresh token
+   * Retorna Observable que puede fallar gracefully (no limpia sesión ni navega)
+   * El manejo de errores lo hace el auth.interceptor
+   */
   refreshToken(): Observable<LoginResponse> {
     const refreshToken = this.tokenService.getRefreshToken();
+    if (!refreshToken) {
+      return throwError(() => new Error('No refresh token available'));
+    }
+
     return this.http
       .post<LoginResponse>(`${this.API_URL}/v1/identity/refresh-token`, { refreshToken })
       .pipe(
         tap((response) => {
-          if (response.succeeded) {
-            this.tokenService.setTokens(response.accessToken!, response.refreshToken!);
+          if (response.succeeded && response.accessToken) {
+            this.tokenService.setTokens(response.accessToken, response.refreshToken!);
             // Update currentUserSignal with new JWT data
             this.loadCurrentUser();
           }
-        }),
-        catchError((err) => {
-          this.clearAuthData();
-          this.router.navigate(['/login']);
-          return throwError(() => err);
         }),
       );
   }
