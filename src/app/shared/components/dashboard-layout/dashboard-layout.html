@@ -1,71 +1,201 @@
-<div class="dashboard-layout">
-  <!-- Header -->
-  <header class="dashboard-header">
-    <div class="header-container">
-      <!-- Logo -->
-      <a [href]="ecommerceUrl" class="logo">
-        <mat-icon class="logo-icon">shopping_bag</mat-icon>
-        <span class="logo-text">ECommerce</span>
-      </a>
+<mat-sidenav-container class="sidenav-container">
+  <!-- Mobile Drawer -->
+  <mat-sidenav
+    #mobileDrawer
+    mode="over"
+    position="start"
+    class="mobile-drawer"
+    (closed)="isMobileDrawerOpen.set(false)"
+  >
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="drawer-user-info">
+        <mat-icon class="drawer-user-icon">account_circle</mat-icon>
+        <div class="drawer-user-details">
+          <span class="drawer-user-name">{{ userFirstName() }}</span>
+          <span class="drawer-user-email">{{ userEmail() }}</span>
+        </div>
+      </div>
+      <button mat-icon-button (click)="closeMobileDrawer()" class="drawer-close-btn">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
 
-      <!-- Navigation -->
-      <nav class="nav-links">
-        <a
+    <!-- Drawer Content -->
+    <div class="drawer-content">
+      <!-- Navegación -->
+      <mat-nav-list>
+        <button
+          mat-list-item
+          type="button"
           routerLink="/profile"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link"
+          (click)="closeMobileDrawer()"
         >
-          <mat-icon>person</mat-icon>
-          <span>{{ languageService.t('profile.title') }}</span>
-        </a>
-        <a routerLink="/profile/security" routerLinkActive="active" class="nav-link">
-          <mat-icon>shield</mat-icon>
-          <span>{{ languageService.t('security.title') }}</span>
-        </a>
-        <a routerLink="/profile/sessions" routerLinkActive="active" class="nav-link">
-          <mat-icon>history</mat-icon>
-          <span>{{ languageService.t('security.activeSessions') }}</span>
-        </a>
-      </nav>
-
-      <!-- User Menu with Theme and Language Toggles -->
-      <div class="user-menu">
-        <!-- Theme Toggle -->
-        <app-theme-toggle></app-theme-toggle>
-
-        <!-- Language Toggle -->
-        <app-language-toggle></app-language-toggle>
-
-        <div class="user-info">
-          <span class="user-greeting"
-            >{{ languageService.t('dashboard.hello') }}, {{ userFirstName() }}</span
-          >
-          <span class="user-email">{{ userEmail() }}</span>
-        </div>
-
-        <button mat-stroked-button class="logout-button" (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>{{ languageService.t('auth.logout') }}</span>
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>{{ languageService.t('profile.title') }}</span>
         </button>
-      </div>
+        <button
+          mat-list-item
+          type="button"
+          routerLink="/profile/security"
+          routerLinkActive="active"
+          (click)="closeMobileDrawer()"
+        >
+          <mat-icon matListItemIcon>shield</mat-icon>
+          <span matListItemTitle>{{ languageService.t('security.title') }}</span>
+        </button>
+        <button
+          mat-list-item
+          type="button"
+          routerLink="/profile/sessions"
+          routerLinkActive="active"
+          (click)="closeMobileDrawer()"
+        >
+          <mat-icon matListItemIcon>history</mat-icon>
+          <span matListItemTitle>{{ languageService.t('security.activeSessions') }}</span>
+        </button>
+      </mat-nav-list>
+
+      <mat-divider></mat-divider>
+
+      <!-- Configuración -->
+      <div class="drawer-section-title">{{ languageService.t('settings.title') }}</div>
+      <mat-nav-list>
+        <button mat-list-item type="button" (click)="themeService.setTheme('light')">
+          <mat-icon matListItemIcon>light_mode</mat-icon>
+          <span matListItemTitle>{{ languageService.t('theme.light') }}</span>
+          @if (themeService.theme() === 'light') {
+            <mat-icon matListItemMeta class="check-icon">check</mat-icon>
+          }
+        </button>
+        <button mat-list-item type="button" (click)="themeService.setTheme('dark')">
+          <mat-icon matListItemIcon>dark_mode</mat-icon>
+          <span matListItemTitle>{{ languageService.t('theme.dark') }}</span>
+          @if (themeService.theme() === 'dark') {
+            <mat-icon matListItemMeta class="check-icon">check</mat-icon>
+          }
+        </button>
+        <button mat-list-item type="button" (click)="themeService.setTheme('auto')">
+          <mat-icon matListItemIcon>brightness_auto</mat-icon>
+          <span matListItemTitle>{{ languageService.t('theme.auto') }}</span>
+          @if (themeService.theme() === 'auto') {
+            <mat-icon matListItemMeta class="check-icon">check</mat-icon>
+          }
+        </button>
+      </mat-nav-list>
+
+      <mat-divider></mat-divider>
+
+      <!-- Idioma -->
+      <div class="drawer-section-title">{{ languageService.t('language.title') }}</div>
+      <mat-nav-list>
+        <button mat-list-item type="button" (click)="languageService.setLanguage('es')">
+          <span matListItemIcon class="language-flag">🇪🇸</span>
+          <span matListItemTitle>Español</span>
+          @if (languageService.language() === 'es') {
+            <mat-icon matListItemMeta class="check-icon">check</mat-icon>
+          }
+        </button>
+        <button mat-list-item type="button" (click)="languageService.setLanguage('en')">
+          <span matListItemIcon class="language-flag">🇺🇸</span>
+          <span matListItemTitle>English</span>
+          @if (languageService.language() === 'en') {
+            <mat-icon matListItemMeta class="check-icon">check</mat-icon>
+          }
+        </button>
+      </mat-nav-list>
+
+      <mat-divider></mat-divider>
+
+      <!-- Logout -->
+      <mat-nav-list>
+        <button mat-list-item type="button" (click)="logoutAndClose()">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>{{ languageService.t('auth.logout') }}</span>
+        </button>
+      </mat-nav-list>
     </div>
-  </header>
+  </mat-sidenav>
 
   <!-- Main Content -->
-  <main class="dashboard-main">
-    <ng-content></ng-content>
-  </main>
+  <mat-sidenav-content>
+    <div class="dashboard-layout">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <div class="header-container">
+          <!-- Botón Hamburguesa (solo móvil) -->
+          <button
+            mat-icon-button
+            class="menu-button"
+            (click)="openMobileDrawer()"
+            aria-label="Abrir menú"
+          >
+            <mat-icon>menu</mat-icon>
+          </button>
 
-  <!-- Footer -->
-  <footer class="dashboard-footer">
-    <div class="footer-container">
-      <div class="footer-links">
-        <a href="#" class="footer-link">{{ languageService.t('footer.conditions') }}</a>
-        <a href="#" class="footer-link">{{ languageService.t('footer.privacy') }}</a>
-        <a href="#" class="footer-link">{{ languageService.t('footer.help') }}</a>
-      </div>
-      <p class="footer-copyright">© {{ currentYear }} ECommerce, Inc</p>
+          <!-- Logo -->
+          <a [href]="ecommerceUrl" class="logo">
+            <mat-icon class="logo-icon">shopping_bag</mat-icon>
+            <span class="logo-text">ECommerce</span>
+          </a>
+
+          <!-- Navigation (oculta en móvil) -->
+          <nav class="nav-links hide-mobile">
+            <a
+              routerLink="/profile"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="nav-link"
+            >
+              <mat-icon>person</mat-icon>
+              <span>{{ languageService.t('profile.title') }}</span>
+            </a>
+            <a routerLink="/profile/security" routerLinkActive="active" class="nav-link">
+              <mat-icon>shield</mat-icon>
+              <span>{{ languageService.t('security.title') }}</span>
+            </a>
+            <a routerLink="/profile/sessions" routerLinkActive="active" class="nav-link">
+              <mat-icon>history</mat-icon>
+              <span>{{ languageService.t('security.activeSessions') }}</span>
+            </a>
+          </nav>
+
+          <!-- User Menu (oculto en móvil) -->
+          <div class="user-menu hide-mobile">
+            <app-theme-toggle></app-theme-toggle>
+            <app-language-toggle></app-language-toggle>
+            <div class="user-info">
+              <span class="user-greeting"
+                >{{ languageService.t('dashboard.hello') }}, {{ userFirstName() }}</span
+              >
+              <span class="user-email">{{ userEmail() }}</span>
+            </div>
+            <button mat-stroked-button class="logout-button" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>{{ languageService.t('auth.logout') }}</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-main">
+        <ng-content></ng-content>
+      </main>
+
+      <!-- Footer -->
+      <footer class="dashboard-footer">
+        <div class="footer-container">
+          <div class="footer-links">
+            <a href="#" class="footer-link">{{ languageService.t('footer.conditions') }}</a>
+            <a href="#" class="footer-link">{{ languageService.t('footer.privacy') }}</a>
+            <a href="#" class="footer-link">{{ languageService.t('footer.help') }}</a>
+          </div>
+          <p class="footer-copyright">© {{ currentYear }} ECommerce, Inc</p>
+        </div>
+      </footer>
     </div>
-  </footer>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
