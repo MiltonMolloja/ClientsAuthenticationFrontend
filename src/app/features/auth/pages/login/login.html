@@ -32,7 +32,13 @@
         <!-- Email Field -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ languageService.t('loginPage.emailLabel') }}</mat-label>
-          <input matInput type="email" formControlName="email" [placeholder]="languageService.t('loginPage.emailPlaceholder')" required>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            [placeholder]="languageService.t('loginPage.emailPlaceholder')"
+            required
+          />
           <mat-icon matPrefix>email</mat-icon>
           @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
             <mat-error>{{ languageService.t('loginPage.emailRequired') }}</mat-error>
@@ -45,24 +51,48 @@
         <!-- Password Field -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>{{ languageService.t('loginPage.passwordLabel') }}</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [placeholder]="languageService.t('loginPage.passwordPlaceholder')" required>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            [placeholder]="languageService.t('loginPage.passwordPlaceholder')"
+            required
+          />
           <mat-icon matPrefix>lock</mat-icon>
-          <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="!hidePassword">
-            <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="!hidePassword"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
           </button>
-          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+          @if (
+            loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched
+          ) {
             <mat-error>{{ languageService.t('loginPage.passwordRequired') }}</mat-error>
           }
         </mat-form-field>
 
         <!-- Remember Me & Forgot Password -->
         <div class="form-actions">
-          <mat-checkbox formControlName="rememberMe">{{ languageService.t('loginPage.rememberMe') }}</mat-checkbox>
-          <a routerLink="/auth/forgot-password" class="forgot-password-link">{{ languageService.t('loginPage.forgotPassword') }}</a>
+          <mat-checkbox formControlName="rememberMe">{{
+            languageService.t('loginPage.rememberMe')
+          }}</mat-checkbox>
+          <a routerLink="/forgot-password" class="forgot-password-link">{{
+            languageService.t('loginPage.forgotPassword')
+          }}</a>
         </div>
 
         <!-- Submit Button -->
-        <button mat-raised-button type="submit" class="submit-button full-width amazon-button" [disabled]="loginForm.invalid || isLoading">
+        <button
+          mat-raised-button
+          type="submit"
+          class="submit-button full-width amazon-button"
+          [disabled]="loginForm.invalid || isLoading"
+        >
           @if (isLoading) {
             <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
             <span>{{ languageService.t('loginPage.signingIn') }}</span>
@@ -76,7 +106,9 @@
     <mat-card-footer class="card-footer">
       <p class="signup-text">
         {{ languageService.t('loginPage.noAccount') }}
-        <a routerLink="/auth/register" class="signup-link">{{ languageService.t('loginPage.signUp') }}</a>
+        <a routerLink="/register" class="signup-link">{{
+          languageService.t('loginPage.signUp')
+        }}</a>
       </p>
     </mat-card-footer>
   </mat-card>
