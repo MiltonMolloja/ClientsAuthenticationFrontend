@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AuthService } from '@core/services/auth.service';
+import { TokenService } from '@core/services/token.service';
 
 /**
  * LogoutComponent
@@ -40,32 +40,32 @@ import { AuthService } from '@core/services/auth.service';
   ],
 })
 export class Logout implements OnInit {
-  private authService = inject(AuthService);
+  private tokenService = inject(TokenService);
   private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     // Obtener returnUrl de los query params
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
-    // Cerrar sesión
-    this.authService.logout().subscribe({
-      next: () => {
-        // Redirigir de vuelta a la aplicación que solicitó el logout
-        if (returnUrl) {
-          window.location.href = decodeURIComponent(returnUrl);
-        } else {
-          // Si no hay returnUrl, ir al login
-          window.location.href = '/login';
-        }
-      },
-      error: () => {
-        // Incluso si hay error, redirigir
-        if (returnUrl) {
-          window.location.href = decodeURIComponent(returnUrl);
-        } else {
-          window.location.href = '/login';
-        }
-      },
-    });
+    console.log('=== LOGOUT PAGE ===');
+    console.log('returnUrl:', returnUrl);
+    console.log('Full URL:', window.location.href);
+
+    // Limpiar tokens locales directamente
+    this.tokenService.clearTokens();
+
+    // Emitir evento de logout para sincronizar con otras aplicaciones
+    localStorage.setItem('auth_logout_event', 'true');
+    setTimeout(() => localStorage.removeItem('auth_logout_event'), 1000);
+
+    // Redirigir después de un pequeño delay para asegurar que todo se limpió
+    setTimeout(() => {
+      console.log('Redirecting to:', returnUrl ? decodeURIComponent(returnUrl) : '/login');
+      if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
+      } else {
+        window.location.href = '/login';
+      }
+    }, 100);
   }
 }

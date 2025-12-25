@@ -2,7 +2,7 @@
   <!-- Header -->
   <header class="auth-header">
     <div class="auth-header-container">
-      <a routerLink="/" class="logo">
+      <a [href]="ecommerceUrl" class="logo">
         <mat-icon class="logo-icon">shopping_bag</mat-icon>
         <span class="logo-text">ECommerce</span>
       </a>
@@ -28,9 +28,7 @@
         <a href="#" class="footer-link">{{ languageService.t('footer.privacy') }}</a>
         <a href="#" class="footer-link">{{ languageService.t('footer.help') }}</a>
       </div>
-      <p class="footer-copyright">
-        © {{ currentYear }} ECommerce, Inc.
-      </p>
+      <p class="footer-copyright">© {{ currentYear }} ECommerce, Inc.</p>
     </div>
   </footer>
 </div>

@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { tap, catchError, finalize, switchMap } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
@@ -69,7 +69,12 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/v1/identity`, request);
   }
 
-  logout(): Observable<any> {
+  /**
+   * Logout - revoca el token y limpia datos de autenticación
+   * @param navigate Si es true, navega a /login después del logout (default: true)
+   * @returns Observable que completa cuando el logout termina
+   */
+  logout(navigate: boolean = true): Observable<any> {
     const refreshToken = this.tokenService.getRefreshToken();
 
     // Emitir evento de logout para sincronizar con otras aplicaciones
@@ -78,10 +83,25 @@ export class AuthService {
       localStorage.removeItem(this.logoutEventKey);
     }, 1000);
 
+    // Si no hay refresh token, solo limpiar datos locales
+    if (!refreshToken) {
+      this.clearAuthData();
+      if (navigate) {
+        this.router.navigate(['/login']);
+      }
+      return of(null);
+    }
+
     return this.http.post(`${this.API_URL}/v1/identity/revoke-token`, { refreshToken }).pipe(
+      catchError(() => {
+        // Si falla la revocación, igual limpiamos los datos locales
+        return of(null);
+      }),
       finalize(() => {
         this.clearAuthData();
-        this.router.navigate(['/login']);
+        if (navigate) {
+          this.router.navigate(['/login']);
+        }
       }),
     );
   }

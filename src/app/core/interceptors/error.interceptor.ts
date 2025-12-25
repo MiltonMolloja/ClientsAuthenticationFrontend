@@ -44,8 +44,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         switch (error.status) {
           case 401:
             // Unauthorized - try to refresh token only if not already trying to refresh
-            if (req.url.includes('/refresh-token') || req.url.includes('/authentication')) {
-              // Don't try to refresh if we're already refreshing or logging in
+            if (
+              req.url.includes('/refresh-token') ||
+              req.url.includes('/authentication') ||
+              req.url.includes('/revoke-token')
+            ) {
+              // Don't try to refresh if we're already refreshing, logging in, or logging out
               errorMessage = 'Unauthorized';
               break;
             }

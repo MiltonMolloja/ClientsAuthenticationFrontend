@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,6 @@ import { environment } from '../../../../environments/environment';
 })
 export class DashboardLayoutComponent implements OnInit {
   private authService = inject(AuthService);
-  private router = inject(Router);
   public languageService = inject(LanguageService);
 
   currentYear = new Date().getFullYear();
@@ -47,10 +46,19 @@ export class DashboardLayoutComponent implements OnInit {
     }
   }
 
+  /**
+   * Logout - limpia tokens locales y redirige al Frontend para que también limpie sus tokens
+   */
   logout(): void {
-    this.authService.logout().subscribe({
+    // Limpiar tokens de Auth (4400) sin navegar
+    this.authService.logout(false).subscribe({
       next: () => {
-        this.router.navigate(['/login']);
+        // Redirigir al Frontend para que limpie sus tokens y vuelva a la home
+        window.location.href = `${this.ecommerceUrl}/logout`;
+      },
+      error: () => {
+        // Incluso si hay error, redirigir
+        window.location.href = `${this.ecommerceUrl}/logout`;
       },
     });
   }
