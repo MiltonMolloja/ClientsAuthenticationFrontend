@@ -26,22 +26,36 @@ const refreshTokenSubject = new BehaviorSubject<string | null>(null);
  * - Forgot/Reset Password: No requiere autenticación
  * - Confirm Email: No requiere autenticación
  */
-const EXCLUDED_URLS = [
-  '/v1/identity/authentication',
-  '/v1/identity/refresh-token',
-  '/v1/identity/revoke-token',
-  '/v1/identity/forgot-password',
-  '/v1/identity/reset-password',
-  '/v1/identity/confirm-email',
-  '/v1/identity/resend-email-confirmation',
-  '/v1/identity', // Register (POST)
+/**
+ * URLs exactas que no deben incluir token de autenticación
+ * Estas son rutas públicas que no requieren autenticación
+ */
+const EXCLUDED_URL_PATTERNS = [
+  '/v1/identity/authentication', // Login
+  '/v1/identity/refresh-token', // Refresh token (usa refresh token, no access token)
+  '/v1/identity/revoke-token', // Logout
+  '/v1/identity/forgot-password', // Forgot password (público)
+  '/v1/identity/reset-password', // Reset password (usa token del email)
+  '/v1/identity/confirm-email', // Confirm email (usa token del email)
+  '/v1/identity/resend-email-confirmation', // Resend confirmation (público)
 ];
+
+/**
+ * URL exacta para registro (POST /v1/identity)
+ * Se verifica por separado porque es exacta, no un prefijo
+ */
+const REGISTER_URL_PATTERN = /\/v1\/identity\/?$/;
 
 /**
  * Verifica si la URL debe ser excluida del manejo de refresh
  */
 function isExcludedUrl(url: string): boolean {
-  return EXCLUDED_URLS.some((excluded) => url.includes(excluded));
+  // Check if it's the register endpoint (exact match)
+  if (REGISTER_URL_PATTERN.test(url)) {
+    return true;
+  }
+  // Check other excluded patterns
+  return EXCLUDED_URL_PATTERNS.some((excluded) => url.includes(excluded));
 }
 
 /**

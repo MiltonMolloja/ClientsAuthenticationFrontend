@@ -366,6 +366,16 @@ html.dark-theme {
   .regenerate-card .checkbox-container {
     &.highlight {
       background-color: #78350f !important;
+      border-color: #f59e0b !important;
+    }
+
+    // Ensure checkbox label is visible in dark theme
+    ::ng-deep .mat-mdc-checkbox-label {
+      color: var(--text-primary) !important;
+    }
+
+    &.highlight ::ng-deep .mat-mdc-checkbox-label {
+      color: #fef3c7 !important;
     }
   }
 }
