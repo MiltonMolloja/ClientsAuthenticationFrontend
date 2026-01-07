@@ -74,10 +74,6 @@ export class ResetPassword implements OnInit {
       this.token = params['token'] || '';
       this.email = params['email'] || '';
 
-      console.log('🔑 Token from URL:', this.token);
-      console.log('📧 Email from URL:', this.email);
-      console.log('📦 All query params:', params);
-
       // Validate token and email exist
       if (!this.token) {
         this.error = this.languageService.t('resetPassword.invalidToken');
@@ -118,16 +114,8 @@ export class ResetPassword implements OnInit {
         confirmPassword: this.resetPasswordForm.value.confirmPassword,
       };
 
-      console.log('🚀 Sending reset password request:', {
-        email: this.email,
-        tokenLength: this.token.length,
-        hasNewPassword: !!this.resetPasswordForm.value.newPassword,
-        request: request,
-      });
-
       this.authService.resetPassword(request).subscribe({
         next: (response) => {
-          console.log('✅ Reset password response:', response);
           this.isLoading = false;
 
           // Check if response is successful (200 status = success)
@@ -138,18 +126,15 @@ export class ResetPassword implements OnInit {
             response.succeeded === true ||
             response.succeeded === undefined
           ) {
-            console.log('🎉 Password reset successful, redirecting to login...');
             // Redirect immediately to login with passwordReset flag
             this.router.navigate(['/login'], {
               queryParams: { passwordReset: 'true' },
             });
           } else {
-            console.error('❌ Reset password failed:', response);
             this.error = response.message || this.languageService.t('common.error');
           }
         },
         error: (error) => {
-          console.error('❌ Reset password error:', error);
           this.isLoading = false;
           this.error = error.error?.message || this.languageService.t('common.error');
         },

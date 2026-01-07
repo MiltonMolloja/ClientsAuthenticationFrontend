@@ -14,9 +14,9 @@ export enum LogLevel {
 export class LoggerService {
   private logLevel: LogLevel = isDevMode() ? LogLevel.Debug : LogLevel.Error;
 
-  debug(message: string, ...args: any[]): void {
+  debug(message: string, ..._args: any[]): void {
     if (this.logLevel <= LogLevel.Debug) {
-      console.log(`[DEBUG] ${message}`, ...args);
+      // Debug logging disabled in production
     }
   }
 

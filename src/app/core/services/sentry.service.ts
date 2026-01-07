@@ -109,12 +109,9 @@ export class SentryService {
         });
 
         this.initialized = true;
-        console.log('[Sentry] Initialized successfully');
-      } catch (error) {
-        console.error('[Sentry] Failed to initialize:', error);
+      } catch {
+        // Failed to initialize Sentry
       }
-    } else {
-      console.log('[Sentry] Disabled - not in production or no DSN configured');
     }
   }
 
@@ -128,8 +125,6 @@ export class SentryService {
 
     if (sentryConfig?.enabled && this.initialized && this.sentry) {
       this.sentry.captureException(error, context ? { extra: context } : undefined);
-    } else {
-      console.error('[Error]', error, context);
     }
   }
 
@@ -153,8 +148,6 @@ export class SentryService {
         captureContext.extra = context;
       }
       this.sentry.captureMessage(message, captureContext);
-    } else {
-      console.log(`[${level.toUpperCase()}]`, message, context);
     }
   }
 

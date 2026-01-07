@@ -31,7 +31,7 @@ import { BackupCodesDialogComponent } from '@shared/components/backup-codes-dial
     MatTableModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    DashboardLayoutComponent
+    DashboardLayoutComponent,
   ],
   templateUrl: './security-settings.html',
   styleUrl: './security-settings.scss',
@@ -46,7 +46,7 @@ export class SecuritySettings implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private notificationService: NotificationService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit(): void {
@@ -69,13 +69,13 @@ export class SecuritySettings implements OnInit {
             ipAddress: activity.ipAddress || 'Unknown IP',
             userAgent: activity.userAgent || 'Unknown',
             success: activity.success,
-            failureReason: activity.failureReason
+            failureReason: activity.failureReason,
           }));
         }
       },
       error: (error) => {
         // Error loading activity
-      }
+      },
     });
   }
 
@@ -101,7 +101,6 @@ export class SecuritySettings implements OnInit {
   }
 
   navigateTo2FA(): void {
-    console.log('Navigating to 2FA setup...', this.user?.twoFactorEnabled);
     if (this.user?.twoFactorEnabled) {
       this.router.navigate(['/2fa/disable']);
     } else {

@@ -47,10 +47,6 @@ export class Logout implements OnInit {
     // Obtener returnUrl de los query params
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
-    console.log('=== LOGOUT PAGE ===');
-    console.log('returnUrl:', returnUrl);
-    console.log('Full URL:', window.location.href);
-
     // Limpiar tokens locales directamente
     this.tokenService.clearTokens();
 
@@ -60,7 +56,6 @@ export class Logout implements OnInit {
 
     // Redirigir después de un pequeño delay para asegurar que todo se limpió
     setTimeout(() => {
-      console.log('Redirecting to:', returnUrl ? decodeURIComponent(returnUrl) : '/login');
       if (returnUrl) {
         window.location.href = decodeURIComponent(returnUrl);
       } else {

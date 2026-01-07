@@ -130,8 +130,6 @@ export class ChangePassword implements OnInit {
 
       this.authService.changePassword(request).subscribe({
         next: (response) => {
-          console.log('🔐 [CHANGE PASSWORD] Response received:', response);
-
           // Backend returns { success: "message" } or { succeeded: true }
           const isSuccess =
             response.succeeded === true ||
@@ -139,24 +137,17 @@ export class ChangePassword implements OnInit {
             (response && !response.succeeded && !response.error);
 
           if (isSuccess) {
-            console.log('✅ [CHANGE PASSWORD] Password changed successfully');
-
             // Show success message
             const successMessage = `${this.languageService.t('auth.passwordChangedSuccess')} ${this.languageService.t('auth.loggingOut')}`;
             this.notificationService.showSuccess(successMessage);
-
-            console.log('🔄 [CHANGE PASSWORD] Starting revoke all sessions...');
 
             // Revoke all other sessions for security, then logout
             this.authService
               .revokeAllSessions()
               .pipe(
                 finalize(() => {
-                  console.log('🧹 [CHANGE PASSWORD] Finalize block executing...');
-
                   // Clear all authentication data (tokens, user signals, etc.)
                   this.authService.clearAuthDataOnly();
-                  console.log('✅ [CHANGE PASSWORD] Auth data cleared');
 
                   // Use window.location.href to avoid authGuard interference
                   // This forces a full page reload and navigation
@@ -164,29 +155,22 @@ export class ChangePassword implements OnInit {
                     `${environment.ecommerceUrl}/auth/callback?next=%2F`,
                   );
                   const loginUrl = `/auth/login?passwordChanged=true&returnUrl=${ecommerceCallback}`;
-                  console.log('🚀 [CHANGE PASSWORD] Redirecting to:', loginUrl);
                   window.location.href = loginUrl;
-                  console.log('✅ [CHANGE PASSWORD] Redirect command executed');
                 }),
               )
               .subscribe({
-                next: () => {
-                  console.log('✅ [CHANGE PASSWORD] Sessions revoked successfully');
-                },
-                error: (err) => {
-                  console.error('❌ [CHANGE PASSWORD] Error revoking sessions:', err);
+                next: () => {},
+                error: () => {
                   // finalize() will still run even on error
                 },
               });
           } else {
-            console.error('❌ [CHANGE PASSWORD] Password change failed:', response);
             this.isLoading = false;
             const errorMessage = response.message || response.error || 'Failed to change password';
             this.notificationService.showError(errorMessage);
           }
         },
-        error: (err) => {
-          console.error('❌ [CHANGE PASSWORD] Error changing password:', err);
+        error: () => {
           this.isLoading = false;
         },
       });
