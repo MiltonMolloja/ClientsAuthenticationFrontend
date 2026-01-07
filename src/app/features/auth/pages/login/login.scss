@@ -4,7 +4,9 @@
   width: 100%;
   background-color: var(--card-bg) !important;
   border: 1px solid var(--card-border) !important;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 
   // Force Material card background
   ::ng-deep {
@@ -270,6 +272,125 @@ html.dark-theme {
         &:hover {
           color: #93c5fd;
         }
+      }
+    }
+  }
+}
+
+// Dev Mode Section
+.dev-mode-section {
+  padding: 0 1.5rem 1.5rem;
+
+  mat-divider {
+    margin-bottom: 1rem;
+  }
+
+  .dev-mode-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .dev-mode-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background-color: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #92400e;
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .login-test-user-button,
+  .reset-test-user-button {
+    padding: 0.5rem 1rem;
+
+    &:disabled {
+      opacity: 0.6;
+    }
+
+    ::ng-deep .mdc-button__label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    mat-icon {
+      font-size: 1.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+    }
+
+    .button-spinner {
+      margin-right: 0.25rem;
+    }
+  }
+
+  .login-test-user-button {
+    background-color: #10b981 !important;
+    color: white !important;
+
+    mat-icon,
+    span {
+      color: white !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #059669 !important;
+    }
+  }
+
+  .reset-test-user-button {
+    border-color: #6366f1;
+    color: #6366f1;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(99, 102, 241, 0.1);
+    }
+  }
+
+  .dev-mode-hint {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+// Dark theme dev mode
+html.dark-theme {
+  .dev-mode-section {
+    .dev-mode-badge {
+      background-color: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.5);
+      color: #fbbf24;
+    }
+
+    .login-test-user-button {
+      background-color: #059669 !important;
+
+      &:hover:not(:disabled) {
+        background-color: #047857 !important;
+      }
+    }
+
+    .reset-test-user-button {
+      border-color: #818cf8;
+      color: #818cf8;
+
+      &:hover:not(:disabled) {
+        background-color: rgba(129, 140, 248, 0.1);
       }
     }
   }

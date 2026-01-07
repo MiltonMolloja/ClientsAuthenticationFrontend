@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -30,6 +31,7 @@ import { environment } from '../../../../../environments/environment';
     MatIconModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    MatDividerModule,
     AuthLayoutComponent,
   ],
   templateUrl: './login.html',
@@ -39,9 +41,13 @@ export class Login implements OnInit {
   loginForm!: FormGroup;
   hidePassword = true;
   isLoading = false;
+  isResettingUser = false;
   returnUrl = '/';
   showPasswordChangedMessage = false;
   showPasswordResetMessage = false;
+
+  // Check if we're in production mode
+  isProduction = environment.production;
 
   constructor(
     private fb: FormBuilder,
@@ -160,6 +166,50 @@ export class Login implements OnInit {
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
+  }
+
+  /**
+   * Login with test user credentials (Development mode only)
+   */
+  loginWithTestUser(): void {
+    if (this.isProduction) {
+      return; // Safety check
+    }
+
+    // Pre-fill the form with test user credentials
+    this.loginForm.patchValue({
+      email: 'mfmolloja@gmail.com',
+      password: 'Pa$$w0rd!',
+    });
+
+    // Trigger login
+    this.onSubmit();
+  }
+
+  /**
+   * Reset test user to default state (Development mode only)
+   */
+  resetTestUser(): void {
+    if (this.isProduction) {
+      return; // Safety check
+    }
+
+    this.isResettingUser = true;
+    this.authService.resetTestUser().subscribe({
+      next: () => {
+        this.notificationService.showSuccess('Usuario de test restablecido correctamente');
+        // Pre-fill the login form with test user credentials
+        this.loginForm.patchValue({
+          email: 'mfmolloja@gmail.com',
+          password: '',
+        });
+        this.isResettingUser = false;
+      },
+      error: (error) => {
+        this.notificationService.showError('Error al restablecer usuario de test');
+        this.isResettingUser = false;
+      },
+    });
   }
 
   private isExternalUrl(url: string): boolean {

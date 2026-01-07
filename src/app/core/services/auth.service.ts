@@ -355,4 +355,12 @@ export class AuthService {
   getActivity(limit: number = 20): Observable<any> {
     return this.http.get(`${this.API_URL}/v1/identity/activity?limit=${limit}`);
   }
+
+  /**
+   * Reset test user to default state (Development mode only)
+   * This endpoint is only available in non-production environments
+   */
+  resetTestUser(): Observable<any> {
+    return this.http.post(`${this.API_URL}/v1/identity/dev/reset-test-user`, {});
+  }
 }

@@ -111,5 +111,49 @@
         }}</a>
       </p>
     </mat-card-footer>
+
+    <!-- Dev Mode: Test User Buttons -->
+    @if (!isProduction) {
+      <div class="dev-mode-section">
+        <mat-divider></mat-divider>
+        <div class="dev-mode-content">
+          <div class="dev-mode-badge">
+            <mat-icon>developer_mode</mat-icon>
+            <span>Modo Desarrollo</span>
+          </div>
+          <button
+            mat-raised-button
+            type="button"
+            class="login-test-user-button"
+            (click)="loginWithTestUser()"
+            [disabled]="isLoading"
+          >
+            @if (isLoading) {
+              <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+              <span>Ingresando...</span>
+            } @else {
+              <mat-icon>login</mat-icon>
+              <span>Ingresar con Usuario de Prueba</span>
+            }
+          </button>
+          <button
+            mat-stroked-button
+            type="button"
+            class="reset-test-user-button"
+            (click)="resetTestUser()"
+            [disabled]="isResettingUser"
+          >
+            @if (isResettingUser) {
+              <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+              <span>Restableciendo...</span>
+            } @else {
+              <mat-icon>restore</mat-icon>
+              <span>Restablecer Usuario de Test</span>
+            }
+          </button>
+          <p class="dev-mode-hint">Usuario: mfmolloja&#64;gmail.com | Pass: Pa$$w0rd!</p>
+        </div>
+      </div>
+    }
   </mat-card>
 </app-auth-layout>
