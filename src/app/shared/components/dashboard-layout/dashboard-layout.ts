@@ -58,10 +58,13 @@ export class DashboardLayoutComponent implements OnInit {
    * Verifica si está en modo desarrollo usando window.__env en runtime
    */
   private checkDevMode(): boolean {
-    const w = window as Window & { __env?: Record<string, string> };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as Window & { __env?: Record<string, any> };
     // Check if explicitly set in window.__env (Docker runtime)
     if (w.__env?.['production'] !== undefined) {
-      return w.__env['production'] !== 'true';
+      const prod = w.__env['production'];
+      // Handle both boolean and string values
+      return prod !== true && prod !== 'true';
     }
     // Fall back to environment.production (build time)
     return !environment.production;
