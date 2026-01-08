@@ -21,9 +21,23 @@ export class FaviconService {
       return;
     }
 
-    const faviconPath = environment.production ? 'favicon-prod.svg' : 'favicon-dev.svg';
+    const isProd = this.checkProdMode();
+    const faviconPath = isProd ? 'favicon-prod.svg' : 'favicon-dev.svg';
 
     this.setFavicon(faviconPath);
+  }
+
+  /**
+   * Verifica si está en modo producción usando window.__env en runtime
+   */
+  private checkProdMode(): boolean {
+    const w = window as Window & { __env?: Record<string, string> };
+    // Check if explicitly set in window.__env (Docker runtime)
+    if (w.__env?.['production'] !== undefined) {
+      return w.__env['production'] === 'true';
+    }
+    // Fall back to environment.production (build time)
+    return environment.production;
   }
 
   /**

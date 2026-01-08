@@ -51,8 +51,21 @@ export class DashboardLayoutComponent implements OnInit {
   userEmail = signal<string>('john.doe@example.com');
   ecommerceUrl = environment.ecommerceUrl;
 
-  // Flag para mostrar badge de desarrollo
-  readonly isDevMode = !environment.production;
+  // Flag para mostrar badge de desarrollo (lee de window.__env en runtime)
+  readonly isDevMode = this.checkDevMode();
+
+  /**
+   * Verifica si está en modo desarrollo usando window.__env en runtime
+   */
+  private checkDevMode(): boolean {
+    const w = window as Window & { __env?: Record<string, string> };
+    // Check if explicitly set in window.__env (Docker runtime)
+    if (w.__env?.['production'] !== undefined) {
+      return w.__env['production'] !== 'true';
+    }
+    // Fall back to environment.production (build time)
+    return !environment.production;
+  }
 
   ngOnInit(): void {
     // Get user info from auth service
