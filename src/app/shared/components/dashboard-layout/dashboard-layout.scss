@@ -376,3 +376,20 @@
     display: none !important;
   }
 }
+
+// ============================================
+// DEV MODE BADGE
+// ============================================
+
+.dev-badge {
+  background-color: #eab308;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}

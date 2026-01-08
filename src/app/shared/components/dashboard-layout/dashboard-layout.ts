@@ -51,6 +51,9 @@ export class DashboardLayoutComponent implements OnInit {
   userEmail = signal<string>('john.doe@example.com');
   ecommerceUrl = environment.ecommerceUrl;
 
+  // Flag para mostrar badge de desarrollo
+  readonly isDevMode = !environment.production;
+
   ngOnInit(): void {
     // Get user info from auth service
     const user = this.authService.currentUser;
